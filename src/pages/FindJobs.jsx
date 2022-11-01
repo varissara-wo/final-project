@@ -6,5 +6,5 @@ const FindJobs = () => {
     )
 }
 
-export default FindJobs
+export default FindJobs;
 

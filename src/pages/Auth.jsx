@@ -1,4 +1,5 @@
 import React from "react";
+import Form from "./Form.jsx";
 import {
   Stack,
   Typography,
@@ -106,6 +107,9 @@ const Auth = () => {
             noValidate
             autoComplete="off"
           >
+            <Box>
+              <Form />
+            </Box>
             <Box>
               <InputLabelStyle>EMAIL</InputLabelStyle>
               <TextFieldStyle

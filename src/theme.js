@@ -92,27 +92,27 @@ export const theme = createTheme({
       fontSize: "20px",
     },
     caption: {
-      fontFamily: "var(--Inter-font)",
+      fontFamily: "var(--inter-font)",
       fontWeight: "400",
       fontSize: "12px",
     },
     overline: {
-      fontFamily: "var(--Inter-font)",
+      fontFamily: "var(--inter-font)",
       fontWeight: "400",
       fontSize: "10px",
     },
     button: {
-      fontFamily: "var(--Inter-font)",
+      fontFamily: "var(--inter-font)",
       fontWeight: "500",
       fontSize: "14px",
     },
     body2: {
-      fontFamily: "var(--Inter-font)",
+      fontFamily: "var(--inter-font)",
       fontWeight: "400",
       fontSize: "14px",
     },
     body1: {
-      fontFamily: "var(--Inter-font)",
+      fontFamily: "var(--inter-font)",
       fontWeight: "500",
       fontSize: "16px",
     },
@@ -122,9 +122,11 @@ export const theme = createTheme({
       fontSize: "14px",
     },
     subtitle1: {
-      fontFamily: "var(--Inter-font)",
+      fontFamily: "var(--inter-font)",
       fontWeight: "400",
       fontSize: "16px",
     },
   },
 });
+
+

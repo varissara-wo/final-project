@@ -1,9 +1,16 @@
 import React from 'react'
+import NavBox from '../components/Navbar.jsx'
+
 
 const Homepage = () => {
     return (
-        <div>Homepage</div>
+        <>
+
+            <NavBox />
+
+        </>
     )
+
 }
 
 export default Homepage;

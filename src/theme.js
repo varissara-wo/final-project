@@ -126,6 +126,21 @@ export const theme = createTheme({
       fontWeight: "400",
       fontSize: "16px",
     },
+    findYouJob: {
+      fontFamily: "var(--montserrat-font)",
+      fontWeight: "400",
+      fontSize: "20px",
+    },
+    meetTeam: {
+      fontFamily: "var(--montserrat-font)",
+      fontWeight: "400",
+      fontSize: "20px",
+    },
+    underLine: {
+      fontFamily: "var(--montserrat-font)",
+      fontWeight: "500",
+      fontSize: "14px",
+    },
   },
   shadows: ["#000000"]
 });

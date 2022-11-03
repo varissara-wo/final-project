@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Grid } from '@mui/material';
+import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 
 
@@ -15,9 +15,10 @@ export default function NavBox() {
             height: '64px',
             color: 'background.paper',
 
-
         }}>
+
             {/*  Get That job logo */}
+
             <Box sx={{
                 display: "flex",
                 width: '100vw',
@@ -32,9 +33,7 @@ export default function NavBox() {
 
                 {/* Sign Up and Login button */}
 
-                <Box sx={{
-                    display: 'flex'
-                }}>
+                <Box sx={{ display: 'flex' }}>
                     <Box>
                         <Button
                             startIcon={<svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -50,11 +49,9 @@ export default function NavBox() {
                                 height: '40px',
                                 margin: '10px',
                                 borderRadius: '16px'
-
                             }}>
                             Sign Up
                         </Button>
-
 
                         <Button
                             startIcon={<svg width="19" height="22" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +66,6 @@ export default function NavBox() {
                                 width: '129px',
                                 height: '40px',
                                 margin: '10px',
-
                             }}>Login</Button>
                     </Box>
                 </Box>

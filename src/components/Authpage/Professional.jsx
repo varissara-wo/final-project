@@ -318,7 +318,6 @@ const Professional = () => {
               display="flex"
               justifyContent="center"
               gap="15px"
-              sx={{ marginBottom: "10px" }}
             >
               <NextButton
                 startIcon={<ArrowBackIosNew />}

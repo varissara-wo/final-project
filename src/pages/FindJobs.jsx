@@ -27,7 +27,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
 import BungalowIcon from "@mui/icons-material/Bungalow";
-import data, { data } from "./datamock/data.js"
+import data from "./datamock/data.js";
 const Buttonstyle = styled(Button)(({ theme }) => ({
   fontFamily: "var(--inter-font)",
   fontWeight: "500",
@@ -103,7 +103,7 @@ const FindJobs = () => {
     setSearch(event.target.value);
     console.log(search);
   };
-  const data = data
+
   return (
     <Box
       className="findjobs-container"
@@ -477,11 +477,7 @@ const FindJobs = () => {
                   }}
                 >
                   <BungalowIcon />
-                  {data.map((item,itemIndex)=>{
-                    return (
-                      
-                    )
-                  })}
+                  {}
                   <Typography
                     sx={{ marginLeft: "10px", marginTop: "5px" }}
                     variant="caption"

@@ -3,6 +3,7 @@ import FindJobs from "./pages/FindJobs.jsx";
 import HomePage from "./pages/Homepage.jsx";
 import Login from "./pages/Login.jsx";
 import Auth from "./pages/Auth.jsx";
+
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme.js";
 

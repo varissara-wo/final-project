@@ -55,10 +55,22 @@ const Textinput = styled(Autocomplete)(({ theme }) => ({
   color: "primary focused",
 }));
 const Textseacrh = styled(TextField)(({ theme }) => ({
-   "& .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":{width: "600px", height: "px"}
+   "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root":{width: "480px", height: "40px"}
   ,"& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":{width: "480px"},
   height: "60px",
   color: "primary focused",
+}));
+const Textseacrh1 = styled(TextField)(({ theme }) => ({
+  "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root":{width: "120px", height: "40px"}
+ ,
+ height: "60px",
+ color: "primary focused",
+}));
+const Textseacrh2 = styled(TextField)(({ theme }) => ({
+  "& ..css-1u3bzj6-MuiFormControl-root-MuiTextField-root":{width: "100px", height: "40px"}
+ ,"& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":{width: "480px"},
+ height: "60px",
+ color: "primary focused",
 }));
 const options = ["Technology", "science", "Accounting", "engineering"];
 const options1 = ["Fulltime", "Partime", "Internship"];
@@ -350,7 +362,7 @@ const FindJobs = () => {
                   alignItems: "flex-start",
                 }}
               >
-                <TextField
+                <Textseacrh1
                   id="outlined-basic"
                   variant="outlined"
                   placeholder="min"
@@ -372,10 +384,10 @@ const FindJobs = () => {
                   }}
                 >
                   {" "}
-                </TextField>
+                </Textseacrh1>
                 <HorizontalRuleIcon />
 
-                <TextField
+                <Textseacrh1
                   id="outlined-basic"
                   variant="outlined"
                   placeholder="max"

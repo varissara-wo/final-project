@@ -672,7 +672,8 @@ const Homepage = () => {
                             sx={{
                                 marginTop: '20px',
                                 marginLeft: '120px',
-                                marginRight: '120px'
+                                marginRight: '120px',
+                                marginButton: '64px'
                             }}>
                             We have a job for you, no matter your background or previous experience. Is sending random memes through chat your only skill? That’s ok, we got you, our Rock Star Meme Curator role is here for you.
                         </Typography>
@@ -939,7 +940,9 @@ const Homepage = () => {
                         backgroundColor: '#E5E5E5',
                         justifyContent: 'space-around',
                         display: 'flex',
-                        marginTop: '10px'
+                        marginTop: '10px',
+                        paddingBottom: '10px'
+
                     }}>
                         <Box>
                             <Typography
@@ -971,6 +974,7 @@ const Homepage = () => {
                             <Box sx={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
+                                paddingButton: '10px'
                             }}>
                                 <Box >
                                     <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">

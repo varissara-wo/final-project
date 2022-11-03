@@ -26,6 +26,7 @@ import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
+import BungalowIcon from "@mui/icons-material/Bungalow";
 const Buttonstyle = styled(Button)(({ theme }) => ({
   fontFamily: "var(--inter-font)",
   fontWeight: "500",
@@ -47,17 +48,20 @@ const Textcap = styled(ListItemText)(({ theme }) => ({
   fontSize: "12px",
   color: "#616161",
 }));
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: "8px",
-  backgroundColor: "#F5F5F6",
-  marginLeft: 0,
-  width: "420px",
-  height: "40px",
+const Textinput = styled(Autocomplete)(({ theme }) => ({
+  width: "280px","& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root":{width: "280px", height: "40px"}
+  ,"& .css-1d3z3hw-MuiOutlinedInput-notchedOutline":{border: "2px solid #F48FB1"},
+  height: "60px",
+  color: "primary focused",
 }));
-const options = ["abc", "def"];
-const options1 = ["434", "d43434"];
+const Textseacrh = styled(TextField)(({ theme }) => ({
+   "& .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":{width: "600px", height: "px"}
+  ,"& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":{width: "480px"},
+  height: "60px",
+  color: "primary focused",
+}));
+const options = ["Technology", "science", "Accounting", "engineering"];
+const options1 = ["Fulltime", "Partime", "Internship"];
 
 const FindJobs = () => {
   const [value, setValue] = React.useState("Select a category");
@@ -65,6 +69,11 @@ const FindJobs = () => {
   const [value1, setValue1] = React.useState("Select a type");
   const [inputValue1, setInputValue1] = React.useState("");
   const [number, setNumber] = useState(0);
+  const [search, setSearch] = useState("");
+  const inputchange = (event) => {
+    setSearch(event.target.value);
+    console.log(search);
+  };
   return (
     <Box
       className="findjobs-container"
@@ -224,98 +233,17 @@ const FindJobs = () => {
           </List>
         </Box>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          marginLeft: "100px",
-          marginTop: "30px",
-        }}
-      >
-        <Typography variant="h4">Find that job</Typography>
-        <Typography
+      <Box sx={{ backgroundColor: "#F5F5F6", width: "100%", height: "900px" }}>
+        <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
+            marginLeft: "100px",
+            marginTop: "30px",
           }}
         >
-          <Typography variant="overline" sx={{ marginBottom: "3px" }}>
-            search by job title or company name
-          </Typography>
-          <TextField
-            id="outlined-basic"
-            variant="outlined"
-            placeholder="manufacturing, sales, swim"
-            color="primary"
-            focused
-            sx={{ width: "420px", height: "36px", marginBottom: "40px" }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "flex-start",
-          }}
-        >
-          <Typography>
-            <Typography variant="overline">Category</Typography>
-            <Autocomplete
-              size="small"
-              value={value}
-              onChange={(event, newValue) => {
-                setValue(newValue);
-              }}
-              inputValue={inputValue}
-              onInputChange={(event, newInputValue) => {
-                setInputValue(newInputValue);
-              }}
-              id="controllable-states-demo"
-              options={options}
-              sx={{ width: "280px", height: "36px", borderRadius: "8px" }}
-              renderInput={(params) => (
-                <TextField {...params} label="Select a category" />
-              )}
-            />
-          </Typography>
-          <Typography>
-            <Typography variant="overline" sx={{ marginLeft: "10px" }}>
-              Type
-            </Typography>
-            <Autocomplete
-              size="small"
-              value={value1}
-              color="primary"
-              focused
-              onChange={(event, newValue) => {
-                setValue1(newValue);
-              }}
-              inputValue={inputValue1}
-              onInputChange={(event, newInputValue) => {
-                setInputValue1(newInputValue);
-              }}
-              id="controllable-states-demo"
-              options={options1}
-              sx={{
-                width: "280px",
-                height: "40px",
-                borderRadius: "8px",
-                marginLeft: "10px",
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="Select a type" />
-              )}
-            />
-          </Typography>
+          <Typography variant="h4">Find that job</Typography>
           <Typography
             sx={{
               display: "flex",
@@ -323,68 +251,26 @@ const FindJobs = () => {
               alignItems: "flex-start",
             }}
           >
-            <Typography variant="overline" sx={{ marginLeft: "10px" }}>
-              Salary Range
+            <Typography variant="overline" sx={{ marginBottom: "3px" }}>
+              search by job title or company name
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "flex-start",
+            <Textseacrh
+              id="outlined-basic"
+              variant="outlined"
+              placeholder="manufacturing, sales, swim"
+              color="primary"
+              focused
+              sx={{ width: "420px", height: "36px", marginBottom: "40px" }}
+              onChange={inputchange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
               }}
-            >
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                placeholder="min"
-                sx={{
-                  width: "102px",
-                  height: "20px",
-                  borderRadius: "8px",
-                  marginLeft: "10px",
-                }}
-                color="primary"
-                focused
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MonetizationOnIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              >
-                {" "}
-              </TextField>
-              <HorizontalRuleIcon />
-
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                placeholder="max"
-                color="primary"
-                focused
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MonetizationOnIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Box>
+            />
           </Typography>
-        </Box>
-        <Typography variant="h6" sx={{ maginTop: "10px", marginLeft: "5px" }}>
-          {" "}
-          {number}jobs for you
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-          }}
-        >
           <Box
             sx={{
               display: "flex",
@@ -392,17 +278,71 @@ const FindJobs = () => {
               alignItems: "flex-start",
             }}
           >
-            <Box></Box>
-            <Box
+            <Typography>
+              <Typography variant="overline">Category</Typography>
+              <Textinput
+                size="small"
+                value={value}
+                color="primary" focused
+                onChange={(event, newValue) => {
+                  setValue(newValue);
+                }}
+                inputValue={inputValue}
+                onInputChange={(event, newInputValue) => {
+                  setInputValue(newInputValue);
+                }}
+                id="controllable-states-demo"
+                options={options}
+                sx={{
+                  width: "280px",
+                  height: "50px",
+                  borderRadius: "8px",
+                  paddindTop: "50px",
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select a category" />
+                )}
+              />
+            </Typography>
+            <Typography>
+              <Typography variant="overline" sx={{ marginLeft: "10px" }}>
+                Type
+              </Typography>
+              <Textinput
+                size="small"
+                value={value1}
+                color="primary"
+                focused
+                onChange={(event, newValue) => {
+                  setValue1(newValue);
+                }}
+                inputValue={inputValue1}
+                onInputChange={(event, newInputValue) => {
+                  setInputValue1(newInputValue);
+                }}
+                id="controllable-states-demo"
+                options={options1}
+                sx={{
+                  width: "280px",
+                  height: "40px",
+                  borderRadius: "8px",
+                  marginLeft: "10px",
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select a type" />
+                )}
+              />
+            </Typography>
+            <Typography
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "flex-start",
               }}
             >
-              <Box></Box>
-              <Box></Box>
-              <Box></Box>
+              <Typography variant="overline" sx={{ marginLeft: "10px" }}>
+                Salary Range
+              </Typography>
               <Box
                 sx={{
                   display: "flex",
@@ -410,23 +350,168 @@ const FindJobs = () => {
                   alignItems: "flex-start",
                 }}
               >
-                <Box></Box>
-                <Box></Box>
-                <Box></Box>
-                <Box></Box>
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  placeholder="min"
+                  sx={{
+                    width: "102px",
+                    height: "20px",
+                    borderRadius: "8px",
+                    marginLeft: "10px",
+                  }}
+                  type="number"
+                  color="primary"
+                  focused
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MonetizationOnIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                >
+                  {" "}
+                </TextField>
+                <HorizontalRuleIcon />
+
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  placeholder="max"
+                  color="primary"
+                  focused
+                  type="number"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MonetizationOnIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               </Box>
-            </Box>
+            </Typography>
           </Box>
+          <Typography
+            variant="h6"
+            sx={{ maginTop: "10px", marginLeft: "5px", marginBottom: "10px" }}
+          >
+            {" "}
+            {number} jobs for you
+          </Typography>
           <Box
             sx={{
               display: "flex",
-              flexDirection: "row",
+              flexDirection: "column",
               alignItems: "flex-start",
+              backgroundColor: "background.paper",
+              width: "290px",
+              height: "170px",
+              borderRadius: "8px",
+              boxShadow: "0px 2px 2px #00000033",
             }}
           >
-            <Box></Box>
-            <Box></Box>
-            <Box></Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "flex-start",
+              }}
+            >
+              <ImageListItem
+                sx={{ width: "75px", height: "75px", marginTop: "15px" }}
+              >
+                <img src="https://cdn.mos.cms.futurecdn.net/6bTF6C2QiWXvhi33fJi3AC-1200-80.jpg.webp" />{" "}
+              </ImageListItem>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  marginLeft: "10px",
+                }}
+              >
+                <Box
+                  sx={{
+                    width: "100px",
+                    height: "15px",
+                    marginBottom: "10px",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <BungalowIcon />
+                  <Typography
+                    sx={{ marginLeft: "10px", marginTop: "5px" }}
+                    variant="caption"
+                  >
+                    {" "}
+                    Manufactoring
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{ width: "180px", height: "28px" }}
+                  className="mappingdata"
+                >
+                  <Typography variant="h6">The Job Title </Typography>
+                </Box>
+                <Box sx={{ width: "170px", height: "28px" }}>
+                  <Typography variant="subtitle2">company name </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    width: "180px",
+                    height: "20px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Box>
+                    <CalendarMonthIcon />
+                  </Box>
+                  <Box sx={{ marginBottom: "5px", marginRight: "10px" }}>
+                    <Typography variant="caption">Fulltime </Typography>{" "}
+                  </Box>
+                  <Box>
+                    <MonetizationOnIcon />
+                  </Box>
+                  <Box>
+                    <Typography variant="caption">2.0k-2.5k </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "flex-start",
+              }}
+            >
+              <Box></Box>
+              <Box>
+                <Button>
+                  {" "}
+                  <GpsFixedIcon
+                    sx={{ color: "#616161", marginRight: "10px" }}
+                  />
+                  <Typography variant="button" sx={{ color: "#616161" }}>
+                    Follow{" "}
+                  </Typography>
+                </Button>
+              </Box>
+              <Box sx={{ marginLeft: "40px" }}>
+                <Button variant="outlined" sx={{ borderRadius: "13px" }}>
+                  <Typography variant="button" sx={{ color: "#616161" }}>
+                    see more{" "}
+                  </Typography>
+                </Button>
+              </Box>
+            </Box>
           </Box>
         </Box>
       </Box>

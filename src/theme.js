@@ -127,6 +127,9 @@ export const theme = createTheme({
       fontSize: "16px",
     },
   },
+  shadows: ["#000000"]
 });
+
+
 
 

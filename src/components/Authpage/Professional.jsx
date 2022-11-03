@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Stack, Typography, Box, Step, StepLabel } from "@mui/material";
 
@@ -67,6 +67,19 @@ const Professional = () => {
     });
   };
 
+  const [account, setAccount] = useState({
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+    name: "",
+    phone: "",
+    birthday: "",
+    linkedin: "",
+    title: "",
+    experience: "",
+    education: "",
+  });
+
   return (
     <>
       <StepperStyle activeStep={activeStep}>
@@ -120,6 +133,9 @@ const Professional = () => {
             <Box>
               <InputLabelStyle>EMAIL</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({ ...account, email: e.target.value });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -129,6 +145,9 @@ const Professional = () => {
               />
               <InputLabelStyle>PASSWORD</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({ ...account, password: e.target.value });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -138,6 +157,12 @@ const Professional = () => {
               />
               <InputLabelStyle>PASSWORD CONFIRMATION</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({
+                    ...account,
+                    passwordConfirmation: e.target.value,
+                  });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -175,6 +200,12 @@ const Professional = () => {
               </RecommendedTypography>
               <InputLabelStyle sx={{ marginTop: "10px" }}>NAME</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({
+                    ...account,
+                    name: e.target.value,
+                  });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -184,6 +215,12 @@ const Professional = () => {
               />
               <InputLabelStyle>PHONE</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({
+                    ...account,
+                    phone: e.target.value,
+                  });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -193,6 +230,12 @@ const Professional = () => {
               />
               <InputLabelStyle>BIRTHDAY</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({
+                    ...account,
+                    birthday: e.target.value,
+                  });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -202,6 +245,12 @@ const Professional = () => {
               />
               <InputLabelStyle>LINKEDIN URL</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({
+                    ...account,
+                    linkedin: e.target.value,
+                  });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -246,6 +295,12 @@ const Professional = () => {
           <Box>
             <InputLabelStyle>TITLE</InputLabelStyle>
             <OnelineTextField
+              onChange={(e) => {
+                setAccount({
+                  ...account,
+                  title: e.target.value,
+                });
+              }}
               defaultValue=""
               label=""
               color="primary"
@@ -255,6 +310,12 @@ const Professional = () => {
             />
             <InputLabelStyle>PROFESSIONAL EXPERIENCE</InputLabelStyle>
             <MultilineTextField
+              onChange={(e) => {
+                setAccount({
+                  ...account,
+                  experience: e.target.value,
+                });
+              }}
               defaultValue=""
               style={{ marginBottom: "14px" }}
               label=""
@@ -268,6 +329,12 @@ const Professional = () => {
             />
             <InputLabelStyle>EDUCATION</InputLabelStyle>
             <MultilineTextField
+              onChange={(e) => {
+                setAccount({
+                  ...account,
+                  education: e.target.value,
+                });
+              }}
               defaultValue=""
               style={{ marginBottom: "14px" }}
               label=""

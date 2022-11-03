@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Stack, Typography, Box, Step, StepLabel } from "@mui/material";
 
@@ -35,6 +35,15 @@ const Recruiter = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
+
+  const [account, setAccount] = useState({
+    companyName: "",
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+    website: "",
+    about: "",
+  });
 
   return (
     <>
@@ -77,6 +86,9 @@ const Recruiter = () => {
             <Box>
               <InputLabelStyle>COMPANY NAME</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({ ...account, companyName: e.target.value });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -86,6 +98,9 @@ const Recruiter = () => {
               />
               <InputLabelStyle>EMAIL</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({ ...account, email: e.target.value });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -95,6 +110,9 @@ const Recruiter = () => {
               />
               <InputLabelStyle>PASSWORD</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({ ...account, password: e.target.value });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -104,6 +122,12 @@ const Recruiter = () => {
               />
               <InputLabelStyle>PASSWORD CONFIRMATION</InputLabelStyle>
               <OnelineTextField
+                onChange={(e) => {
+                  setAccount({
+                    ...account,
+                    passwordConfirmation: e.target.value,
+                  });
+                }}
                 defaultValue=""
                 label=""
                 color="primary"
@@ -144,6 +168,9 @@ const Recruiter = () => {
               COMPANY WEBSITE
             </InputLabelStyle>
             <OnelineTextField
+              onChange={(e) => {
+                setAccount({ ...account, website: e.target.value });
+              }}
               defaultValue=""
               label=""
               color="primary"
@@ -153,6 +180,9 @@ const Recruiter = () => {
             />
             <InputLabelStyle>ABOUT THE COMPANY</InputLabelStyle>
             <MultilineTextField
+              onChange={(e) => {
+                setAccount({ ...account, about: e.target.value });
+              }}
               defaultValue=""
               style={{ marginBottom: "14px" }}
               label=""

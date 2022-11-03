@@ -142,7 +142,6 @@ export const theme = createTheme({
       fontSize: "14px",
     },
   },
-  shadows: ["#000000"]
 });
 
 

@@ -27,6 +27,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
 import BungalowIcon from "@mui/icons-material/Bungalow";
+import data, { data } from "./datamock/data.js"
 const Buttonstyle = styled(Button)(({ theme }) => ({
   fontFamily: "var(--inter-font)",
   fontWeight: "500",
@@ -49,28 +50,44 @@ const Textcap = styled(ListItemText)(({ theme }) => ({
   color: "#616161",
 }));
 const Textinput = styled(Autocomplete)(({ theme }) => ({
-  width: "280px","& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root":{width: "280px", height: "40px"}
-  ,"& .css-1d3z3hw-MuiOutlinedInput-notchedOutline":{border: "2px solid #F48FB1"},
+  width: "280px",
+  "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
+    width: "280px",
+    height: "40px",
+  },
+  "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
+    border: "2px solid #F48FB1",
+  },
   height: "60px",
   color: "primary focused",
 }));
 const Textseacrh = styled(TextField)(({ theme }) => ({
-   "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root":{width: "480px", height: "40px"}
-  ,"& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":{width: "480px"},
+  "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root": {
+    width: "480px",
+    height: "40px",
+  },
+  "& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":
+    { width: "480px" },
   height: "60px",
   color: "primary focused",
 }));
 const Textseacrh1 = styled(TextField)(({ theme }) => ({
-  "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root":{width: "120px", height: "40px"}
- ,
- height: "60px",
- color: "primary focused",
+  "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root": {
+    width: "120px",
+    height: "40px",
+  },
+  height: "60px",
+  color: "primary focused",
 }));
 const Textseacrh2 = styled(TextField)(({ theme }) => ({
-  "& ..css-1u3bzj6-MuiFormControl-root-MuiTextField-root":{width: "100px", height: "40px"}
- ,"& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":{width: "480px"},
- height: "60px",
- color: "primary focused",
+  "& ..css-1u3bzj6-MuiFormControl-root-MuiTextField-root": {
+    width: "100px",
+    height: "40px",
+  },
+  "& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":
+    { width: "480px" },
+  height: "60px",
+  color: "primary focused",
 }));
 const options = ["Technology", "science", "Accounting", "engineering"];
 const options1 = ["Fulltime", "Partime", "Internship"];
@@ -86,6 +103,7 @@ const FindJobs = () => {
     setSearch(event.target.value);
     console.log(search);
   };
+  const data = data
   return (
     <Box
       className="findjobs-container"
@@ -295,7 +313,8 @@ const FindJobs = () => {
               <Textinput
                 size="small"
                 value={value}
-                color="primary" focused
+                color="primary"
+                focused
                 onChange={(event, newValue) => {
                   setValue(newValue);
                 }}
@@ -385,7 +404,9 @@ const FindJobs = () => {
                 >
                   {" "}
                 </Textseacrh1>
-                <HorizontalRuleIcon />
+                <HorizontalRuleIcon
+                  sx={{ marginTop: "8px", marginLeft: "18px" }}
+                />
 
                 <Textseacrh1
                   id="outlined-basic"
@@ -394,6 +415,7 @@ const FindJobs = () => {
                   color="primary"
                   focused
                   type="number"
+                  sx={{ marginLeft: "5px" }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -455,6 +477,11 @@ const FindJobs = () => {
                   }}
                 >
                   <BungalowIcon />
+                  {data.map((item,itemIndex)=>{
+                    return (
+                      
+                    )
+                  })}
                   <Typography
                     sx={{ marginLeft: "10px", marginTop: "5px" }}
                     variant="caption"

@@ -92,6 +92,38 @@ const Textseacrh2 = styled(TextField)(({ theme }) => ({
 const options = ["Technology", "science", "Accounting", "engineering"];
 const options1 = ["Fulltime", "Partime", "Internship"];
 
+const TextButtonStyled = styled(ListItemText)(() => ({
+  fontFamily: "var(--inter-font)",
+  fontWeight: "400",
+  fontSize: "16px",
+  color: "#616161",
+  marginLeft: "10px",
+  "&.Mui-selected": {
+    color: "#373737",
+  },
+}));
+const IconBoxStyled = styled(Box)(() => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "22px",
+  height: "22px",
+}));
+const SidebarButtonStyled = styled(ListItemButton)(() => ({
+  "&.Mui-selected": {
+    backgroundColor: "#F5F5F6",
+  },
+}));
+const GithubProfileStyled = styled(ListItemButton)(() => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItems: "center",
+  padding: "2px 0 2px 0",
+  width: "100%",
+}));
+
 const FindJobs = () => {
   const [value, setValue] = React.useState("Select a category");
   const [inputValue, setInputValue] = React.useState("");
@@ -104,6 +136,11 @@ const FindJobs = () => {
     console.log(search);
   };
 
+  const [selectedIndex, setSelectedIndex] = useState();
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
+
   return (
     <Box
       className="findjobs-container"
@@ -114,155 +151,213 @@ const FindJobs = () => {
         alignItems: "flex-start",
       }}
     >
+      {/* Start Sidebar */}
       <Box
         className="sidebar-container"
         sx={{
-          width: "240px",
-          minWidth: "240px",
+          // width: "240px",
+          maxWidth: "240px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "flex-start",
           backgroundColor: "background.default",
-          height: "900px",
+          height: "100vh",
         }}
       >
-        <Box className="sidebar-menu" sx={{ width: "100%" }}>
+        <Box className="sidebar-top" sx={{ width: "100%" }}>
           <Box
+            className="getthatjoblogo-box"
             sx={{
-              width: "100%",
               margin: "32px 16px 32px 16px",
               width: "136px",
             }}
           >
             <img src="pic/gtj-logo-1.svg" alt="getthatjoblogo" />
           </Box>
-          <List>
-            <ListItem disablePadding sx={{ width: "100%" }}>
-              <ListItemButton
+          <Box>
+            <List>
+              <SidebarButtonStyled
+                href="#simple-list"
+                selected={selectedIndex === 0}
+                onClick={(event) => handleListItemClick(event, 0)}
+              >
+                <IconBoxStyled>
+                  <img src="pic/find.svg" alt="find that job" />
+                </IconBoxStyled>
+                <TextButtonStyled sx={{}}>Find that Job</TextButtonStyled>
+              </SidebarButtonStyled>
+
+              <SidebarButtonStyled
+                href="#simple-list"
+                selected={selectedIndex === 1}
+                onClick={(event) => handleListItemClick(event, 1)}
+              >
+                <IconBoxStyled>
+                  <img src="pic/doc.svg" alt="find that job" />
+                </IconBoxStyled>
+                <TextButtonStyled>Your applications</TextButtonStyled>
+              </SidebarButtonStyled>
+
+              <SidebarButtonStyled
+                href="#simple-list"
+                selected={selectedIndex === 2}
+                onClick={(event) => handleListItemClick(event, 2)}
+              >
+                <IconBoxStyled>
+                  <img src="pic/gps.svg" alt="find that job" />
+                </IconBoxStyled>
+                <TextButtonStyled>Following</TextButtonStyled>
+              </SidebarButtonStyled>
+
+              <SidebarButtonStyled
                 component="a"
                 href="#simple-list"
-                sx={{ width: "100%" }}
+                selected={selectedIndex === 3}
+                onClick={(event) => handleListItemClick(event, 3)}
               >
-                <ListItemIcon sx={{ width: "100%" }}>
-                  <SearchIcon sx={{ marginTop: "5px" }} />
-                  <Textlist sx={{}} primary="Find that job" />
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component="a" href="#simple-list">
-                <ListItemIcon>
-                  <DescriptionIcon sx={{ marginTop: "5px" }} />
-                  <Textlist
-                    sx={{ marginLeft: "10px" }}
-                    primary="Your applications"
-                  />
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component="a" href="#simple-list">
-                <ListItemIcon>
-                  <GpsFixedIcon sx={{ marginTop: "5px" }} />
-                  <Textlist sx={{ marginLeft: "10px" }} primary="Following" />
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component="a" href="#simple-list">
-                <ListItemIcon>
-                  <PersonIcon sx={{ marginTop: "5px" }} />
-                  <Textlist sx={{ marginLeft: "10px" }} primary="Profile" />
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component="a" href="#simple-list">
-                <ListItemIcon
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img src="pic/LogoutIcon.svg" />
-                  </Box>
-                  <Textlist sx={{ marginLeft: "8px" }} primary="Log out" />
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-          </List>
+                <IconBoxStyled>
+                  <img src="pic/personal.svg" alt="find that job" />
+                </IconBoxStyled>
+                <TextButtonStyled>Profile</TextButtonStyled>
+              </SidebarButtonStyled>
+
+              <SidebarButtonStyled component="a" href="#simple-list">
+                <IconBoxStyled>
+                  <img src="pic/LogoutIcon.svg" alt="log out" />
+                </IconBoxStyled>
+                <TextButtonStyled>Log out</TextButtonStyled>
+              </SidebarButtonStyled>
+            </List>
+          </Box>
         </Box>
+
         <Box
           className="sidebar-footer"
           sx={{
+            boxSizing: "border-box",
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
+            width: "100%",
           }}
         >
-          <List sx={{ marginLeft: "16px" }}>
-            <ListItem disablePadding sx={{ margin: "0 0 12px 0" }}>
-              <Typography variant="caption" color={"secondary"}>
-                © 2022 - Get That Job
-              </Typography>
-            </ListItem>
-            <ListItem disablePadding sx={{ margin: "0 0 12px 0" }}>
+          <Typography
+            variant="caption"
+            color={"secondary"}
+            sx={{ margin: "0 0 12px 16px" }}
+          >
+            © 2022 - Get That Job
+          </Typography>
+
+          <ListItem disablePadding sx={{ margin: "0 0 12px 16px" }}>
+            <Typography
+              variant="caption"
+              color={"secondary"}
+              sx={{ maxWidth: "125px" }}
+            >
+              Codeable - Cohort X Final Project
+            </Typography>
+          </ListItem>
+
+          <ListItem disablePadding sx={{ margin: "0 0 5px 16px" }}>
+            <Typography variant="caption" color={"secondary"}>
+              Build with
+            </Typography>
+            <FavoriteIcon
+              sx={{ fontSize: 12, margin: "0 5px 0 5px" }}
+              color={"error"}
+            />
+            <Typography variant="caption" color={"secondary"}>
+              by:
+            </Typography>
+          </ListItem>
+
+          <GithubProfileStyled href="#simple-list">
+            <GitHubIcon
+              sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
+            />
+            <Typography
+              variant="caption"
+              color={"secondary"}
+              sx={{ marginLeft: "5px" }}
+            >
+              Apiwat
+            </Typography>
+          </GithubProfileStyled>
+          <GithubProfileStyled href="#simple-list">
+            <GitHubIcon
+              sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
+            />
+            <Typography
+              variant="caption"
+              color={"secondary"}
+              sx={{ marginLeft: "5px" }}
+            >
+              Smile
+            </Typography>
+          </GithubProfileStyled>
+          <GithubProfileStyled href="#simple-list">
+            <GitHubIcon
+              sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
+            />
+            <Typography
+              variant="caption"
+              color={"secondary"}
+              sx={{ marginLeft: "5px" }}
+            >
+              Thanakorn Boonlar
+            </Typography>
+          </GithubProfileStyled>
+          <GithubProfileStyled href="#simple-list">
+            <GitHubIcon
+              sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
+            />
+            <Typography
+              variant="caption"
+              color={"secondary"}
+              sx={{ marginLeft: "5px" }}
+            >
+              Phone
+            </Typography>
+          </GithubProfileStyled>
+          <GithubProfileStyled href="#simple-list">
+            <GitHubIcon
+              sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
+            />
+            <Typography
+              variant="caption"
+              color={"secondary"}
+              sx={{ marginLeft: "5px" }}
+            >
+              Korn
+            </Typography>
+          </GithubProfileStyled>
+          <Box sx={{ margin: "10px 0 32px 0" }}>
+            <Typography
+              variant="caption"
+              color={"secondary"}
+              sx={{ margin: "10px 0 5px 16px" }}
+            >
+              Source code:
+            </Typography>
+            <GithubProfileStyled href="#simple-list">
+              <GitHubIcon
+                sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
+              />
               <Typography
                 variant="caption"
                 color={"secondary"}
-                sx={{ maxWidth: "125px" }}
+                sx={{ marginLeft: "5px" }}
               >
-                Codeable - Cohort X Final Project
+                Korn
               </Typography>
-            </ListItem>
-            <ListItem disablePadding sx={{ margin: "0 0 5px " }}>
-              <Typography variant="caption" color={"secondary"}>
-                Build with
-              </Typography>
-              <FavoriteIcon
-                sx={{ fontSize: 12, margin: "0 5px 0 5px" }}
-                color={"error"}
-              />
-              <Typography variant="caption" color={"secondary"}>
-                by:
-              </Typography>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton
-                component="a"
-                href="#simple-list"
-                sx={{ padding: "0" }}
-              >
-                <ListItemIcon>
-                  <GitHubIcon />
-                  <Textlist sx={{ marginLeft: "10px" }} secondary="Apiwat" />
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-
-            <ListItem disablePadding>
-              <Typography variant="caption">Source code:</Typography>
-            </ListItem>
-            <ListItem disablePadding>
-              <Typography variant="caption">Ruby on Rails REST API</Typography>
-            </ListItem>
-            <ListItem disablePadding>
-              <Typography variant="caption">React Responsive SPA</Typography>
-            </ListItem>
-          </List>
+            </GithubProfileStyled>
+          </Box>
         </Box>
       </Box>
+      {/* End Sidebar */}
+
       <Box sx={{ backgroundColor: "#F5F5F6", width: "100%", height: "900px" }}>
         <Box
           sx={{

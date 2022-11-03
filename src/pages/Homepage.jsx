@@ -659,7 +659,7 @@ const Homepage = () => {
                             component='p'
                             color='primary.contrastText'
                             sx={{
-                                marginTop: '64px',
+                                marginTop: '24px',
                                 marginLeft: '120px',
                                 marginRight: '120px'
                             }}>
@@ -670,7 +670,7 @@ const Homepage = () => {
                             component='p'
                             color='primary.contrastText'
                             sx={{
-                                marginTop: '20px',
+                                marginTop: '24px',
                                 marginLeft: '120px',
                                 marginRight: '120px',
                                 marginButton: '64px'
@@ -1001,7 +1001,8 @@ const Homepage = () => {
                                         component="span"
                                         color="warning"
                                         sx={{
-
+                                            paddingLeft: '5px',
+                                            paddingRight: '5px'
                                         }}>
                                         React Responsive SPA
                                     </Typography>

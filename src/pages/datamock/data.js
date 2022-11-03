@@ -1,7 +1,7 @@
 export const data = [
   {
     category: "Tech",
-    img: "",
+    img: "https://www.realfruitpower.com/contentimage/ContentImage7-8-2014873623971.png",
     title: "engineer",
     name: "apple",
     type: "Fulltime",
@@ -9,7 +9,7 @@ export const data = [
   },
   {
     category: "account",
-    img: "",
+    img: "https://m.media-amazon.com/images/I/61THuQWrAZL._SL1200_.jpg",
     title: "account",
     name: "orange",
     type: "Parttime",
@@ -17,7 +17,7 @@ export const data = [
   },
   {
     category: "account",
-    img: "",
+    img: "https://cdn-prod.medicalnewstoday.com/content/images/articles/320/320894/strawberry-on-white-background-to-represent-strawberry-tongue.jpg",
     title: "ceo",
     name: "grape",
     type: "Parttime",
@@ -25,7 +25,7 @@ export const data = [
   },
   {
     category: "account",
-    img: "",
+    img: "https://www.collinsdictionary.com/images/full/grape_229112122.jpg",
     title: "thief",
     name: "coconut",
     type: "Parttime",
@@ -33,7 +33,7 @@ export const data = [
   },
   {
     category: "account",
-    img: "",
+    img: "https://domf5oio6qrcr.cloudfront.net/medialibrary/6372/202ebeef-6657-44ec-8fff-28352e1f5999.jpg",
     title: "account",
     name: "banana",
     type: "Parttime",

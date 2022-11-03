@@ -27,7 +27,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
 import BungalowIcon from "@mui/icons-material/Bungalow";
-import data from "./datamock/data.js";
+import { data } from "./datamock/data.js";
 const Buttonstyle = styled(Button)(({ theme }) => ({
   fontFamily: "var(--inter-font)",
   fontWeight: "500",
@@ -135,12 +135,14 @@ const FindJobs = () => {
     setSearch(event.target.value);
     console.log(search);
   };
-
-  const [selectedIndex, setSelectedIndex] = useState();
+  const changenum = (event) => {
+    setNumber(data1.length);
+  };
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
-
+  const data1 = data;
   return (
     <Box
       className="findjobs-container"
@@ -155,8 +157,9 @@ const FindJobs = () => {
       <Box
         className="sidebar-container"
         sx={{
-          // width: "240px",
-          maxWidth: "240px",
+          width: "240px",
+          //maxWidth: "240px",
+          height: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -342,15 +345,23 @@ const FindJobs = () => {
               Source code:
             </Typography>
             <GithubProfileStyled href="#simple-list">
-              <GitHubIcon
-                sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
-              />
+              <Box
+                className="getthatjoblogo-box"
+                sx={{
+                  margin: "0 0 0 16px",
+                  width: "14px",
+                  height: "14px",
+                }}
+              >
+                <img src="pic/react.svg" alt="getthatjoblogo" />
+              </Box>
+
               <Typography
                 variant="caption"
                 color={"secondary"}
                 sx={{ marginLeft: "5px" }}
               >
-                Korn
+                React Responsive SPA
               </Typography>
             </GithubProfileStyled>
           </Box>
@@ -358,7 +369,7 @@ const FindJobs = () => {
       </Box>
       {/* End Sidebar */}
 
-      <Box sx={{ backgroundColor: "#F5F5F6", width: "100%", height: "900px" }}>
+      <Box sx={{ backgroundColor: "#F5F5F6", width: "100%", height: "100vh" }}>
         <Box
           sx={{
             display: "flex",
@@ -531,117 +542,165 @@ const FindJobs = () => {
           </Typography>
           <Box
             sx={{
+              width: "100%",
+              height: "100%",
               display: "flex",
-              flexDirection: "column",
+              flexDirection: "row",
               alignItems: "flex-start",
-              backgroundColor: "background.paper",
-              width: "290px",
-              height: "170px",
-              borderRadius: "8px",
-              boxShadow: "0px 2px 2px #00000033",
+              flexWrap: "wrap",
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "flex-start",
-              }}
-            >
-              <ImageListItem
-                sx={{ width: "75px", height: "75px", marginTop: "15px" }}
-              >
-                <img src="https://cdn.mos.cms.futurecdn.net/6bTF6C2QiWXvhi33fJi3AC-1200-80.jpg.webp" />{" "}
-              </ImageListItem>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  marginLeft: "10px",
-                }}
-              >
-                <Box
-                  sx={{
-                    width: "100px",
-                    height: "15px",
-                    marginBottom: "10px",
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <BungalowIcon />
-                  {}
-                  <Typography
-                    sx={{ marginLeft: "10px", marginTop: "5px" }}
-                    variant="caption"
+            {data1.map((item, itemIndex) => {
+              return (
+                <>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      backgroundColor: "background.paper",
+                      width: "290px",
+                      height: "170px",
+                      borderRadius: "8px",
+                      boxShadow: "0px 2px 2px #00000033",
+                      key: { itemIndex },
+                      margin: "10px",
+                    }}
                   >
-                    {" "}
-                    Manufactoring
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{ width: "180px", height: "28px" }}
-                  className="mappingdata"
-                >
-                  <Typography variant="h6">The Job Title </Typography>
-                </Box>
-                <Box sx={{ width: "170px", height: "28px" }}>
-                  <Typography variant="subtitle2">company name </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "flex-start",
-                    width: "180px",
-                    height: "20px",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <Box>
-                    <CalendarMonthIcon />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <ImageListItem
+                        sx={{
+                          width: "75px",
+                          height: "75px",
+                          marginTop: "15px",
+                          marginLeft: "5px",
+                        }}
+                      >
+                        <img
+                          src={`${item.img}?w=75&fit=crop&auto=format`}
+                          //srcSet={`${item.img}?w=75&fit=crop&auto=format&dpr=2 2x`}
+                        />{" "}
+                      </ImageListItem>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "flex-start",
+                          marginLeft: "18px",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: "100px",
+                            height: "15px",
+                            marginBottom: "10px",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "flex-start",
+                          }}
+                        >
+                          <BungalowIcon />
+
+                          <Typography
+                            sx={{ marginLeft: "10px", marginTop: "5px" }}
+                            variant="caption"
+                          >
+                            {" "}
+                            {item.category}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{ width: "180px", height: "28px" }}
+                          className="mappingdata"
+                        >
+                          <Typography variant="h6">The Job Title </Typography>
+                        </Box>
+                        <Box sx={{ width: "170px", height: "28px" }}>
+                          <Typography variant="subtitle2">
+                            {item.name}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "flex-start",
+                            width: "250px",
+                            height: "20px",
+                            marginBottom: "10px",
+                          }}
+                        >
+                          <Box>
+                            <CalendarMonthIcon />
+                          </Box>
+                          <Box
+                            sx={{ marginBottom: "5px", marginRight: "10px" }}
+                          >
+                            <Typography variant="caption">
+                              {item.type}{" "}
+                            </Typography>{" "}
+                          </Box>
+                          <Box>
+                            <MonetizationOnIcon />
+                          </Box>
+                          <Box>
+                            <Typography variant="caption">
+                              {item.salary}{" "}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <Box></Box>
+                      <Box>
+                        <Button>
+                          {" "}
+                          <GpsFixedIcon
+                            sx={{
+                              color: "#616161",
+                              marginRight: "10px",
+                              marginLeft: "10px",
+                            }}
+                          />
+                          <Typography
+                            variant="button"
+                            sx={{ color: "#616161" }}
+                          >
+                            Follow{" "}
+                          </Typography>
+                        </Button>
+                      </Box>
+                      <Box sx={{ marginLeft: "40px" }}>
+                        <Button
+                          variant="outlined"
+                          sx={{ borderRadius: "13px" }}
+                        >
+                          <Typography
+                            variant="button"
+                            sx={{ color: "#616161" }}
+                          >
+                            see more{" "}
+                          </Typography>
+                        </Button>
+                      </Box>
+                    </Box>
                   </Box>
-                  <Box sx={{ marginBottom: "5px", marginRight: "10px" }}>
-                    <Typography variant="caption">Fulltime </Typography>{" "}
-                  </Box>
-                  <Box>
-                    <MonetizationOnIcon />
-                  </Box>
-                  <Box>
-                    <Typography variant="caption">2.0k-2.5k </Typography>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "flex-start",
-              }}
-            >
-              <Box></Box>
-              <Box>
-                <Button>
-                  {" "}
-                  <GpsFixedIcon
-                    sx={{ color: "#616161", marginRight: "10px" }}
-                  />
-                  <Typography variant="button" sx={{ color: "#616161" }}>
-                    Follow{" "}
-                  </Typography>
-                </Button>
-              </Box>
-              <Box sx={{ marginLeft: "40px" }}>
-                <Button variant="outlined" sx={{ borderRadius: "13px" }}>
-                  <Typography variant="button" sx={{ color: "#616161" }}>
-                    see more{" "}
-                  </Typography>
-                </Button>
-              </Box>
-            </Box>
+                </>
+              );
+            })}
           </Box>
         </Box>
       </Box>

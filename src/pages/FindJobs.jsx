@@ -28,6 +28,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import { data } from "./datamock/data.js";
+import Link from "@mui/material/Link";
 const Buttonstyle = styled(Button)(({ theme }) => ({
   fontFamily: "var(--inter-font)",
   fontWeight: "500",
@@ -153,7 +154,7 @@ const FindJobs = () => {
         alignItems: "flex-start",
       }}
     >
-      {/* Start Sidebar */}
+      {/*------------------------------------- Start Sidebar -------------------------------------*/}
       <Box
         className="sidebar-container"
         sx={{
@@ -276,7 +277,7 @@ const FindJobs = () => {
             </Typography>
           </ListItem>
 
-          <GithubProfileStyled href="#simple-list">
+          <GithubProfileStyled href="https://github.com/Hohokz" target="_blank">
             <GitHubIcon
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
@@ -285,10 +286,13 @@ const FindJobs = () => {
               color={"secondary"}
               sx={{ marginLeft: "5px" }}
             >
-              Apiwat
+              Apiwat Singharach
             </Typography>
           </GithubProfileStyled>
-          <GithubProfileStyled href="#simple-list">
+          <GithubProfileStyled
+            href="https://github.com/MilesNR"
+            target="_blank"
+          >
             <GitHubIcon
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
@@ -297,10 +301,13 @@ const FindJobs = () => {
               color={"secondary"}
               sx={{ marginLeft: "5px" }}
             >
-              Smile
+              Nattakit Rattanakeha
             </Typography>
           </GithubProfileStyled>
-          <GithubProfileStyled href="#simple-list">
+          <GithubProfileStyled
+            href="https://github.com/thanakornboonlar"
+            target="_blank"
+          >
             <GitHubIcon
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
@@ -312,7 +319,10 @@ const FindJobs = () => {
               Thanakorn Boonlar
             </Typography>
           </GithubProfileStyled>
-          <GithubProfileStyled href="#simple-list">
+          <GithubProfileStyled
+            href="https://github.com/varissara-wo"
+            target="_blank"
+          >
             <GitHubIcon
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
@@ -321,10 +331,13 @@ const FindJobs = () => {
               color={"secondary"}
               sx={{ marginLeft: "5px" }}
             >
-              Phone
+              Varissara Wongprasit
             </Typography>
           </GithubProfileStyled>
-          <GithubProfileStyled href="#simple-list">
+          <GithubProfileStyled
+            href="https://github.com/cholanuchkorn123"
+            target="_blank"
+          >
             <GitHubIcon
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
@@ -333,10 +346,10 @@ const FindJobs = () => {
               color={"secondary"}
               sx={{ marginLeft: "5px" }}
             >
-              Korn
+              Cholanuch Kasemtanakitti
             </Typography>
           </GithubProfileStyled>
-          <Box sx={{ margin: "10px 0 32px 0" }}>
+          <Box sx={{ margin: "10px 0 32px 0", width: "100%" }}>
             <Typography
               variant="caption"
               color={"secondary"}
@@ -344,7 +357,7 @@ const FindJobs = () => {
             >
               Source code:
             </Typography>
-            <GithubProfileStyled href="#simple-list">
+            <GithubProfileStyled href="https://reactjs.org/" target="_blank">
               <Box
                 className="getthatjoblogo-box"
                 sx={{
@@ -367,7 +380,7 @@ const FindJobs = () => {
           </Box>
         </Box>
       </Box>
-      {/* End Sidebar */}
+      {/*------------------------------------- End Sidebar -------------------------------------*/}
 
       <Box sx={{ backgroundColor: "#F5F5F6", width: "100%", height: "100vh" }}>
         <Box

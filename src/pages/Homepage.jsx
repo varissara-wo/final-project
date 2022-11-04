@@ -18,7 +18,7 @@ const Homepage = () => {
                 <NavBox />
             </Box>
             <Box width='auto'>
-                <Box margin='0px' width='auto' height='897px'
+                <Box margin='0px' marginTop='64px' width='auto' height='897px'
                     sx={{
                         display: 'flex',
                         backgroundColor: '#E5E5E5',

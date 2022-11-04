@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Stack, Typography, Box, Step, StepLabel } from "@mui/material";
+import { Stack, Typography, Box, Step, StepLabel, styled } from "@mui/material";
 
 import {
   NextButton,
@@ -17,9 +17,31 @@ import {
   FileUploadOutlined,
   ArrowForwardIos,
   ArrowBackIosNew,
+  AccountBoxOutlined,
 } from "@mui/icons-material";
 
 const Professional = () => {
+  const [account, setAccount] = useState({
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+    name: "",
+    phone: "",
+    birthday: "",
+    linkedin: "",
+    title: "",
+    experience: "",
+    education: "",
+  });
+
+  const [validate, setValidate] = useState({
+    password: "",
+    confirmPassword: "",
+    linkedinUrl: "",
+  });
+
+  // validate linkdin url
+
   const steps = [
     "Login information",
     "Personal information",
@@ -37,6 +59,21 @@ const Professional = () => {
     return skipped.has(step);
   };
 
+  //validate linkdin url
+  const validateLinkdin = (url) => {
+    const linkedinRegex =
+      /((https?:\/\/)?((www|\w\w)\.)?linkedin\.com\/)((([\w]{2,3})?)|([^/]+\/(([\w|\d-&#?=])+\/?){1,}))$/gm;
+    const isUrlValid = linkedinRegex.test(url);
+    return isUrlValid;
+  };
+
+  const validatePassword = (password) => {
+    const passwordRegex =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,20}$/;
+    const isPasswordValid = passwordRegex.test(password);
+    return isPasswordValid;
+  };
+
   const handleNext = () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
@@ -44,8 +81,47 @@ const Professional = () => {
       newSkipped.delete(activeStep);
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
+    if (activeStep === 0) {
+      const checkPassword = validatePassword(account.password);
+      if (checkPassword) {
+        setValidate({ ...validate, password: "" });
+        if (account.password === account.passwordConfirmation) {
+          setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          setSkipped(newSkipped);
+          setValidate({ ...validate, confirmPassword: "" });
+        } else {
+          setValidate({
+            ...validate,
+            confirmPassword: "** Password not match",
+          });
+        }
+      } else {
+        setValidate({
+          ...validate,
+          password:
+            "** Password should have at least one numeric digit, one special character, one uppercase and one lowercase letter",
+        });
+      }
+    }
+
+    if (activeStep === 1) {
+      const checkLinkdinUrl = validateLinkdin(account.linkedin);
+      if (checkLinkdinUrl || account.linkedin === "") {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
+        setValidate({ ...validate, linkedinUrl: "" });
+      } else {
+        setValidate({
+          ...validate,
+          linkedinUrl: "** Url should be linkedin profile",
+        });
+      }
+    }
+
+    if (activeStep === 2) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
+    }
   };
 
   const handleBack = () => {
@@ -67,19 +143,6 @@ const Professional = () => {
     });
   };
 
-  const [account, setAccount] = useState({
-    email: "",
-    password: "",
-    passwordConfirmation: "",
-    name: "",
-    phone: "",
-    birthday: "",
-    linkedin: "",
-    title: "",
-    experience: "",
-    education: "",
-  });
-
   return (
     <>
       <StepperStyle activeStep={activeStep}>
@@ -91,7 +154,7 @@ const Professional = () => {
           }
           return (
             <Step key={label}>
-              <StepLabel>
+              <StepLabel width="600px">
                 {activeStep === 0 && (
                   <Typography variant="overline" component="p" color="warining">
                     {index === 0 ? "IN PROGRESS" : "PENDING"}
@@ -126,7 +189,7 @@ const Professional = () => {
           <Box
             marginTop="36px"
             component="form"
-            sx={{ width: "360px" }}
+            sx={{ width: "650px" }}
             noValidate
             autoComplete="off"
           >
@@ -143,34 +206,59 @@ const Professional = () => {
                 focused
                 inputProps={{ style: { padding: 8 } }}
               />
+
               <InputLabelStyle>PASSWORD</InputLabelStyle>
-              <OnelineTextField
-                onChange={(e) => {
-                  setAccount({ ...account, password: e.target.value });
-                }}
-                defaultValue=""
-                label=""
-                color="primary"
-                placeholder="******"
-                focused
-                inputProps={{ style: { padding: 8 } }}
-              />
+              <Stack direction="row" gap="15px">
+                <OnelineTextField
+                  onChange={(e) => {
+                    setAccount({ ...account, password: e.target.value });
+                  }}
+                  defaultValue=""
+                  label=""
+                  color="primary"
+                  placeholder="******"
+                  focused
+                  inputProps={{ style: { padding: 8 } }}
+                />
+                <Typography
+                  variant="body2"
+                  color="primary"
+                  component="span"
+                  display="flex"
+                  flex={1}
+                >
+                  {validate.password}
+                </Typography>
+              </Stack>
+
               <InputLabelStyle>PASSWORD CONFIRMATION</InputLabelStyle>
-              <OnelineTextField
-                onChange={(e) => {
-                  setAccount({
-                    ...account,
-                    passwordConfirmation: e.target.value,
-                  });
-                }}
-                defaultValue=""
-                label=""
-                color="primary"
-                placeholder="******"
-                focused
-                inputProps={{ style: { padding: 8 } }}
-              />
-              <Stack display="flex" alignItems="center">
+              <Stack direction="row" gap="15px">
+                <OnelineTextField
+                  onChange={(e) => {
+                    setAccount({
+                      ...account,
+                      passwordConfirmation: e.target.value,
+                    });
+                  }}
+                  defaultValue=""
+                  label=""
+                  color="primary"
+                  placeholder="******"
+                  focused
+                  inputProps={{ style: { padding: 8 } }}
+                />
+                <Typography
+                  variant="body2"
+                  color="primary"
+                  component="span"
+                  display="flex"
+                  flex={1}
+                >
+                  {validate.confirmPassword}
+                </Typography>
+              </Stack>
+
+              <Stack display="flex" alignItems="center" width="360px">
                 <NextButton
                   variant="contained"
                   color="primary"
@@ -189,7 +277,7 @@ const Professional = () => {
           <Box
             marginTop="36px"
             component="form"
-            sx={{ width: "360px" }}
+            sx={{ width: "600px" }}
             noValidate
             autoComplete="off"
           >
@@ -244,25 +332,40 @@ const Professional = () => {
                 inputProps={{ style: { padding: 8 } }}
               />
               <InputLabelStyle>LINKEDIN URL</InputLabelStyle>
-              <OnelineTextField
-                onChange={(e) => {
-                  setAccount({
-                    ...account,
-                    linkedin: e.target.value,
-                  });
-                }}
-                defaultValue=""
-                label=""
-                color="primary"
-                placeholder="https://www.linkedin.com/in/username"
-                focused
-                inputProps={{ style: { padding: 8 } }}
-              />
+              <Stack direction="row" gap="15px">
+                <OnelineTextField
+                  value={account.linkedin}
+                  flex={2}
+                  onChange={(e) => {
+                    setAccount({
+                      ...account,
+                      linkedin: e.target.value,
+                    });
+                  }}
+                  defaultValue=""
+                  label=""
+                  color="primary"
+                  placeholder="https://www.linkedin.com/in/username"
+                  focused
+                  inputProps={{ style: { padding: 8 } }}
+                />
+                <Typography
+                  variant="body2"
+                  color="primary"
+                  component="span"
+                  display="flex"
+                  flex={1}
+                >
+                  {validate.linkedinUrl}
+                </Typography>
+              </Stack>
+
               <Stack
                 direction="row"
                 display="flex"
                 justifyContent="center"
                 gap="15px"
+                width="360px"
               >
                 <SkipButton
                   variant="outlined"
@@ -385,6 +488,7 @@ const Professional = () => {
               display="flex"
               justifyContent="center"
               gap="15px"
+              width="360px"
             >
               <NextButton
                 startIcon={<ArrowBackIosNew />}
@@ -392,7 +496,7 @@ const Professional = () => {
                 color="primary"
                 onClick={handleBack}
               >
-                PREVIUS
+                PREVIOUS
               </NextButton>
               <SkipButton
                 onClick={handleNext}

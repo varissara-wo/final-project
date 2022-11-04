@@ -8,6 +8,7 @@ import {
   Tabs,
   Tab,
   ImageListItem,
+  Paper,
 } from "@mui/material";
 
 import Navbar from "../components/Navbar.jsx";
@@ -24,7 +25,7 @@ const Auth = () => {
   //   <--------------- form type --------------->
 
   return (
-    <>
+    <Box height="100vh">
       <Navbar />
       <Stack width="100%" alignItems="center">
         <Stack
@@ -37,7 +38,7 @@ const Auth = () => {
           justifyContent="center"
         >
           {/* -------------------------Form section------------------ */}
-          <Box flex={1} p={10} paddingLeft="188px">
+          <Box flex={1} p={5} paddingLeft="188px">
             <Typography variant="h3" marginBottom="16px" color="warning">
               Good choice!
             </Typography>
@@ -86,7 +87,7 @@ const Auth = () => {
           </Box>
         </Stack>
       </Stack>
-    </>
+    </Box>
   );
 };
 

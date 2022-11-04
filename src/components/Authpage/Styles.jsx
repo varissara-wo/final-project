@@ -128,3 +128,17 @@ export const RecommendedTypography = styled(Typography)(() => ({
   lineHeight: "0",
   marginBottom: "4px",
 }));
+
+export const ValidateTypography = styled(Typography)(() => ({
+  width: "600px",
+  "& .css-ivu46s-MuiInputBase-root-MuiOutlinedInput-root": {
+    padding: "0px",
+  },
+  "& .css-1h8391f-MuiFormHelperText-root": {
+    marginLeft: "0px",
+    fontSize: "14px",
+  },
+  "& .css-1h8391f-MuiFormHelperText-root ": {
+    color: "#8E8E8E",
+  },
+}));

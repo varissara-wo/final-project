@@ -38,6 +38,9 @@ const Professional = () => {
     password: "",
     confirmPassword: "",
     linkedinUrl: "",
+    phoneNumber: "",
+    experience: "Between 300 and 2000 characters",
+    education: "Between 100 and 2000 characters",
   });
 
   // validate linkdin url
@@ -50,6 +53,7 @@ const Professional = () => {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [validateExperienceColor, setValidateExperienceColor] = useState("");
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -72,6 +76,25 @@ const Professional = () => {
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,20}$/;
     const isPasswordValid = passwordRegex.test(password);
     return isPasswordValid;
+  };
+
+  const validatePhoneNumber = (number) => {
+    const phoneNumberRegex =
+      /^\+?([0-9]{2})\)?[-. ]?([0-9]{2})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    const isPhoneNumberValid = phoneNumberRegex.test(number);
+    return isPhoneNumberValid;
+  };
+
+  const validateExperience = (context) => {
+    const experienceRegex = /^\w{300,2000}$/;
+    const isExperienceValid = experienceRegex.test(context);
+    return isExperienceValid;
+  };
+
+  const validateEducation = (context) => {
+    const educationRegex = /^\w{100,2000}$/;
+    const isEducationValid = educationRegex.test(context);
+    return isEducationValid;
   };
 
   const handleNext = () => {
@@ -106,10 +129,20 @@ const Professional = () => {
 
     if (activeStep === 1) {
       const checkLinkdinUrl = validateLinkdin(account.linkedin);
+      const checkPhoneNumber = validatePhoneNumber(account.phone);
+
       if (checkLinkdinUrl || account.linkedin === "") {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
         setValidate({ ...validate, linkedinUrl: "" });
+        if (checkPhoneNumber || account.phone === "") {
+          setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          setSkipped(newSkipped);
+          setValidate({ ...validate, linkedinUrl: "" });
+        } else {
+          setValidate({
+            ...validate,
+            phoneNumber: "** Phonenumber not collect",
+          });
+        }
       } else {
         setValidate({
           ...validate,
@@ -119,8 +152,26 @@ const Professional = () => {
     }
 
     if (activeStep === 2) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      setSkipped(newSkipped);
+      const checkExperience = validateExperience(account.experience);
+      const checkEducation = validateEducation(account.education);
+      if (checkExperience || account.experience === "") {
+        if (checkEducation || account.education === "") {
+          setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          setSkipped(newSkipped);
+        } else {
+          setValidate({
+            ...validate,
+            education:
+              "** Should have characters between 100 - 2000 characters",
+          });
+        }
+      } else {
+        setValidateExperienceColor("#F48FB1");
+        setValidate({
+          ...validate,
+          experience: "** Should have characters between 300 - 2000 characters",
+        });
+      }
     }
   };
 
@@ -302,20 +353,33 @@ const Professional = () => {
                 inputProps={{ style: { padding: 8 } }}
               />
               <InputLabelStyle>PHONE</InputLabelStyle>
-              <OnelineTextField
-                onChange={(e) => {
-                  setAccount({
-                    ...account,
-                    phone: e.target.value,
-                  });
-                }}
-                defaultValue=""
-                label=""
-                color="primary"
-                placeholder="+xxxxxxxxx"
-                focused
-                inputProps={{ style: { padding: 8 } }}
-              />
+              <Stack direction="row" gap="15px">
+                <OnelineTextField
+                  onChange={(e) => {
+                    setAccount({
+                      ...account,
+                      phone: e.target.value,
+                    });
+                  }}
+                  value={account.phone}
+                  defaultValue=""
+                  label=""
+                  color="primary"
+                  placeholder="+xx xxxxxxxxx"
+                  focused
+                  inputProps={{ style: { padding: 8 } }}
+                />
+                <Typography
+                  variant="body2"
+                  color="primary"
+                  component="span"
+                  display="flex"
+                  flex={1}
+                >
+                  {validate.phoneNumber}
+                </Typography>
+              </Stack>
+
               <InputLabelStyle>BIRTHDAY</InputLabelStyle>
               <OnelineTextField
                 onChange={(e) => {
@@ -426,7 +490,10 @@ const Professional = () => {
               placeholder="Worked 6 years in a bitcoin farm until I decided to change my life..."
               focused
               inputProps={{ style: { padding: "8px" } }}
-              helperText="Between 300 and 2000 characters"
+              helperText={validate.experience}
+              FormHelperTextProps={{
+                style: { color: validateExperienceColor },
+              }}
               multiline
               rows={3}
             />

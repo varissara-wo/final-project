@@ -2,15 +2,11 @@ import * as React from "react";
 import { Button, AppBar, styled } from "@mui/material";
 import Box from "@mui/material/Box";
 
-const Navbar = styled(AppBar)(() => ({
-  "& ": {
-    colorBackground: "#fff",
-  },
-}));
+const Navbar = styled(AppBar)(() => ({}));
 
 export default function NavBox() {
   return (
-    <Navbar position="sticky" color="background">
+    <Navbar position="fixed" color="background">
       <Box
         sx={{
           display: "flex",

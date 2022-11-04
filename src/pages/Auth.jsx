@@ -25,7 +25,7 @@ const Auth = () => {
   //   <--------------- form type --------------->
 
   return (
-    <Box height="100vh">
+    <Box marginTop="64px" height="100vh" backgroundColor="#E5E5E5">
       <Navbar />
       <Stack width="100%" alignItems="center">
         <Stack

@@ -80,6 +80,24 @@ const Professional = () => {
     education: "",
   });
 
+  // handleFileChange for file upload validation
+  const innitialFileData = "No file chosen";
+  const [fileStatus, setFileStatus] = useState(innitialFileData);
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    //Validate the file is PDF
+    if (file.type !== "application/pdf") {
+      return setFileStatus("Not a PDF file");
+    }
+    //Validate the file PDF size less than 5 MB
+    else if (file.size > 5 * 1024 * 1024) {
+      return setFileStatus("File size more than 5 MB");
+    } else {
+      setFileStatus(`File ${file.name}`);
+      return file;
+    }
+  };
+
   return (
     <>
       <StepperStyle activeStep={activeStep}>
@@ -361,14 +379,16 @@ const Professional = () => {
                 left="10px"
                 hidden
                 width="300px"
-                accept="image/*"
+                accept=".pdf"
                 multiple
                 type="file"
+                id="upload"
+                onChange={handleFileChange}
               />
             </UploadButton>
 
             <Typography component="span" variant="body2" color="secondary.main">
-              No file chosen
+              {fileStatus}
             </Typography>
 
             <Typography

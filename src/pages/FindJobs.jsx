@@ -175,6 +175,7 @@ const FindJobs = () => {
             sx={{
               margin: "32px 16px 32px 16px",
               width: "136px",
+              cursor: "pointer",
             }}
           >
             <img src="pic/gtj-logo-1.svg" alt="getthatjoblogo" />
@@ -182,7 +183,7 @@ const FindJobs = () => {
           <Box>
             <List>
               <SidebarButtonStyled
-                href="#simple-list"
+                href="#find-that-Job"
                 selected={selectedIndex === 0}
                 onClick={(event) => handleListItemClick(event, 0)}
               >
@@ -193,40 +194,40 @@ const FindJobs = () => {
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                href="#simple-list"
+                href="#your-applications"
                 selected={selectedIndex === 1}
                 onClick={(event) => handleListItemClick(event, 1)}
               >
                 <IconBoxStyled>
-                  <img src="pic/doc.svg" alt="find that job" />
+                  <img src="pic/doc.svg" alt="your applications" />
                 </IconBoxStyled>
                 <TextButtonStyled>Your applications</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                href="#simple-list"
+                href="#following"
                 selected={selectedIndex === 2}
                 onClick={(event) => handleListItemClick(event, 2)}
               >
                 <IconBoxStyled>
-                  <img src="pic/gps.svg" alt="find that job" />
+                  <img src="pic/gps.svg" alt="following" />
                 </IconBoxStyled>
                 <TextButtonStyled>Following</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
                 component="a"
-                href="#simple-list"
+                href="#profile"
                 selected={selectedIndex === 3}
                 onClick={(event) => handleListItemClick(event, 3)}
               >
                 <IconBoxStyled>
-                  <img src="pic/personal.svg" alt="find that job" />
+                  <img src="pic/personal.svg" alt="profile" />
                 </IconBoxStyled>
                 <TextButtonStyled>Profile</TextButtonStyled>
               </SidebarButtonStyled>
 
-              <SidebarButtonStyled component="a" href="#simple-list">
+              <SidebarButtonStyled component="a" href="/">
                 <IconBoxStyled>
                   <img src="pic/LogoutIcon.svg" alt="log out" />
                 </IconBoxStyled>

@@ -538,7 +538,7 @@ const FindJobs = () => {
             sx={{ maginTop: "10px", marginLeft: "5px", marginBottom: "10px" }}
           >
             {" "}
-            {number} jobs for you
+            {data.length} jobs for you
           </Typography>
           <Box
             sx={{
@@ -603,6 +603,7 @@ const FindJobs = () => {
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "flex-start",
+                            marginTop: "10px",
                           }}
                         >
                           <BungalowIcon />
@@ -639,9 +640,7 @@ const FindJobs = () => {
                           <Box>
                             <CalendarMonthIcon />
                           </Box>
-                          <Box
-                            sx={{ marginBottom: "5px", marginRight: "10px" }}
-                          >
+                          <Box sx={{ marginBottom: "5px", marginRight: "4px" }}>
                             <Typography variant="caption">
                               {item.type}{" "}
                             </Typography>{" "}

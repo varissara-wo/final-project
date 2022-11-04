@@ -6,7 +6,7 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 // -------------- Button --------------
 
 export const NextButton = styled(Button)(() => ({
@@ -41,6 +41,28 @@ export const OnelineTextField = styled(TextField)(() => ({
     "& fieldset": {
       borderRadius: "8px",
     },
+  },
+}));
+export const Datepic = styled(DatePicker)(() => ({
+  marginBottom: "16px",
+  "& .css-otaojw-MuiFormControl-root-MuiTextField-root .css-sfqmct-MuiInputBase-root-MuiOutlinedInput-root":
+    { Height: "25px", width: "350px" },
+  "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
+    borderRadius: "8px",
+    width: "350px",
+    border: "2px solid #F48FB1",
+  },
+  "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
+    border: "2px solid #F48FB1",
+  },
+  "& .css-y2lyk9-MuiFormLabel-root-MuiInputLabel-root": {
+    color: "gray",
+  },
+  "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+    padding: "10px 14px",
+  },
+  "& .css-y2lyk9-MuiFormLabel-root-MuiInputLabel-root": {
+    top: "-15%",
   },
 }));
 

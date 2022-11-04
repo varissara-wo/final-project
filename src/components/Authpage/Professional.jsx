@@ -1,7 +1,17 @@
 import React, { useState } from "react";
-
-import { Stack, Typography, Box, Step, StepLabel } from "@mui/material";
-
+// import { DatePicker, Space } from "antd";
+// import "antd/dist/antd.css";
+import {
+  Stack,
+  Typography,
+  Box,
+  Step,
+  StepLabel,
+  TextField,
+} from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
   NextButton,
   UploadButton,
@@ -11,6 +21,7 @@ import {
   InputLabelStyle,
   StepperStyle,
   RecommendedTypography,
+  Datepic,
 } from "./Styles.jsx";
 
 import {
@@ -28,6 +39,7 @@ const Professional = () => {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [value, setValue] = React.useState(null);
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -79,7 +91,7 @@ const Professional = () => {
     experience: "",
     education: "",
   });
-
+  console.log(account);
   return (
     <>
       <StepperStyle activeStep={activeStep}>
@@ -229,7 +241,38 @@ const Professional = () => {
                 inputProps={{ style: { padding: 8 } }}
               />
               <InputLabelStyle>BIRTHDAY</InputLabelStyle>
-              <OnelineTextField
+
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Datepic
+                  label="Pick a Date"
+                  value={value}
+                  color="primary"
+                  focused
+                  sx={{ width: "350px", Height: "36px", marginBottom: "16px" }}
+                  onChange={(newValue) => {
+                    setAccount({
+                      ...account,
+                      birthday: newValue.$d,
+                    });
+                    setValue(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+
+              {/* <DatePicker
+                sx={{ width: "350px", Height: "36px", marginBottom: "16px" }}
+                placeholder="pick a date"
+                format="YYYY-MM-DD HH:mm"
+                onChange={(_, dateString) => {
+                  setAccount({
+                    ...account,
+                    birthday: dateString,
+                  });
+                }}
+              ></DatePicker> */}
+
+              {/* <OnelineTextField
                 onChange={(e) => {
                   setAccount({
                     ...account,
@@ -242,7 +285,7 @@ const Professional = () => {
                 placeholder="Pick a date"
                 focused
                 inputProps={{ style: { padding: 8 } }}
-              />
+              /> */}
               <InputLabelStyle>LINKEDIN URL</InputLabelStyle>
               <OnelineTextField
                 onChange={(e) => {

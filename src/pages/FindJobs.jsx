@@ -28,6 +28,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import { data } from "./datamock/data.js";
+import Link from "@mui/material/Link";
 const Buttonstyle = styled(Button)(({ theme }) => ({
   fontFamily: "var(--inter-font)",
   fontWeight: "500",
@@ -153,7 +154,7 @@ const FindJobs = () => {
         alignItems: "flex-start",
       }}
     >
-      {/* Start Sidebar */}
+      {/*------------------------------------- Start Sidebar -------------------------------------*/}
       <Box
         className="sidebar-container"
         sx={{
@@ -174,6 +175,7 @@ const FindJobs = () => {
             sx={{
               margin: "32px 16px 32px 16px",
               width: "136px",
+              cursor: "pointer",
             }}
           >
             <img src="pic/gtj-logo-1.svg" alt="getthatjoblogo" />
@@ -181,7 +183,7 @@ const FindJobs = () => {
           <Box>
             <List>
               <SidebarButtonStyled
-                href="#simple-list"
+                href="#find-that-Job"
                 selected={selectedIndex === 0}
                 onClick={(event) => handleListItemClick(event, 0)}
               >
@@ -192,40 +194,40 @@ const FindJobs = () => {
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                href="#simple-list"
+                href="#your-applications"
                 selected={selectedIndex === 1}
                 onClick={(event) => handleListItemClick(event, 1)}
               >
                 <IconBoxStyled>
-                  <img src="pic/doc.svg" alt="find that job" />
+                  <img src="pic/doc.svg" alt="your applications" />
                 </IconBoxStyled>
                 <TextButtonStyled>Your applications</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                href="#simple-list"
+                href="#following"
                 selected={selectedIndex === 2}
                 onClick={(event) => handleListItemClick(event, 2)}
               >
                 <IconBoxStyled>
-                  <img src="pic/gps.svg" alt="find that job" />
+                  <img src="pic/gps.svg" alt="following" />
                 </IconBoxStyled>
                 <TextButtonStyled>Following</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
                 component="a"
-                href="#simple-list"
+                href="#profile"
                 selected={selectedIndex === 3}
                 onClick={(event) => handleListItemClick(event, 3)}
               >
                 <IconBoxStyled>
-                  <img src="pic/personal.svg" alt="find that job" />
+                  <img src="pic/personal.svg" alt="profile" />
                 </IconBoxStyled>
                 <TextButtonStyled>Profile</TextButtonStyled>
               </SidebarButtonStyled>
 
-              <SidebarButtonStyled component="a" href="#simple-list">
+              <SidebarButtonStyled component="a" href="/">
                 <IconBoxStyled>
                   <img src="pic/LogoutIcon.svg" alt="log out" />
                 </IconBoxStyled>
@@ -276,7 +278,7 @@ const FindJobs = () => {
             </Typography>
           </ListItem>
 
-          <GithubProfileStyled href="#simple-list">
+          <GithubProfileStyled href="https://github.com/Hohokz" target="_blank">
             <GitHubIcon
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
@@ -285,10 +287,13 @@ const FindJobs = () => {
               color={"secondary"}
               sx={{ marginLeft: "5px" }}
             >
-              Apiwat
+              Apiwat Singharach
             </Typography>
           </GithubProfileStyled>
-          <GithubProfileStyled href="#simple-list">
+          <GithubProfileStyled
+            href="https://github.com/MilesNR"
+            target="_blank"
+          >
             <GitHubIcon
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
@@ -297,10 +302,13 @@ const FindJobs = () => {
               color={"secondary"}
               sx={{ marginLeft: "5px" }}
             >
-              Smile
+              Nattakit Rattanakeha
             </Typography>
           </GithubProfileStyled>
-          <GithubProfileStyled href="#simple-list">
+          <GithubProfileStyled
+            href="https://github.com/thanakornboonlar"
+            target="_blank"
+          >
             <GitHubIcon
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
@@ -312,7 +320,10 @@ const FindJobs = () => {
               Thanakorn Boonlar
             </Typography>
           </GithubProfileStyled>
-          <GithubProfileStyled href="#simple-list">
+          <GithubProfileStyled
+            href="https://github.com/varissara-wo"
+            target="_blank"
+          >
             <GitHubIcon
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
@@ -321,10 +332,13 @@ const FindJobs = () => {
               color={"secondary"}
               sx={{ marginLeft: "5px" }}
             >
-              Phone
+              Varissara Wongprasit
             </Typography>
           </GithubProfileStyled>
-          <GithubProfileStyled href="#simple-list">
+          <GithubProfileStyled
+            href="https://github.com/cholanuchkorn123"
+            target="_blank"
+          >
             <GitHubIcon
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
@@ -333,10 +347,10 @@ const FindJobs = () => {
               color={"secondary"}
               sx={{ marginLeft: "5px" }}
             >
-              Korn
+              Cholanuch Kasemtanakitti
             </Typography>
           </GithubProfileStyled>
-          <Box sx={{ margin: "10px 0 32px 0" }}>
+          <Box sx={{ margin: "10px 0 32px 0", width: "100%" }}>
             <Typography
               variant="caption"
               color={"secondary"}
@@ -344,7 +358,7 @@ const FindJobs = () => {
             >
               Source code:
             </Typography>
-            <GithubProfileStyled href="#simple-list">
+            <GithubProfileStyled href="https://reactjs.org/" target="_blank">
               <Box
                 className="getthatjoblogo-box"
                 sx={{
@@ -367,7 +381,7 @@ const FindJobs = () => {
           </Box>
         </Box>
       </Box>
-      {/* End Sidebar */}
+      {/*------------------------------------- End Sidebar -------------------------------------*/}
 
       <Box sx={{ backgroundColor: "#F5F5F6", width: "100%", height: "100vh" }}>
         <Box

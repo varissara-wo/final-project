@@ -1,4 +1,3 @@
-import React from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import SearchIcon from "@mui/icons-material/Search";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -722,5 +721,4 @@ const FindJobs = () => {
     </Box>
   );
 };
-
 export default FindJobs;

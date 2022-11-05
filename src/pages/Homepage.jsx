@@ -3,6 +3,7 @@ import NavBox from '../components/Navbar.jsx'
 import Box from '@mui/material/Box';
 import { Typography, Button, styled, Divider } from '@mui/material';
 
+
 // .MuiBox - root.css - 8kbx29
 
 const MultilineUnderLine = styled(`hr`)(() => ({
@@ -10,6 +11,8 @@ const MultilineUnderLine = styled(`hr`)(() => ({
     borderColor: '#BF5F82',
 
 }));
+
+
 
 const Homepage = () => {
     return (

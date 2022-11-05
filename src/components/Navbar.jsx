@@ -2,9 +2,14 @@ import * as React from 'react';
 import { Button, Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
+import { useNavigate } from 'react-router-dom';
+
 
 
 export default function NavBox() {
+
+    const navigate = useNavigate();
+
     return (
         <AppBar position="fixed" color="background">
             <Box sx={{
@@ -26,7 +31,7 @@ export default function NavBox() {
                     alignItems: 'center',
                     boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)"
                 }}>
-                    <Box>
+                    <Box onClick={() => navigate("/")}>
                         <img src='images/gtj-logo.png' />
                     </Box>
 
@@ -43,6 +48,7 @@ export default function NavBox() {
                                 variant="outlined"
                                 color="primary"
                                 fontFamily="button"
+                                onClick={() => navigate("/auth")}
                                 sx={{
                                     color: '#616161',
                                     borderColor: 'primary',

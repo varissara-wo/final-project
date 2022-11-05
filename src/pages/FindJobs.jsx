@@ -1,3 +1,4 @@
+import React from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import SearchIcon from "@mui/icons-material/Search";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -59,14 +60,14 @@ const Textinput = styled(Autocomplete)(({ theme }) => ({
     border: "2px solid #F48FB1",
   },
   height: "60px",
-  color: "primary focused","& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root":{
-    backgroundColor:"#FFFFFF"
+  color: "primary focused", "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
+    backgroundColor: "#FFFFFF"
   }
 }));
 const Textseacrh = styled(TextField)(({ theme }) => ({
   "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root": {
     width: "480px",
-    height: "40px",   backgroundColor:"#FFFFFF"
+    height: "40px", backgroundColor: "#FFFFFF"
   },
   "& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":
     { width: "480px" },
@@ -76,7 +77,7 @@ const Textseacrh = styled(TextField)(({ theme }) => ({
 const Textseacrh1 = styled(TextField)(({ theme }) => ({
   "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root": {
     width: "120px",
-    height: "40px",   backgroundColor:"#FFFFFF"
+    height: "40px", backgroundColor: "#FFFFFF"
   },
   height: "60px",
   color: "primary focused",
@@ -599,7 +600,7 @@ const FindJobs = () => {
                       >
                         <img
                           src={`${item.img}?w=75&fit=crop&auto=format`}
-                          //srcSet={`${item.img}?w=75&fit=crop&auto=format&dpr=2 2x`}
+                        //srcSet={`${item.img}?w=75&fit=crop&auto=format&dpr=2 2x`}
                         />{" "}
                       </ImageListItem>
                       <Box

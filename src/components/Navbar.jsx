@@ -31,7 +31,7 @@ export default function NavBox() {
                     alignItems: 'center',
                     boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)"
                 }}>
-                    <Box onClick={() => navigate("/")}>
+                    <Box onClick={() => navigate("/")} girt>
                         <img src='images/gtj-logo.png' />
                     </Box>
 

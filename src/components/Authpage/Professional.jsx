@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 
-import { Stack, Typography, Box, Step, StepLabel, styled } from "@mui/material";
+import {
+  Stack,
+  Typography,
+  Box,
+  Step,
+  StepLabel,
+  TextField,
+} from "@mui/material";
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import {
   NextButton,
@@ -11,13 +21,13 @@ import {
   InputLabelStyle,
   StepperStyle,
   RecommendedTypography,
+  Datepic,
 } from "./Styles.jsx";
 
 import {
   FileUploadOutlined,
   ArrowForwardIos,
   ArrowBackIosNew,
-  AccountBoxOutlined,
 } from "@mui/icons-material";
 
 const Professional = () => {
@@ -41,10 +51,10 @@ const Professional = () => {
     phoneNumber: "",
     experience: "Between 300 and 2000 characters",
     education: "Between 100 and 2000 characters",
+    useremail:""
   });
 
-  // validate linkdin url
-
+ 
   const steps = [
     "Login information",
     "Personal information",
@@ -53,7 +63,8 @@ const Professional = () => {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const [validateExperienceColor, setValidateExperienceColor] = useState("");
+  const [color, setColor] = useState({experience:"", education:""});
+  const [value, setValue] = React.useState(null);
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -63,7 +74,7 @@ const Professional = () => {
     return skipped.has(step);
   };
 
-  //validate linkdin url
+  //validate form input
   const validateLinkdin = (url) => {
     const linkedinRegex =
       /((https?:\/\/)?((www|\w\w)\.)?linkedin\.com\/)((([\w]{2,3})?)|([^/]+\/(([\w|\d-&#?=])+\/?){1,}))$/gm;
@@ -78,6 +89,13 @@ const Professional = () => {
     return isPasswordValid;
   };
 
+  const validateEmail = (email) => {
+    const emailRegex =
+    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const isEmailValid = emailRegex.test(email);
+    return isEmailValid;
+  };
+
   const validatePhoneNumber = (number) => {
     const phoneNumberRegex =
       /^\+?([0-9]{2})\)?[-. ]?([0-9]{2})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
@@ -86,7 +104,7 @@ const Professional = () => {
   };
 
   const validateExperience = (context) => {
-    const experienceRegex = /^\w{300,2000}$/;
+    const experienceRegex = /.{300,2000}/;
     const isExperienceValid = experienceRegex.test(context);
     return isExperienceValid;
   };
@@ -105,26 +123,30 @@ const Professional = () => {
     }
 
     if (activeStep === 0) {
+     
       const checkPassword = validatePassword(account.password);
-      if (checkPassword) {
-        setValidate({ ...validate, password: "" });
-        if (account.password === account.passwordConfirmation) {
-          setActiveStep((prevActiveStep) => prevActiveStep + 1);
-          setSkipped(newSkipped);
-          setValidate({ ...validate, confirmPassword: "" });
-        } else {
-          setValidate({
-            ...validate,
-            confirmPassword: "** Password not match",
-          });
-        }
-      } else {
-        setValidate({
-          ...validate,
-          password:
-            "** Password should have at least one numeric digit, one special character, one uppercase and one lowercase letter",
-        });
-      }
+      const checkEmail = validateEmail(account.email);
+      console.log(checkEmail)
+
+      //Invalid message
+      const emailMessage = "** Email is not valid"
+      const passwordMessage = "** Password should have at least one numeric digit, one special character, one uppercase and one lowercase letter"
+      const notMatch = "** Password not match"
+
+      if (checkEmail & checkPassword & account.password === account.passwordConfirmation){
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
+      } else if (checkEmail === false  & checkPassword === false) {
+        setValidate({ ...validate, useremail: emailMessage,  password:passwordMessage });
+      } 
+        else if (checkEmail === true  & checkPassword === false) {
+        setValidate({ ...validate, useremail: "",  password:passwordMessage });
+      } else if (checkEmail === false  & checkPassword === true & account.password === account.passwordConfirmation) {
+        setValidate({ ...validate, useremail: emailMessage,  password:"" });
+      } else if (checkEmail === true  & checkPassword === true & account.password !== account.passwordConfirmation) {
+        setValidate({ ...validate, useremail: "",  password:"", confirmPassword: notMatch });
+      } 
+      
     }
 
     if (activeStep === 1) {
@@ -154,24 +176,38 @@ const Professional = () => {
     if (activeStep === 2) {
       const checkExperience = validateExperience(account.experience);
       const checkEducation = validateEducation(account.education);
-      if (checkExperience || account.experience === "") {
-        if (checkEducation || account.education === "") {
-          setActiveStep((prevActiveStep) => prevActiveStep + 1);
-          setSkipped(newSkipped);
-        } else {
-          setValidate({
-            ...validate,
-            education:
-              "** Should have characters between 100 - 2000 characters",
-          });
-        }
-      } else {
-        setValidateExperienceColor("#F48FB1");
+
+      if (checkExperience & checkEducation || account.experience === "" &  account.education === ""){
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
+      } else if (checkExperience === false & checkEducation === false){
+
+       //experience & education
+        setColor({...color, experience: "#F48FB1", education: "#F48FB1"});
         setValidate({
           ...validate,
           experience: "** Should have characters between 300 - 2000 characters",
+          education:
+            "** Should have characters between 100 - 2000 characters",
+        });
+      } else if (checkExperience === true & checkEducation === false){
+        setColor({...color, experience: "", education: "#F48FB1"});
+        setValidate({
+          ...validate,
+          experience: "Between 300 and 2000 characters",
+          education:
+            "** Should have characters between 100 - 2000 characters",
+        });
+      }else if (checkExperience === false & checkEducation === true){
+        setColor({...color, experience: "#F48FB1", education: ""});
+        setValidate({
+          ...validate,
+          experience: "** Should have characters between 300 - 2000 characters",
+          education:
+            "Between 100 and 2000 characters",
         });
       }
+      
     }
   };
 
@@ -265,7 +301,9 @@ const Professional = () => {
           >
             <Box>
               <InputLabelStyle>EMAIL</InputLabelStyle>
-              <OnelineTextField
+              
+              <Stack direction="row" gap="15px">
+               <OnelineTextField
                 onChange={(e) => {
                   setAccount({ ...account, email: e.target.value });
                 }}
@@ -276,6 +314,16 @@ const Professional = () => {
                 focused
                 inputProps={{ style: { padding: 8 } }}
               />
+                <Typography
+                  variant="body2"
+                  color="primary"
+                  component="span"
+                  display="flex"
+                  flex={1}
+                >
+                  {validate.useremail}
+                </Typography>
+              </Stack>
 
               <InputLabelStyle>PASSWORD</InputLabelStyle>
               <Stack direction="row" gap="15px">
@@ -400,20 +448,22 @@ const Professional = () => {
               </Stack>
 
               <InputLabelStyle>BIRTHDAY</InputLabelStyle>
-              <OnelineTextField
-                onChange={(e) => {
-                  setAccount({
-                    ...account,
-                    birthday: e.target.value,
-                  });
-                }}
-                defaultValue=""
-                label=""
-                color="primary"
-                placeholder="Pick a date"
-                focused
-                inputProps={{ style: { padding: 8 } }}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Datepic
+                  value={value}
+                  color="primary"
+                  focused
+                  sx={{ width: "350px", Height: "36px", marginBottom: "16px" }}
+                  onChange={(newValue) => {
+                    setAccount({
+                      ...account,
+                      birthday: newValue.$d,
+                    });
+                    setValue(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
               <InputLabelStyle>LINKEDIN URL</InputLabelStyle>
               <Stack direction="row" gap="15px">
                 <OnelineTextField
@@ -474,7 +524,7 @@ const Professional = () => {
         <Box
           marginTop="36px"
           component="form"
-          sx={{ width: "360px" }}
+          sx={{ width: "600px" }}
           noValidate
           autoComplete="off"
         >
@@ -502,6 +552,7 @@ const Professional = () => {
                   experience: e.target.value,
                 });
               }}
+              value={account.experience}
               defaultValue=""
               style={{ marginBottom: "14px" }}
               label=""
@@ -511,7 +562,7 @@ const Professional = () => {
               inputProps={{ style: { padding: "8px" } }}
               helperText={validate.experience}
               FormHelperTextProps={{
-                style: { color: validateExperienceColor },
+                style: { color: color.experience },
               }}
               multiline
               rows={3}
@@ -531,9 +582,13 @@ const Professional = () => {
               placeholder="Major in life experiences with a PHD in procrastination..."
               focused
               inputProps={{ style: { padding: "8px" } }}
-              helperText="Between 100 and 2000 characters"
+              FormHelperTextProps={{
+                style: { color: color.education },
+              }}
+              helperText={validate.education}
               multiline
               rows={3}
+              value={account.education}
             />
 
             <InputLabelStyle>UPLOAD/UPDATE YOUR CV</InputLabelStyle>

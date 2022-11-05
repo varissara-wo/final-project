@@ -7,6 +7,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 // -------------- Button --------------
 
 export const NextButton = styled(Button)(() => ({
@@ -148,5 +150,37 @@ export const ValidateTypography = styled(Typography)(() => ({
   },
   "& .css-1h8391f-MuiFormHelperText-root ": {
     color: "#8E8E8E",
+  },
+}));
+
+// -------------- Pinkdate --------------
+
+export const Datepic = styled(DatePicker)(() => ({
+  marginBottom: "16px",
+
+  "& .css-otaojw-MuiFormControl-root-MuiTextField-root .css-sfqmct-MuiInputBase-root-MuiOutlinedInput-root":
+    { Height: "25px", width: "350px" },
+  "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
+    borderRadius: "8px",
+    width: "350px",
+  },
+  "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
+    border: "2px solid #F48FB1",
+  },
+  "& .css-y2lyk9-MuiFormLabel-root-MuiInputLabel-root": {
+    color: "gray",
+    top: "-15%",
+  },
+  "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+    padding: "10px 14px",
+  },
+
+  "& .css-sfqmct-MuiInputBase-root-MuiOutlinedInput-root": {
+    backgroundColor: "#fff",
+  },
+  "& .MuiOutlinedInput-root:hover": {
+    "& > fieldset": {
+      borderColor: "#F48FB1",
+    },
   },
 }));

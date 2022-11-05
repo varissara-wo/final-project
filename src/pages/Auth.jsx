@@ -8,7 +8,6 @@ import {
   Tabs,
   Tab,
   ImageListItem,
-  Paper,
 } from "@mui/material";
 
 import Navbar from "../components/Navbar.jsx";
@@ -25,7 +24,7 @@ const Auth = () => {
   //   <--------------- form type --------------->
 
   return (
-    <Box marginTop="64px" height="100vh" backgroundColor="#E5E5E5">
+    <Box marginTop="64px" height="100%" backgroundColor="#E5E5E5">
       <Navbar />
       <Stack width="100%" alignItems="center">
         <Stack
@@ -34,11 +33,11 @@ const Auth = () => {
           width="100%"
           height="100%"
           maxWidth="1440px"
-          maxHeight="900px"
+          // maxHeight="900px"
           justifyContent="center"
         >
           {/* -------------------------Form section------------------ */}
-          <Box flex={1} p={5} paddingLeft="188px">
+          <Box flex={1} p={5} paddingLeft="188px" height="100%">
             <Typography variant="h3" marginBottom="16px" color="warning">
               Good choice!
             </Typography>
@@ -80,7 +79,7 @@ const Auth = () => {
             {userType === "professional" && <Professional />}
             {userType === "recruiter" && <Recruiter />}
           </Box>
-          <Box flex={1}>
+          <Box flex={1} height="100vh">
             <ImageListItem sx={{ position: "fixed", bottom: "0px" }}>
               <img src="images/discussing.svg" alt="woman" />
             </ImageListItem>

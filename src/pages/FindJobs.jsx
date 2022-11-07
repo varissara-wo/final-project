@@ -29,6 +29,7 @@ import { useState } from "react";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import { data } from "./datamock/data.js";
 import Link from "@mui/material/Link";
+
 const Buttonstyle = styled(Button)(({ theme }) => ({
   fontFamily: "var(--inter-font)",
   fontWeight: "500",
@@ -655,7 +656,7 @@ const FindJobs = () => {
                         >
                           <Box>
                             <CalendarMonthIcon />
-                          </Box>
+                          </Box> 
                           <Box sx={{ marginBottom: "5px", marginRight: "4px" }}>
                             <Typography variant="caption">
                               {item.type}{" "}

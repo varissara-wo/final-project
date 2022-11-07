@@ -28,79 +28,84 @@ const Recruiter = () => {
 
   const [validate, setValidate] = useState({
     about: "Between 100 and 2000 characters",
-    useremail:"",
-    companyName:""
+    useremail: "",
+    companyName: "",
   });
 
   //validate state
-  const [passwordMessage, setPasswordMessage] = useState("")
-  const [confirmPasswordMessage, setConfirmPasswordMessage] = useState("")
-  const [emailMessage, setEmailMessage] = useState("")
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [confirmPasswordMessage, setConfirmPasswordMessage] = useState("");
+  const [emailMessage, setEmailMessage] = useState("");
 
-  const [color, setColor] = useState({about:""});
+  const [color, setColor] = useState({ about: "" });
 
   //validate form input
   const validatePassword = (password) => {
-    let isPass = false
-    const passwordMessage = "** Password should have at least one numeric digit, one special character, one uppercase and one lowercase letter"
-    const notMatch = "** Password not match"
+    let isPass = false;
+    const passwordMessage =
+      "** Password should have at least one numeric digit, one special character, one uppercase and one lowercase letter";
+    const notMatch = "** Password not match";
     const passwordRegex =
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,20}$/;
     const isPasswordValid = passwordRegex.test(password);
-    if (isPasswordValid){
-      setPasswordMessage("")
-      isPass = true
+    if (isPasswordValid) {
+      setPasswordMessage("");
+      isPass = true;
     } else {
-      setPasswordMessage(passwordMessage)
+      setPasswordMessage(passwordMessage);
     }
-    return isPass
+    return isPass;
   };
 
   const validateConfirmPassword = (password) => {
-    let isPass = false
-    console.log(account.confirmPassword)
-    console.log(account.password)
-    const notMatch = "** Password not match"
-    if (account.password === account.passwordConfirmation & account.password !== ""){
-      setConfirmPasswordMessage("")
-      isPass = true
-    } else if (account.password === account.passwordConfirmation & account.password === "") {
-      setConfirmPasswordMessage(notMatch)
+    let isPass = false;
+    console.log(account.confirmPassword);
+    console.log(account.password);
+    const notMatch = "** Password not match";
+    if (
+      (account.password === account.passwordConfirmation) &
+      (account.password !== "")
+    ) {
+      setConfirmPasswordMessage("");
+      isPass = true;
+    } else if (
+      (account.password === account.passwordConfirmation) &
+      (account.password === "")
+    ) {
+      setConfirmPasswordMessage(notMatch);
     } else if (account.password !== account.passwordConfirmation) {
-      setConfirmPasswordMessage(notMatch)
+      setConfirmPasswordMessage(notMatch);
     } else if (account.password === account.passwordConfirmation) {
-      setConfirmPasswordMessage("")
-    } 
-    return isPass
-  }
-
+      setConfirmPasswordMessage("");
+    }
+    return isPass;
+  };
 
   const validateEmail = (email) => {
-    const emailMessage = "** Email is not valid"
-    let isPass = false
-    const emailRegex =
-    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const emailMessage = "** Email is not valid";
+    let isPass = false;
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const isEmailValid = emailRegex.test(email);
-    if (isEmailValid){
-      setEmailMessage("")
-      isPass = true
+    if (isEmailValid) {
+      setEmailMessage("");
+      isPass = true;
     } else {
-      setEmailMessage(emailMessage)
+      setEmailMessage(emailMessage);
     }
     return isPass;
   };
 
   const validateCompanyName = () => {
-    const message = "** Company name is not valid"
-    let isPass = false
-    if (account.companyName !== ""){
-      setValidate({ ...validate, companyName: ""})
-      isPass = true
+    const message = "** Company name is not valid";
+    let isPass = false;
+    if (account.companyName !== "") {
+      setValidate({ ...validate, companyName: "" });
+      isPass = true;
     } else {
-      setValidate({ ...validate, companyName: message})
+      setValidate({ ...validate, companyName: message });
     }
     return isPass;
-  }
+  };
 
   const validateAbout = (context) => {
     const aboutRegex = /^\w{100,2000}$/;
@@ -127,7 +132,6 @@ const Recruiter = () => {
     }
   };
 
-
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -143,35 +147,35 @@ const Recruiter = () => {
     }
 
     if (activeStep === 0) {
-     
-      const checkPassword =  validatePassword(account.password);
-      const checkEmail =  validateEmail(account.email);
-      const checkCompanyName =  validateCompanyName();
+      const checkPassword = validatePassword(account.password);
+      const checkEmail = validateEmail(account.email);
+      const checkCompanyName = validateCompanyName();
       const checkConfirmPassword = validateConfirmPassword();
 
-      if (checkEmail & checkPassword & checkCompanyName & checkConfirmPassword){
-          setActiveStep((prevActiveStep) => prevActiveStep + 1);
-          setSkipped(newSkipped);
-        }      
+      if (
+        checkEmail &
+        checkPassword &
+        checkCompanyName &
+        checkConfirmPassword
+      ) {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
+      }
     }
 
     if (activeStep === 1) {
       const checkAbout = validateAbout(account.about);
-  
 
-      if (checkAbout  || account.about === "" ){
+      if (checkAbout || account.about === "") {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
       } else {
-
-        setColor({...color, about: "#F48FB1"});
+        setColor({ ...color, about: "#F48FB1" });
         setValidate({
           ...validate,
-          about:
-            "** Should have characters between 100 - 2000 characters",
+          about: "** Should have characters between 100 - 2000 characters",
         });
-      } 
-      
+      }
     }
   };
 
@@ -193,9 +197,7 @@ const Recruiter = () => {
       return newSkipped;
     });
   };
-
-  
-
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <>
@@ -238,18 +240,18 @@ const Recruiter = () => {
             <Box>
               <InputLabelStyle>COMPANY NAME</InputLabelStyle>
               <Stack direction="row" gap="15px">
-              <OnelineTextField
-                required
-                onChange={(e) => {
-                  setAccount({ ...account, companyName: e.target.value });
-                }}
-                defaultValue=""
-                label=""
-                color="primary"
-                placeholder="MY Company S.A"
-                focused
-                inputProps={{ style: { padding: 8 } }}
-              />
+                <OnelineTextField
+                  required
+                  onChange={(e) => {
+                    setAccount({ ...account, companyName: e.target.value });
+                  }}
+                  defaultValue=""
+                  label=""
+                  color="primary"
+                  placeholder="MY Company S.A"
+                  focused
+                  inputProps={{ style: { padding: 8 } }}
+                />
                 <Typography
                   variant="body2"
                   color="primary"
@@ -259,21 +261,21 @@ const Recruiter = () => {
                 >
                   {validate.companyName}
                 </Typography>
-                </Stack>
-             
+              </Stack>
+
               <InputLabelStyle>EMAIL</InputLabelStyle>
               <Stack direction="row" gap="15px">
-               <OnelineTextField
-                onChange={(e) => {
-                  setAccount({ ...account, email: e.target.value });
-                }}
-                defaultValue=""
-                label=""
-                color="primary"
-                placeholder="some.user@mail.com"
-                focused
-                inputProps={{ style: { padding: 8 } }}
-              />
+                <OnelineTextField
+                  onChange={(e) => {
+                    setAccount({ ...account, email: e.target.value });
+                  }}
+                  defaultValue=""
+                  label=""
+                  color="primary"
+                  placeholder="some.user@mail.com"
+                  focused
+                  inputProps={{ style: { padding: 8 } }}
+                />
                 <Typography
                   variant="body2"
                   color="primary"
@@ -296,6 +298,7 @@ const Recruiter = () => {
                   placeholder="******"
                   focused
                   inputProps={{ style: { padding: 8 } }}
+                  type={showPassword ? "text" : "password"}
                 />
                 <Typography
                   variant="body2"
@@ -322,6 +325,7 @@ const Recruiter = () => {
                   placeholder="******"
                   focused
                   inputProps={{ style: { padding: 8 } }}
+                  type={showPassword ? "text" : "password"}
                 />
                 <Typography
                   variant="body2"
@@ -333,7 +337,7 @@ const Recruiter = () => {
                   {confirmPasswordMessage}
                 </Typography>
               </Stack>
-              <Stack display="flex" alignItems="center"  width="360px">
+              <Stack display="flex" alignItems="center" width="360px">
                 <NextButton
                   variant="contained"
                   color="primary"

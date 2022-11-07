@@ -8,7 +8,8 @@ import {
   StepLabel,
   TextField,
 } from "@mui/material";
-
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
@@ -22,6 +23,8 @@ import {
   StepperStyle,
   RecommendedTypography,
   Datepic,
+  IconButton,
+  InputAdornment,
 } from "./Styles.jsx";
 
 import {
@@ -51,10 +54,15 @@ const Professional = () => {
     phoneNumber: "",
     experience: "Between 300 and 2000 characters",
     education: "Between 100 and 2000 characters",
-    useremail:""
+    useremail: "",
   });
 
- 
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    console.log(showPassword);
+    setShowPassword(!showPassword);
+  };
+  const handleMouseDownPassword = () => setShowPassword(true);
   const steps = [
     "Login information",
     "Personal information",
@@ -63,7 +71,7 @@ const Professional = () => {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const [color, setColor] = useState({experience:"", education:""});
+  const [color, setColor] = useState({ experience: "", education: "" });
   const [value, setValue] = React.useState(null);
 
   const isStepOptional = (step) => {
@@ -90,8 +98,7 @@ const Professional = () => {
   };
 
   const validateEmail = (email) => {
-    const emailRegex =
-    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const isEmailValid = emailRegex.test(email);
     return isEmailValid;
   };
@@ -123,30 +130,49 @@ const Professional = () => {
     }
 
     if (activeStep === 0) {
-     
       const checkPassword = validatePassword(account.password);
       const checkEmail = validateEmail(account.email);
-      console.log(checkEmail)
+      console.log(checkEmail);
 
       //Invalid message
-      const emailMessage = "** Email is not valid"
-      const passwordMessage = "** Password should have at least one numeric digit, one special character, one uppercase and one lowercase letter"
-      const notMatch = "** Password not match"
+      const emailMessage = "** Email is not valid";
+      const passwordMessage =
+        "** Password should have at least one numeric digit, one special character, one uppercase and one lowercase letter";
+      const notMatch = "** Password not match";
 
-      if (checkEmail & checkPassword & account.password === account.passwordConfirmation){
+      if (
+        checkEmail &
+        checkPassword &
+        (account.password === account.passwordConfirmation)
+      ) {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
-      } else if (checkEmail === false  & checkPassword === false) {
-        setValidate({ ...validate, useremail: emailMessage,  password:passwordMessage });
-      } 
-        else if (checkEmail === true  & checkPassword === false) {
-        setValidate({ ...validate, useremail: "",  password:passwordMessage });
-      } else if (checkEmail === false  & checkPassword === true & account.password === account.passwordConfirmation) {
-        setValidate({ ...validate, useremail: emailMessage,  password:"" });
-      } else if (checkEmail === true  & checkPassword === true & account.password !== account.passwordConfirmation) {
-        setValidate({ ...validate, useremail: "",  password:"", confirmPassword: notMatch });
-      } 
-      
+      } else if ((checkEmail === false) & (checkPassword === false)) {
+        setValidate({
+          ...validate,
+          useremail: emailMessage,
+          password: passwordMessage,
+        });
+      } else if ((checkEmail === true) & (checkPassword === false)) {
+        setValidate({ ...validate, useremail: "", password: passwordMessage });
+      } else if (
+        (checkEmail === false) &
+        (checkPassword === true) &
+        (account.password === account.passwordConfirmation)
+      ) {
+        setValidate({ ...validate, useremail: emailMessage, password: "" });
+      } else if (
+        (checkEmail === true) &
+        (checkPassword === true) &
+        (account.password !== account.passwordConfirmation)
+      ) {
+        setValidate({
+          ...validate,
+          useremail: "",
+          password: "",
+          confirmPassword: notMatch,
+        });
+      }
     }
 
     if (activeStep === 1) {
@@ -177,37 +203,35 @@ const Professional = () => {
       const checkExperience = validateExperience(account.experience);
       const checkEducation = validateEducation(account.education);
 
-      if (checkExperience & checkEducation || account.experience === "" &  account.education === ""){
+      if (
+        checkExperience & checkEducation ||
+        (account.experience === "") & (account.education === "")
+      ) {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
-      } else if (checkExperience === false & checkEducation === false){
-
-       //experience & education
-        setColor({...color, experience: "#F48FB1", education: "#F48FB1"});
+      } else if ((checkExperience === false) & (checkEducation === false)) {
+        //experience & education
+        setColor({ ...color, experience: "#F48FB1", education: "#F48FB1" });
         setValidate({
           ...validate,
           experience: "** Should have characters between 300 - 2000 characters",
-          education:
-            "** Should have characters between 100 - 2000 characters",
+          education: "** Should have characters between 100 - 2000 characters",
         });
-      } else if (checkExperience === true & checkEducation === false){
-        setColor({...color, experience: "", education: "#F48FB1"});
+      } else if ((checkExperience === true) & (checkEducation === false)) {
+        setColor({ ...color, experience: "", education: "#F48FB1" });
         setValidate({
           ...validate,
           experience: "Between 300 and 2000 characters",
-          education:
-            "** Should have characters between 100 - 2000 characters",
+          education: "** Should have characters between 100 - 2000 characters",
         });
-      }else if (checkExperience === false & checkEducation === true){
-        setColor({...color, experience: "#F48FB1", education: ""});
+      } else if ((checkExperience === false) & (checkEducation === true)) {
+        setColor({ ...color, experience: "#F48FB1", education: "" });
         setValidate({
           ...validate,
           experience: "** Should have characters between 300 - 2000 characters",
-          education:
-            "Between 100 and 2000 characters",
+          education: "Between 100 and 2000 characters",
         });
       }
-      
     }
   };
 
@@ -301,19 +325,19 @@ const Professional = () => {
           >
             <Box>
               <InputLabelStyle>EMAIL</InputLabelStyle>
-              
+
               <Stack direction="row" gap="15px">
-               <OnelineTextField
-                onChange={(e) => {
-                  setAccount({ ...account, email: e.target.value });
-                }}
-                defaultValue=""
-                label=""
-                color="primary"
-                placeholder="some.user@mail.com"
-                focused
-                inputProps={{ style: { padding: 8 } }}
-              />
+                <OnelineTextField
+                  onChange={(e) => {
+                    setAccount({ ...account, email: e.target.value });
+                  }}
+                  defaultValue=""
+                  label=""
+                  color="primary"
+                  placeholder="some.user@mail.com"
+                  focused
+                  inputProps={{ style: { padding: 8 } }}
+                />
                 <Typography
                   variant="body2"
                   color="primary"
@@ -337,7 +361,17 @@ const Professional = () => {
                   placeholder="******"
                   focused
                   inputProps={{ style: { padding: 8 } }}
+                  type={showPassword ? "text" : "password"}
+                  // inputProps={{ style: { padding: 8 },endAdornment: <InputAdornment position="end"><Visibility/></InputAdornment>,}}
+
+                  // endIcon={<IconButton
+                  //   onClick={() => setShowPassword(!showPassword)}
+                  //   onMouseDown={() => console.log("hija")}
+                  // >
+                  //   {showPassword ? <Visibility /> : <VisibilityOff />}
+                  // </IconButton>}
                 />
+
                 <Typography
                   variant="body2"
                   color="primary"
@@ -363,6 +397,12 @@ const Professional = () => {
                   color="primary"
                   placeholder="******"
                   focused
+                  value={account.passwordConfirmation}
+                  type={
+                    account.passwordConfirmation.showPassword
+                      ? "text"
+                      : "password"
+                  }
                   inputProps={{ style: { padding: 8 } }}
                 />
                 <Typography

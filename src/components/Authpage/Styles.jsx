@@ -6,7 +6,7 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-
+import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 // -------------- Button --------------
@@ -184,3 +184,21 @@ export const Datepic = styled(DatePicker)(() => ({
     },
   },
 }));
+// ----buttono to hide password
+export const IconButton = styled(ButtonUnstyled)(
+  ({ theme }) => `
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: inherit;
+  cursor: pointer;
+  color: ${theme.palette.mode === 'dark' ? '#CDD2D7' : '#3E5060'};
+  `,
+);
+export const InputAdornment = styled('div')`
+  margin: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;

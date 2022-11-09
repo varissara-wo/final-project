@@ -53,8 +53,8 @@ professionalRouter.post("/", async (req, res) => {
       last_logged_in: new Date(),
     };
 
-    // const salt = await ;
     const salt = await bcrypt.genSalt(10);
+
     newProfessionalUser.password = await bcrypt.hash(
       newProfessionalUser.password,
       salt
@@ -84,6 +84,51 @@ professionalRouter.post("/", async (req, res) => {
       message: "New user has been created sucessfully",
     });
   } catch (err) {}
+});
+professionalRouter.put("/:id", async (req, res) => {
+  const updatedUser = {
+    ...req.body,
+    updated_at: new Date(),
+  };
+  const userId = req.params.id;
+  const alreadyUse = await pool.query(
+    `select * from professional where email =$1`,
+    [updatedUser.email]
+  );
+  if (alreadyUse) {
+    return res.json({
+      message: "This email is already available",
+    });
+  } else {
+    await pool.query(
+      `UPDATE professional SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,title=$6,experience=$7,cv=$8,education=$9,updated_at=$10 where professional_id=$11`,
+      [
+        updatedUser.email,
+        updatedUser.name,
+        updatedUser.phone,
+        updatedUser.birthday,
+        updatedUser.linkedin,
+        updatedUser.title,
+        updatedUser.experience,
+        updatedUser.cv,
+        updatedUser.education,
+        updatedUser.updated_at,
+        userId,
+      ]
+    );
+    return res.json({
+      message: `User ${userId} has been updated.`,
+    });
+  }
+});
+professionalRouter.delete("/:id", async (req, res) => {
+  const userId = req.params.id;
+  await pool.query(`delete from professional where professional_id=$1`, [
+    userId,
+  ]);
+  return res.json({
+    message: `User ${userId} has been deleted.`,
+  });
 });
 
 export default professionalRouter;

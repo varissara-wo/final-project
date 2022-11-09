@@ -257,9 +257,11 @@ const Professional = () => {
   //handleFileChange for file upload validation
   const innitialFileData = "No file chosen";
   const [fileStatus, setFileStatus] = useState(innitialFileData);
+  
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     //Validate the file is PDF
+    console.log(file)
     if (file.type !== "application/pdf") {
       return setFileStatus("Not a PDF file");
     }

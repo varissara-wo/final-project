@@ -104,8 +104,7 @@ const Professional = () => {
   };
 
   const validatePhoneNumber = (number) => {
-    const phoneNumberRegex =
-      /^\+?([0-9]{2})\)?[-. ]?([0-9]{2})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    const phoneNumberRegex = /^(\+66)(\d{9})$/gm;
     const isPhoneNumberValid = phoneNumberRegex.test(number);
     return isPhoneNumberValid;
   };
@@ -474,7 +473,7 @@ const Professional = () => {
                   defaultValue=""
                   label=""
                   color="primary"
-                  placeholder="+xx xxxxxxxxx"
+                  placeholder="+66xxxxxxxxx"
                   focused
                   inputProps={{ style: { padding: 8 } }}
                 />

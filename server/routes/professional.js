@@ -21,7 +21,6 @@ professionalRouter.get("/users/exists/:email", async (req, res) => {
       [req.params.email]
     );
 
-    console.log(isUserExist.rows.length);
     let message =
       isUserExist.rows.length === 1
         ? "This email is already available"

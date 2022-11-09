@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import {
   Stack,
@@ -56,6 +57,19 @@ const Professional = () => {
     education: "Between 100 and 2000 characters",
     useremail: "",
   });
+
+  const [isEmailValid, setIsEmailValid] = useState("");
+
+  async function isEmailExist() {
+    const result = await axios.get(
+      `http://localhost:4000/professional/users/exists/${account.email}`
+    );
+
+    setIsEmailValid(result.data.data);
+  }
+  useEffect(() => {
+    isEmailExist();
+  }, [account.email]);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -132,6 +146,8 @@ const Professional = () => {
       const checkPassword = validatePassword(account.password);
       const checkEmail = validateEmail(account.email);
       console.log(checkEmail);
+      console.log(isEmailValid);
+      console.log(account.email);
 
       //Invalid message
       const emailMessage = "** Email is not valid";

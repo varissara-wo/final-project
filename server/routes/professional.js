@@ -94,7 +94,7 @@ professionalRouter.put("/:id", async (req, res) => {
     `select * from professional where email =$1`,
     [updatedUser.email]
   );
-  if (alreadyUse) {
+  if (alreadyUse.rows.length === 1) {
     return res.json({
       message: "This email is already available",
     });

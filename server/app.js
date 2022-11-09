@@ -1,7 +1,11 @@
 import express from "express";
 import bodyParser from "body-parser";
 import professionalRouter from "./routes/professional.js";
+
+import recruiterRouter from "./routes/recruiter.js";
+
 import cors from "cors";
+
 import { pool } from "./utils/db.js";
 
 const app = express();
@@ -24,7 +28,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/professional", professionalRouter);
-
+app.use("/recruiter", recruiterRouter);
 app.listen(PORT, () => {
   connectDb();
   console.log(`Server start at Port ${PORT}`);

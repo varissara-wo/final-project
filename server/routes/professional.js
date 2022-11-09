@@ -14,6 +14,27 @@ professionalRouter.get("/", async (req, res) => {
   } catch {}
 });
 
+professionalRouter.get("/users/exists/:email", async (req, res) => {
+  try {
+    const isUserExist = await pool.query(
+      `select * from professional where email = $1`,
+      [req.params.email]
+    );
+
+    console.log(isUserExist.rows.length);
+    let message =
+      isUserExist.rows.length === 1
+        ? "This email is already available"
+        : "Can use this email";
+
+    return res.status(200).json({
+      data: message,
+    });
+  } catch (err) {
+    throw err;
+  }
+});
+
 professionalRouter.post("/", async (req, res) => {
   try {
     const newProfessionalUser = {
@@ -32,17 +53,12 @@ professionalRouter.post("/", async (req, res) => {
       last_logged_in: new Date(),
     };
 
+    // const salt = await ;
     const salt = await bcrypt.genSalt(10);
     newProfessionalUser.password = await bcrypt.hash(
       newProfessionalUser.password,
       salt
     );
-
-    // const salt = await bcrypt.genSalt(10);
-    // newProfessionalUser.password = await bcrypt.hash(
-    //   newProfessionalUser.password,
-    //   salt
-    // );
 
     await pool.query(
       `insert into professional (email,password,name,phone,birthday,linkedin,title,experience,education,cv,created_at,updated_at,last_logged_in) 

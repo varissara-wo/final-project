@@ -75,7 +75,7 @@ professionalRouter.put("/:id", async (req, res) => {
   );
   if (alreadyUse) {
     return res.json({
-      message: "user alreadyuse",
+      message: "This email is already available",
     });
   } else {
     await pool.query(

@@ -43,9 +43,12 @@ const GithubProfileStyled = styled(ListItemButton)(() => ({
 
 const Sidebar = () => {
   // State for the sidebar
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [initIndex, setInitindex] = useState("");
+  let index = initIndex;
+  const [selectedIndex, setSelectedIndex] = useState(index);
+
   const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
+    setInitindex(index);
   };
 
   return (
@@ -79,7 +82,7 @@ const Sidebar = () => {
           <Box>
             <List>
               <SidebarButtonStyled
-                href="#find-that-Job"
+                href="/findjobs"
                 selected={selectedIndex === 0}
                 onClick={(event) => handleListItemClick(event, 0)}
               >
@@ -115,7 +118,9 @@ const Sidebar = () => {
                 component="a"
                 href="#profile"
                 selected={selectedIndex === 3}
-                onClick={(event) => handleListItemClick(event, 3)}
+                onClick={(event) => {
+                  handleListItemClick(event, 3);
+                }}
               >
                 <IconBoxStyled>
                   <img src="pic/personal.svg" alt="profile" />

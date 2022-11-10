@@ -9,8 +9,7 @@ import {
   StepLabel,
   TextField,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
@@ -24,8 +23,6 @@ import {
   StepperStyle,
   RecommendedTypography,
   Datepic,
-  IconButton,
-  InputAdornment,
 } from "./Styles.jsx";
 
 import {
@@ -70,8 +67,6 @@ const Professional = () => {
   useEffect(() => {
     isEmailExist();
   }, [account.email]);
-
-  const [showPassword, setShowPassword] = useState(false);
 
   const steps = [
     "Login information",
@@ -374,15 +369,7 @@ const Professional = () => {
                   placeholder="******"
                   focused
                   inputProps={{ style: { padding: 8 } }}
-                  type={showPassword ? "text" : "password"}
-                  // inputProps={{ style: { padding: 8 },endAdornment: <InputAdornment position="end"><Visibility/></InputAdornment>,}}
-
-                  // endIcon={<IconButton
-                  //   onClick={() => setShowPassword(!showPassword)}
-                  //   onMouseDown={() => console.log("hija")}
-                  // >
-                  //   {showPassword ? <Visibility /> : <VisibilityOff />}
-                  // </IconButton>}
+                  // type={showPassword ? "text" : "password"}
                 />
 
                 <Typography

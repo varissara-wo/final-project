@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Professional from "../components/Authpage/Professional.jsx";
-import Recruiter from "../components/Authpage/Recruiter.jsx";
+import Professional from "../components/Register/Professional.jsx";
+import Recruiter from "../components/Register/Recruiter.jsx";
 import {
   Stack,
   Typography,

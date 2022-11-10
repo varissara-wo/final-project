@@ -12,7 +12,7 @@ import {
 
 import Navbar from "../components/Navbar.jsx";
 
-const Auth = () => {
+const Register = () => {
   //   <--------------- user type --------------->
 
   const [userType, setUserType] = useState("professional");
@@ -90,4 +90,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default Register;

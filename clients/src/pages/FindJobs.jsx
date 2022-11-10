@@ -27,7 +27,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
 import BungalowIcon from "@mui/icons-material/Bungalow";
-import { data } from "./datamock/data.js";
+import { data } from "../data/data.js";
 import Link from "@mui/material/Link";
 
 const Buttonstyle = styled(Button)(({ theme }) => ({
@@ -61,14 +61,16 @@ const Textinput = styled(Autocomplete)(({ theme }) => ({
     border: "2px solid #F48FB1",
   },
   height: "60px",
-  color: "primary focused", "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
-    backgroundColor: "#FFFFFF"
-  }
+  color: "primary focused",
+  "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
+    backgroundColor: "#FFFFFF",
+  },
 }));
 const Textseacrh = styled(TextField)(({ theme }) => ({
   "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root": {
     width: "480px",
-    height: "40px", backgroundColor: "#FFFFFF"
+    height: "40px",
+    backgroundColor: "#FFFFFF",
   },
   "& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":
     { width: "480px" },
@@ -78,7 +80,8 @@ const Textseacrh = styled(TextField)(({ theme }) => ({
 const Textseacrh1 = styled(TextField)(({ theme }) => ({
   "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root": {
     width: "120px",
-    height: "40px", backgroundColor: "#FFFFFF"
+    height: "40px",
+    backgroundColor: "#FFFFFF",
   },
   height: "60px",
   color: "primary focused",
@@ -601,7 +604,7 @@ const FindJobs = () => {
                       >
                         <img
                           src={`${item.img}?w=75&fit=crop&auto=format`}
-                        //srcSet={`${item.img}?w=75&fit=crop&auto=format&dpr=2 2x`}
+                          //srcSet={`${item.img}?w=75&fit=crop&auto=format&dpr=2 2x`}
                         />{" "}
                       </ImageListItem>
                       <Box
@@ -626,8 +629,8 @@ const FindJobs = () => {
                           <BungalowIcon />
 
                           <Typography
-                            sx={{ marginLeft: "10px", marginTop: "5px" }}
                             variant="caption"
+                            sx={{ marginLeft: "10px", marginTop: "5px" }}
                           >
                             {" "}
                             {item.category}
@@ -656,7 +659,7 @@ const FindJobs = () => {
                         >
                           <Box>
                             <CalendarMonthIcon />
-                          </Box> 
+                          </Box>
                           <Box sx={{ marginBottom: "5px", marginRight: "4px" }}>
                             <Typography variant="caption">
                               {item.type}{" "}

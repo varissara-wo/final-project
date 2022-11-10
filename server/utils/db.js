@@ -1,0 +1,15 @@
+import * as pg from "pg";
+import dotenv from "dotenv";
+const { Pool } = pg.default;
+
+dotenv.config();
+
+const pool = new Pool({
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT,
+});
+
+export { pool };

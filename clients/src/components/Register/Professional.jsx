@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import {
   Stack,
@@ -8,8 +9,7 @@ import {
   StepLabel,
   TextField,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
@@ -23,8 +23,6 @@ import {
   StepperStyle,
   RecommendedTypography,
   Datepic,
-  IconButton,
-  InputAdornment,
 } from "./Styles.jsx";
 
 import {
@@ -57,12 +55,19 @@ const Professional = () => {
     useremail: "",
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => {
-    console.log(showPassword);
-    setShowPassword(!showPassword);
-  };
-  const handleMouseDownPassword = () => setShowPassword(true);
+  const [isEmailValid, setIsEmailValid] = useState("");
+
+  async function isEmailExist() {
+    const result = await axios.get(
+      `http://localhost:4000/professional/users/exists/${account.email}`
+    );
+
+    setIsEmailValid(result.data.data);
+  }
+  useEffect(() => {
+    isEmailExist();
+  }, [account.email]);
+
   const steps = [
     "Login information",
     "Personal information",
@@ -104,8 +109,7 @@ const Professional = () => {
   };
 
   const validatePhoneNumber = (number) => {
-    const phoneNumberRegex =
-      /^\+?([0-9]{2})\)?[-. ]?([0-9]{2})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    const phoneNumberRegex = /^(\+66)(\d{9})$/gm;
     const isPhoneNumberValid = phoneNumberRegex.test(number);
     return isPhoneNumberValid;
   };
@@ -133,6 +137,8 @@ const Professional = () => {
       const checkPassword = validatePassword(account.password);
       const checkEmail = validateEmail(account.email);
       console.log(checkEmail);
+      console.log(isEmailValid);
+      console.log(account.email);
 
       //Invalid message
       const emailMessage = "** Email is not valid";
@@ -257,9 +263,11 @@ const Professional = () => {
   //handleFileChange for file upload validation
   const innitialFileData = "No file chosen";
   const [fileStatus, setFileStatus] = useState(innitialFileData);
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     //Validate the file is PDF
+    console.log(file);
     if (file.type !== "application/pdf") {
       return setFileStatus("Not a PDF file");
     }
@@ -361,15 +369,7 @@ const Professional = () => {
                   placeholder="******"
                   focused
                   inputProps={{ style: { padding: 8 } }}
-                  type={showPassword ? "text" : "password"}
-                  // inputProps={{ style: { padding: 8 },endAdornment: <InputAdornment position="end"><Visibility/></InputAdornment>,}}
-
-                  // endIcon={<IconButton
-                  //   onClick={() => setShowPassword(!showPassword)}
-                  //   onMouseDown={() => console.log("hija")}
-                  // >
-                  //   {showPassword ? <Visibility /> : <VisibilityOff />}
-                  // </IconButton>}
+                  // type={showPassword ? "text" : "password"}
                 />
 
                 <Typography
@@ -472,7 +472,7 @@ const Professional = () => {
                   defaultValue=""
                   label=""
                   color="primary"
-                  placeholder="+xx xxxxxxxxx"
+                  placeholder="+66xxxxxxxxx"
                   focused
                   inputProps={{ style: { padding: 8 } }}
                 />

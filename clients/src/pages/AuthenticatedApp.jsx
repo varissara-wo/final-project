@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import FindJobs from "./pages/FindJobs.jsx";
-import HomePage from "./pages/Homepage.jsx";
-import Login from "./pages/Login.jsx";
-import Auth from "./pages/Auth.jsx";
+import FindJobs from "./FindJobs.jsx";
+import HomePage from "./Homepage.jsx";
+import Login from "./Login.jsx";
+import Register from "./Register.jsx";
 
 import { ThemeProvider } from "@mui/material";
-import { theme } from "./theme.js";
+import { theme } from "../theme.js";
 
-function App() {
+function AuthenticationApp() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
@@ -15,11 +15,11 @@ function App() {
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/findjobs" element={<FindJobs />}></Route>
-          <Route path="/auth" element={<Auth />}></Route>
+          <Route path="/auth" element={<Register />}></Route>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
   );
 }
 
-export default App;
+export default AuthenticationApp;

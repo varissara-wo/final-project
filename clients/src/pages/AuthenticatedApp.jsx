@@ -5,7 +5,7 @@ import Login from "./Login.jsx";
 import Auth from "./Auth.jsx";
 
 import { ThemeProvider } from "@mui/material";
-import { theme } from "./utils/theme.js";
+import { theme } from "../theme.js";
 
 function AuthenticationApp() {
   return (

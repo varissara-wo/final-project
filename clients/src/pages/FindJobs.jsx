@@ -27,7 +27,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
 import BungalowIcon from "@mui/icons-material/Bungalow";
-import { data } from "./data/data.js";
+import { data } from "../data/data.js";
 import Link from "@mui/material/Link";
 
 const Buttonstyle = styled(Button)(({ theme }) => ({

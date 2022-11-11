@@ -2,15 +2,20 @@ import { useState } from "react";
 import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Input, Typography } from "@mui/material";
+import { Input, Typography,Stack } from "@mui/material";
 import ImageListItem from "@mui/material/ImageListItem";
 import TextField from "@mui/material/TextField";
+import usePosts from "../hooks/usePost.jsx";
+import {
+  Buttonwidth
+  
+} from "../components/Authpage/Styles.jsx";
 import {
   Textinput,
   Textseacrh,
   Textseacrh1,
   Textseacrhre,
-  Categoryinput,
+  Categoryinput,Informationbox
 } from "./styles.jsx";
 
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
@@ -21,7 +26,7 @@ export function Createpost() {
   const [inputValue1, setInputValue1] = React.useState("");
   const [info, setInfo] = useState({
     title: "",
-    category1: "allcategory",
+    category1: "",
     type: "",
     salarymin: 0,
     salarymax: 0,
@@ -38,6 +43,13 @@ export function Createpost() {
     "Goverment",
     "Sales",
   ];
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    createPost({
+     info
+    });
+  };
+  const { createPost } = usePosts();
   //type
   const type = ["Fulltime", "Partime"];
   return (
@@ -89,20 +101,19 @@ export function Createpost() {
             <Typography variant="overline">Category</Typography>
             <Categoryinput
               size="small"
-              value={info.category1}
+              value={inputValue}
               color="primary"
               focused
-              onChange={(e) => {
-                console.log(e);
-                setInfo({
-                  ...info,
-                  category1: e.target.value,
-                });
-              }}
+             
               inputValue={inputValue}
               onInputChange={(event, newInputValue) => {
                 setInputValue(newInputValue);
+                setInfo({
+                  ...info,
+                  category1: newInputValue,
+                });
               }}
+              
               id="controllable-states-demo"
               options={category}
               sx={{
@@ -121,18 +132,17 @@ export function Createpost() {
             <Typography variant="overline">Type</Typography>
             <Categoryinput
               size="small"
-              value={info.type}
+              value={inputValue1}
               color="primary"
               focused
-              onChange={(e) => {
-                setInfo({
-                  ...info,
-                  type: e.target.value,
-                });
-              }}
+              
               inputValue={inputValue1}
               onInputChange={(event, newInputValue) => {
                 setInputValue1(newInputValue);
+                setInfo({
+                  ...info,
+                  type: newInputValue,
+                });
               }}
               id="controllable-states-demo"
               options={type}
@@ -148,6 +158,7 @@ export function Createpost() {
             />
           </Typography>
           {/*------------------------------ Salary range ------------------------------*/}
+         
           <Typography
             sx={{
               display: "flex",
@@ -156,7 +167,7 @@ export function Createpost() {
               marginRight: "10px",
             }}
           >
-            <Typography variant="overline" sx={{ marginLeft: "10px" }}>
+            <Typography variant="overline" sx={{}}>
               Salary Range
             </Typography>
             <Box
@@ -174,7 +185,7 @@ export function Createpost() {
                   width: "102px",
                   height: "20px",
                   borderRadius: "8px",
-                  marginLeft: "10px",
+                  
                 }}
                 type="number"
                 color="primary"
@@ -196,7 +207,7 @@ export function Createpost() {
                 {" "}
               </Textseacrh1>
               <HorizontalRuleIcon
-                sx={{ marginTop: "8px", marginLeft: "18px" }}
+                sx={{ marginTop: "8px", marginLeft: "20px" }}
               />
 
               <Textseacrh1
@@ -229,13 +240,13 @@ export function Createpost() {
         <Typography variant="overline" sx={{ marginBottom: "3px" }}>
           Job title
         </Typography>
-        <Textseacrhre
+        <Informationbox
           id="outlined-basic"
           variant="outlined"
-          placeholder="software engineer"
+          placeholder="Describe the main functions and characteristics of your job position"
           color="primary"
           focused
-          sx={{ width: "420px", height: "36px", marginBottom: "8px" }}
+          sx={{ width: "420px", height: "36px", marginBottom: "50px" }}
           onChange={(e) => {
             setInfo({
               ...info,
@@ -243,7 +254,52 @@ export function Createpost() {
             });
           }}
         />
+         <Typography variant="overline" sx={{ marginBottom: "3px" }}>
+         Mandatory Requirements
+        </Typography>
+        <Informationbox
+          id="outlined-basic"
+          variant="outlined"
+          placeholder="List each mandatory requirement in a new line"
+          color="primary"
+          focused
+          sx={{ width: "420px", height: "36px", marginBottom: "50px" }}
+          onChange={(e) => {
+            setInfo({
+              ...info,
+              requiement: e.target.value,
+            });
+          }}
+        />
+         <Typography variant="overline" sx={{ marginBottom: "3px" }}>
+         Optional Requirements
+        </Typography>
+        <Informationbox
+          id="outlined-basic"
+          variant="outlined"
+          placeholder="List each optional requirement in a new line"
+          color="primary"
+          focused
+          sx={{ width: "420px", height: "36px", marginBottom: "50px" }}
+          onChange={(e) => {
+            setInfo({
+              ...info,
+              optional: e.target.value,
+            });
+          }}
+        />
+         <Buttonwidth
+                                variant="contained"
+                                color="primary"
+                                onClick={{}}
+                            >
+                                POST THIS JOB
+                            </Buttonwidth>
       </Box>
+      
+                           
+                        
+      
     </Box>
   );
 }

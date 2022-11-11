@@ -114,5 +114,37 @@ recruiterRouter.delete("/:id", async (req, res) => {
     message: `User ${userId} has been deleted.`,
   });
 });
+recruiterRouter.post("/createpost", async (req, res) => {
+  const category_id= await pool.query(`select * from categories where name =$1`,[req.info.category]);
+    const post = {
+      recruiter_id: 1,
+      category_id:category_id.category_id,
+      type:req.info.type,
+      
+    
+      created_at: new Date(),
+     
+    };
+  
+    await pool.query(
+      `insert into jobs  (company_name,email,password,website,about,logo,created_at,updated_at,last_logged_in) 
+                values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+      [
+        recruiterUser.companyname,
+        recruiterUser.email,
+        recruiterUser.password,
+        recruiterUser.website,
+        recruiterUser.about,
+        recruiterUser.logo,
+        recruiterUser.created_at,
+        recruiterUser.updated_at,
+        recruiterUser.last_logged_in,
+      ]
+    );
 
+    return res.status(201).json({
+      message: "New user has been created sucessfully",
+    });
+  
+});
 export default recruiterRouter;

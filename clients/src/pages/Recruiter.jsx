@@ -33,17 +33,18 @@ export function Recruiter() {
         className="sidebar-container"
         sx={{
           width: "240px",
-          height: "100vh",
+         
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "flex-start",
           backgroundColor: "background.default",
-          height: "100vh",
+          height: "100vh", 
         }}
+       
       >
         {/*------------------------------ Start Top Sidebar ------------------------------*/}
-        <Box className="sidebar-top" sx={{ width: "100%" }}>
+        <Box className="sidebar-top" sx={{ width: "100%" ,}}>
           <Box
             className="getthatjoblogo-box"
             sx={{

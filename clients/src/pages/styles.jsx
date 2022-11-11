@@ -104,41 +104,47 @@ export const GithubProfileStyled = styled(ListItemButton)(() => ({
   width: "100%",
 }));
 export const Textseacrhre = styled(TextField)(({ theme }) => ({
-    "& .css-1b812tk-MuiInputBase-root-MuiOutlinedInput-root": {
-        width: "300px",
-        height: "45px",
-        backgroundColor: "#FFFFFF",
-      },
-      "& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":
-        { width: "480px" },
-      height: "60px",
-      color: "primary focused",
-  }));
-  export const Categoryinput = styled(Autocomplete)(({ theme }) => ({
-    width: "280px",
-    "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
-      width: "300px",
-      height: "45px",
+  "& .css-1b812tk-MuiInputBase-root-MuiOutlinedInput-root": {
+    width: "300px",
+    height: "45px",
+    backgroundColor: "#FFFFFF",
+  },
+  "& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":
+    { width: "480px" },
+  height: "60px",
+  color: "primary focused",
+}));
+export const Categoryinput = styled(Autocomplete)(({ theme }) => ({
+  width: "280px",
+  "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
+    width: "300px",
+    height: "45px",
+  },
+  "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
+    border: "2px solid #F48FB1",
+  },
+  height: "60px",
+  color: "primary focused",
+  "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
+    backgroundColor: "#FFFFFF",
+  },
+  "& .css-130go8a-MuiAutocomplete-root .MuiOutlinedInput-root.MuiInputBase-sizeSmall0":
+    {
+      paddingTop: "0px",
+      paddingBottom: "0px",
     },
-    "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
-      border: "2px solid #F48FB1",
-    },
-    height: "60px",
-    color: "primary focused",
-    "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
-      backgroundColor: "#FFFFFF",
-    },"& .css-130go8a-MuiAutocomplete-root .MuiOutlinedInput-root.MuiInputBase-sizeSmall0":{
-        paddingTop:"0px",    paddingBottom:"0px"
-    }
-  }));
-  export const Informationbox = styled(TextField)(({ theme }) => ({
-    "& .css-1b812tk-MuiInputBase-root-MuiOutlinedInput-root": {
-        width: "300px",
-        height: "45px",
-        backgroundColor: "#FFFFFF",
-      },
-      "& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":
-        { width: "480px" },
-      height: "60px",
-      color: "primary focused",
-  }));
+}));
+export const Informationbox = styled(TextField)(({ theme }) => ({
+  "& .css-1b812tk-MuiInputBase-root-MuiOutlinedInput-root": {
+    width: "760px",
+    height: "70px",
+    backgroundColor: "#FFFFFF",
+  },
+  "& .css-pmic0h-MuiFormControl-root-MuiTextField-root .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input":
+    { width: "480px" },
+  height: "60px",
+  color: "primary focused",
+  "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
+    height: "80px",
+  },
+}));

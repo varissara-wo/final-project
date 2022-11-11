@@ -6,7 +6,9 @@ const professionalRouter = Router();
 
 professionalRouter.get("/", async (req, res) => {
   try {
-    const professionalUsers = await pool.query(`select * from professional`);
+    const professionalUsers = await pool.query(
+      `select * from professional_users`
+    );
 
     return res.status(200).json({
       data: professionalUsers.rows,

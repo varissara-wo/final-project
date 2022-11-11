@@ -115,36 +115,45 @@ recruiterRouter.delete("/:id", async (req, res) => {
   });
 });
 recruiterRouter.post("/createpost", async (req, res) => {
-  const category_id= await pool.query(`select * from categories where name =$1`,[req.info.category]);
+  try {
+    const category_id = await pool.query(
+      `select * from categories where name =$1`,
+      [req.body.category1]
+    );
     const post = {
       recruiter_id: 1,
-      category_id:category_id.category_id,
-      type:req.info.type,
-      
-    
+      category_id: category_id.category_id,
+      type: req.body.type,
+      min_salary: req.body.salarymin,
+      max_salary: req.body.salarymax,
+      about_job_position: req.body.jobdetial,
+      job_requirement: req.body.requiement,
+      option_requirement: req.body.optional,
       created_at: new Date(),
-     
+      job_id: 4,
     };
-  
+    console.log(post);
+    console.log("5555");
     await pool.query(
-      `insert into jobs  (company_name,email,password,website,about,logo,created_at,updated_at,last_logged_in) 
+      `insert into jobs  ( recruiter_id, type,min_salary, max_salary,about_job_postition, job_require,option_require,  created_at,job_id) 
                 values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
       [
-        recruiterUser.companyname,
-        recruiterUser.email,
-        recruiterUser.password,
-        recruiterUser.website,
-        recruiterUser.about,
-        recruiterUser.logo,
-        recruiterUser.created_at,
-        recruiterUser.updated_at,
-        recruiterUser.last_logged_in,
+        post.recruiter_id,
+        post.type,
+        post.min_salary,
+        post.max_salary,
+        post.about_job_position,
+        post.job_requirement,
+        post.option_requirement,
+        post.created_at,
+        post.job_id,
       ]
     );
-
     return res.status(201).json({
-      message: "New user has been created sucessfully",
+      message: "Post has been creted success",
     });
-  
+  } catch (er) {
+    console.log(er);
+  }
 });
 export default recruiterRouter;

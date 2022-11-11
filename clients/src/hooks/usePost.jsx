@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function usePosts() {
   const navigate = useNavigate();
   const createPost = async (data) => {
-    console.log("dsfaffafs")
+    console.log(data);
     await axios.post(`http://localhost:4000/recruiter/createpost`, data);
     navigate("/");
   };

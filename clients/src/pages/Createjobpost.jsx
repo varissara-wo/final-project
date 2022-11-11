@@ -2,26 +2,26 @@ import { useState } from "react";
 import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Input, Typography,Stack } from "@mui/material";
+import { Input, Typography, Stack } from "@mui/material";
 import ImageListItem from "@mui/material/ImageListItem";
 import TextField from "@mui/material/TextField";
 import usePosts from "../hooks/usePost.jsx";
-import {
-  Buttonwidth
-  
-} from "../components/Authpage/Styles.jsx";
+import { Buttonwidth } from "../components/Authpage/Styles.jsx";
 import {
   Textinput,
   Textseacrh,
   Textseacrh1,
   Textseacrhre,
-  Categoryinput,Informationbox
+  Categoryinput,
+  Informationbox,
 } from "./styles.jsx";
 
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import InputAdornment from "@mui/material/InputAdornment";
 export function Createpost() {
+  const { createPost } = usePosts();
+  console.log(createPost);
   const [inputValue, setInputValue] = React.useState("");
   const [inputValue1, setInputValue1] = React.useState("");
   const [info, setInfo] = useState({
@@ -43,13 +43,14 @@ export function Createpost() {
     "Goverment",
     "Sales",
   ];
-  const handleSubmit = (event) => {
+  const handle = (event) => {
+    console.log(info);
     event.preventDefault();
     createPost({
-     info
+      ...info,
     });
   };
-  const { createPost } = usePosts();
+
   //type
   const type = ["Fulltime", "Partime"];
   return (
@@ -104,7 +105,6 @@ export function Createpost() {
               value={inputValue}
               color="primary"
               focused
-             
               inputValue={inputValue}
               onInputChange={(event, newInputValue) => {
                 setInputValue(newInputValue);
@@ -113,7 +113,6 @@ export function Createpost() {
                   category1: newInputValue,
                 });
               }}
-              
               id="controllable-states-demo"
               options={category}
               sx={{
@@ -135,7 +134,6 @@ export function Createpost() {
               value={inputValue1}
               color="primary"
               focused
-              
               inputValue={inputValue1}
               onInputChange={(event, newInputValue) => {
                 setInputValue1(newInputValue);
@@ -158,7 +156,6 @@ export function Createpost() {
             />
           </Typography>
           {/*------------------------------ Salary range ------------------------------*/}
-         
           <Typography
             sx={{
               display: "flex",
@@ -185,7 +182,6 @@ export function Createpost() {
                   width: "102px",
                   height: "20px",
                   borderRadius: "8px",
-                  
                 }}
                 type="number"
                 color="primary"
@@ -254,8 +250,8 @@ export function Createpost() {
             });
           }}
         />
-         <Typography variant="overline" sx={{ marginBottom: "3px" }}>
-         Mandatory Requirements
+        <Typography variant="overline" sx={{ marginBottom: "3px" }}>
+          Mandatory Requirements
         </Typography>
         <Informationbox
           id="outlined-basic"
@@ -271,8 +267,8 @@ export function Createpost() {
             });
           }}
         />
-         <Typography variant="overline" sx={{ marginBottom: "3px" }}>
-         Optional Requirements
+        <Typography variant="overline" sx={{ marginBottom: "3px" }}>
+          Optional Requirements
         </Typography>
         <Informationbox
           id="outlined-basic"
@@ -288,18 +284,17 @@ export function Createpost() {
             });
           }}
         />
-         <Buttonwidth
-                                variant="contained"
-                                color="primary"
-                                onClick={{}}
-                            >
-                                POST THIS JOB
-                            </Buttonwidth>
+        <Buttonwidth
+          variant="contained"
+          color="primary"
+          onClick={(e) => {
+            handle(e);
+          }}
+          type="submit"
+        >
+          POST THIS JOB
+        </Buttonwidth>
       </Box>
-      
-                           
-                        
-      
     </Box>
   );
 }

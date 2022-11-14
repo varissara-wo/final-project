@@ -7,7 +7,7 @@ const EmailInput = (props) => {
   const { isProfessionalExist, isRecruiterExist } = useRegis();
 
   const { user, value, onChange } = props;
-  console.log(user);
+
   console.log(isProfessionalExist);
 
   const [isValid, setIsValid] = useState(false);
@@ -20,7 +20,8 @@ const EmailInput = (props) => {
 
   useEffect(() => {
     validateInput();
-  }, [value, isProfessionalExist, isRecruiterExist]);
+  }, [value]);
+  console.log(isProfessionalExist);
 
   return (
     <>

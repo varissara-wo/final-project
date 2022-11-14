@@ -21,6 +21,7 @@ import {
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import PasswordInput from "./PasswordInput.jsx";
 
 import {
   NextButton,
@@ -39,14 +40,13 @@ import {
   ArrowBackIosNew,
 } from "@mui/icons-material";
 
-import EmailInput from "./EmailInput.jsx";
+import EmailInput from "./EmailInputs.jsx";
 import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
-import PasswordInput from "./PasswordInput.jsx";
 
 const ProfessionalRegister = () => {
   const [userData, setUserData] = useState({
-    professionalemail: "",
+    email: "",
     password: "",
     confirmpassword: "",
     name: "",
@@ -76,7 +76,11 @@ const ProfessionalRegister = () => {
     return skipped.has(step);
   };
 
-  const { isProfessionalExist, isProfessionalEmailExist } = useRegis();
+  const {
+    isProfessionalEmailExist,
+    isProfessionalExist,
+    registerProfessional,
+  } = useRegis();
 
   const handleNext = async () => {
     let newSkipped = skipped;
@@ -87,7 +91,6 @@ const ProfessionalRegister = () => {
 
     if (activeStep === 0) {
       await isProfessionalEmailExist(userData.email);
-
       const checkPassword = validatePassword(userData.password);
       const checkEmail = validateEmail(userData.email);
       const checkConfirmPassword = validateConfirmPassword(
@@ -124,8 +127,11 @@ const ProfessionalRegister = () => {
 
       if (checkExperience || userData.experience === "") {
         if (checkEducation || userData.education === "") {
-          setActiveStep((prevActiveStep) => prevActiveStep + 1);
-          setSkipped(newSkipped);
+          setUserData({ ...userData, birthday: String(userData.birthday) });
+          const data = {
+            ...userData,
+          };
+          registerProfessional(data);
         }
       }
     }

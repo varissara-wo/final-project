@@ -21,7 +21,7 @@ import {
   validateAbout,
 } from "../../utils/validateRegister.jsx";
 
-import EmailInput from "./EmailInput.jsx";
+import EmailInput from "./EmailInputs.jsx";
 import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
 import PasswordInput from "./PasswordInput.jsx";
@@ -32,15 +32,17 @@ const RecruiterRegister = () => {
   const steps = ["Login information", "Company information"];
 
   const [userData, setUserData] = useState({
-    companyName: "",
+    companyname: "",
     email: "",
     password: "",
     confirmpassword: "",
     website: "",
     about: "",
+    logo: "",
   });
 
-  const { isRecruiterExist, isRecruiterEmailExist } = useRegis();
+  const { isRecruiterExist, isRecruiterEmailExist, registerRecruiter } =
+    useRegis();
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
@@ -60,7 +62,7 @@ const RecruiterRegister = () => {
       await isRecruiterEmailExist(userData.email);
       const checkPassword = validatePassword(userData.password);
       const checkEmail = validateEmail(userData.email);
-      const checkCompanyName = validateCompanyName(userData.name);
+      const checkCompanyName = validateCompanyName(userData.companyname);
       const checkConfirmPassword = validateConfirmPassword(
         userData.password,
         userData.confirmpassword
@@ -81,8 +83,10 @@ const RecruiterRegister = () => {
     if (activeStep === 1) {
       const checkAbout = validateAbout(userData.about);
       if (checkAbout || userData.about === "") {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
+        const data = {
+          ...userData,
+        };
+        registerRecruiter(data);
       }
     }
   };
@@ -129,11 +133,11 @@ const RecruiterRegister = () => {
 
   const companyNameInput = [
     {
-      name: "name",
+      name: "companyname",
       type: "text",
       placeholder: "MY Company S.A Doe",
       errorMessage: "** Company name is not valid",
-      pattern: /\w+/,
+      pattern: /^\w+\w*$/,
       label: "NAME",
     },
   ];
@@ -210,7 +214,7 @@ const RecruiterRegister = () => {
                   <OnelineInput
                     key={index}
                     {...input}
-                    value={userData[input.name]}
+                    value={userData[input.companyname]}
                     onChange={handlerInputChange}
                   />
                 );

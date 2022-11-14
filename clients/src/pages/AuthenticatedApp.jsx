@@ -15,7 +15,7 @@ function AuthenticationApp() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/findjobs" element={<FindJobs />}></Route>
         {/* -------------------------mock recruiter createpost------------------ */}
-        <Route path="/Recruiter" element={<Recruiter />}></Route>
+        <Route path="/recruiter" element={<Recruiter />}></Route>
         {/* -------------------------mock recruiter createpost------------------ */}
         <Route path="/auth" element={<Register />}></Route>
       </Routes>

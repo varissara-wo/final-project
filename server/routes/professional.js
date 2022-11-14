@@ -6,6 +6,7 @@ const professionalRouter = Router();
 
 professionalRouter.get("/", async (req, res) => {
   try {
+
     const professionalUsers = await pool.query(
       `select * from professional_users`
     );
@@ -13,9 +14,11 @@ professionalRouter.get("/", async (req, res) => {
     return res.status(200).json({
       data: professionalUsers.rows,
     });
+
   } catch (err) {
     console.log(err);
   }
+
 });
 
 professionalRouter.get("/users/exists/:email", async (req, res) => {
@@ -61,7 +64,7 @@ professionalRouter.post("/", async (req, res) => {
     );
 
     await pool.query(
-      `insert into professional_users (email,password,name,phone,birthday,linkedin,title,experience,education,cv,created_at,updated_at,last_logged_in) 
+      `insert into professional_users (email,password,name,phone,birthday,linkedin,job_title,experience,education,cv_url,created_at,updated_at,last_logged_in) 
       values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`,
       [
         newProfessionalUser.email,
@@ -101,7 +104,7 @@ professionalRouter.put("/:id", async (req, res) => {
     });
   } else {
     await pool.query(
-      `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,title=$6,experience=$7,cv=$8,education=$9,updated_at=$10 where professional_id=$11`,
+      `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,
       [
         updatedUser.email,
         updatedUser.name,

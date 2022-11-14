@@ -21,7 +21,6 @@ import {
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import PasswordInput from "./PasswordInput.jsx";
 
 import {
   NextButton,
@@ -43,6 +42,7 @@ import {
 import EmailInput from "./EmailInput.jsx";
 import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
+import PasswordInput from "./PasswordInput.jsx";
 
 const ProfessionalRegister = () => {
   const [userData, setUserData] = useState({

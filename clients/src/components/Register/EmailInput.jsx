@@ -4,9 +4,11 @@ import { useRegis } from "../../contexts/register.jsx";
 import { OnelineTextField, InputLabelStyle } from "./Styles.jsx";
 
 const EmailInput = (props) => {
-  const { isEmailExist } = useRegis();
+  const { isProfessionalExist, isRecruiterExist } = useRegis();
 
-  const { value, onChange } = props;
+  const { user, value, onChange } = props;
+  console.log(user);
+  console.log(isProfessionalExist);
 
   const [isValid, setIsValid] = useState(false);
 
@@ -18,7 +20,7 @@ const EmailInput = (props) => {
 
   useEffect(() => {
     validateInput();
-  }, [value, isEmailExist]);
+  }, [value, isProfessionalExist, isRecruiterExist]);
 
   return (
     <>
@@ -44,16 +46,28 @@ const EmailInput = (props) => {
           >
             {isValid ? "" : "** It should be valid email address"}
           </Typography>
-
-          <Typography
-            variant="body2"
-            color="primary"
-            component="span"
-            display="flex"
-            flex={1}
-          >
-            {isEmailExist && `** This email is available`}
-          </Typography>
+          {user === "professional" && (
+            <Typography
+              variant="body2"
+              color="primary"
+              component="span"
+              display="flex"
+              flex={1}
+            >
+              {isProfessionalExist && `** This email is available`}
+            </Typography>
+          )}
+          {user === "recruiter" && (
+            <Typography
+              variant="body2"
+              color="primary"
+              component="span"
+              display="flex"
+              flex={1}
+            >
+              {isRecruiterExist && `** This email is available`}
+            </Typography>
+          )}
         </Stack>
       </Stack>
     </>

@@ -15,6 +15,7 @@ const OnelineInput = (props) => {
   } = props;
 
   const [isValid, setIsValid] = useState(false);
+  console.log(isValid);
 
   const validateInput = () => {
     const regex = pattern;

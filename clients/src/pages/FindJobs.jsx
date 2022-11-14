@@ -43,7 +43,6 @@ const FindJobs = () => {
           justifyContent: "space-between",
           alignItems: "flex-start",
           backgroundColor: "background.default",
-          height: "100vh",
         }}
       >
         {/*------------------------------ Start Top Sidebar ------------------------------*/}

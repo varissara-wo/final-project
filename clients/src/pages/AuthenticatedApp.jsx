@@ -2,14 +2,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FindJobs from "./FindJobs.jsx";
 import HomePage from "./Homepage.jsx";
 import Login from "./Login.jsx";
-import Auth from "./Auth.jsx";
-import { Findjobssearch } from "./Findjobscontent.jsx";
+import Register from "./Register.jsx";
+
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme.js";
 import { Recruiter } from "./Recruiter.jsx";
 function AuthenticationApp() {
   return (
     <ThemeProvider theme={theme}>
+    
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
@@ -18,7 +19,7 @@ function AuthenticationApp() {
           {/* -------------------------mock recruiter createpost------------------ */}
           <Route path="/Recruiter" element={<Recruiter />}></Route>
           {/* -------------------------mock recruiter createpost------------------ */}
-          <Route path="/auth" element={<Auth />}></Route>
+          <Route path="/auth" element={<Register />}></Route>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

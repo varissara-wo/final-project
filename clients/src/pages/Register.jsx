@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Professional from "../components/Authpage/Professional.jsx";
-import Recruiter from "../components/Authpage/Recruiter.jsx";
+
 import {
   Stack,
   Typography,
@@ -11,8 +10,10 @@ import {
 } from "@mui/material";
 
 import Navbar from "../components/Navbar.jsx";
+import ProfessionalRegister from "../components/Register/ProfessinalRegister.jsx";
+import RecruiterRegister from "../components/Register/RecruiterRegister.jsx";
 
-const Auth = () => {
+const Register = () => {
   //   <--------------- user type --------------->
 
   const [userType, setUserType] = useState("professional");
@@ -76,8 +77,9 @@ const Auth = () => {
             </Tabs>
 
             {/* -------------------------Stepper Professional------------------ */}
-            {userType === "professional" && <Professional />}
-            {userType === "recruiter" && <Recruiter />}
+            {/* {userType === "professional" && <Professional />} */}
+            {userType === "professional" && <ProfessionalRegister />}
+            {userType === "recruiter" && <RecruiterRegister />}
           </Box>
           <Box flex={1} height="100vh">
             <ImageListItem sx={{ position: "fixed", bottom: "0px" }}>
@@ -90,4 +92,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default Register;

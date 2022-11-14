@@ -1,37 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
+import { Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Box from "@mui/material/Box";
-import { Input, Typography } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import {
-  TextButtonStyled,
-  IconBoxStyled,
-  SidebarButtonStyled,
-  GithubProfileStyled,
-} from "./styles.jsx";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Findjobssearch } from "./Findjobscontent.jsx";
-import  { useState } from "react";
 
-const FindJobs = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+const TextButtonStyled = styled(ListItemText)(() => ({
+  fontFamily: "var(--inter-font)",
+  fontWeight: "400",
+  fontSize: "16px",
+  color: "#616161",
+  marginLeft: "10px",
+  "&.Mui-selected": {
+    color: "#373737",
+  },
+}));
+const IconBoxStyled = styled(Box)(() => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "22px",
+  height: "22px",
+}));
+const SidebarButtonStyled = styled(ListItemButton)(() => ({
+  "&.Mui-selected": {
+    backgroundColor: "#F5F5F6",
+  },
+}));
+const GithubProfileStyled = styled(ListItemButton)(() => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItems: "center",
+  padding: "2px 0 2px 0",
+  width: "100%",
+}));
+
+const Sidebar = () => {
+  // State for the sidebar
+  const [initIndex, setInitindex] = useState("");
+  let index = initIndex;
+  const [selectedIndex, setSelectedIndex] = useState(index);
+
   const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
+    setInitindex(index);
   };
-  //  const [initIndex,setInitindex] = useState("")
-  // let index = initIndex 
-  // const [selectedIndex, setSelectedIndex] = useState(index);
+
   return (
-    <Box
-      className="findjobs-container"
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-      }}
-    >
+    <>
       {/*------------------------------------- Start Sidebar -------------------------------------*/}
       <Box
         className="sidebar-container"
@@ -43,6 +64,7 @@ const FindJobs = () => {
           justifyContent: "space-between",
           alignItems: "flex-start",
           backgroundColor: "background.default",
+          height: "100vh",
         }}
       >
         {/*------------------------------ Start Top Sidebar ------------------------------*/}
@@ -96,7 +118,9 @@ const FindJobs = () => {
                 component="a"
                 href="#profile"
                 selected={selectedIndex === 3}
-                onClick={(event) => handleListItemClick(event, 3)}
+                onClick={(event) => {
+                  handleListItemClick(event, 3);
+                }}
               >
                 <IconBoxStyled>
                   <img src="pic/personal.svg" alt="profile" />
@@ -261,11 +285,9 @@ const FindJobs = () => {
         </Box>
         {/*------------------------------ End Footer Sidebar ------------------------------*/}
       </Box>
-
       {/*------------------------------------- End Sidebar -------------------------------------*/}
-      {selectedIndex === 0 && <Findjobssearch/>}
-     
-    </Box>
+    </>
   );
 };
-export default FindJobs;
+
+export default Sidebar;

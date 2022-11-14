@@ -6,7 +6,7 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 // -------------- Button --------------
@@ -19,6 +19,16 @@ export const NextButton = styled(Button)(() => ({
   padding: "8px 16px",
   marginTop: "16px",
   width: "115px",
+}));
+
+export const Buttonwidth = styled(Button)(() => ({
+  fontFamily: "var( --inter-font)",
+  fontWeight: "500",
+  fontSize: "14px",
+  borderRadius: "16px",
+  padding: "8px 16px",
+  marginTop: "16px",
+  width: "150px",
 }));
 
 export const UploadButton = styled(NextButton)(() => ({
@@ -193,10 +203,10 @@ export const IconButton = styled(ButtonUnstyled)(
   border: none;
   background: inherit;
   cursor: pointer;
-  color: ${theme.palette.mode === 'dark' ? '#CDD2D7' : '#3E5060'};
-  `,
+  color: ${theme.palette.mode === "dark" ? "#CDD2D7" : "#3E5060"};
+  `
 );
-export const InputAdornment = styled('div')`
+export const InputAdornment = styled("div")`
   margin: 8px;
   display: inline-flex;
   align-items: center;

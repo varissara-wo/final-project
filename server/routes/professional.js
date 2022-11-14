@@ -6,12 +6,19 @@ const professionalRouter = Router();
 
 professionalRouter.get("/", async (req, res) => {
   try {
-    const professionalUsers = await pool.query(`select * from professional_users`);
+
+    const professionalUsers = await pool.query(
+      `select * from professional_users`
+    );
 
     return res.status(200).json({
       data: professionalUsers.rows,
     });
-  } catch { }
+
+  } catch (err) {
+    console.log(err);
+  }
+
 });
 
 professionalRouter.get("/users/exists/:email", async (req, res) => {
@@ -21,16 +28,13 @@ professionalRouter.get("/users/exists/:email", async (req, res) => {
       [req.params.email]
     );
 
-    let message =
-      isUserExist.rows.length === 1
-        ? "This email is already available"
-        : "Can use this email";
+    let check = isUserExist.rows.length === 1 ? true : false;
 
     return res.status(200).json({
-      data: message,
+      isEmailExist: check,
     });
   } catch (err) {
-    throw err;
+    console.log(err);
   }
 });
 

@@ -1,71 +1,50 @@
-import React, { useState } from "react";
-import { Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import React from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Box from "@mui/material/Box";
+import { Input, Typography } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
+import {
+  TextButtonStyled,
+  IconBoxStyled,
+  SidebarButtonStyled,
+  GithubProfileStyled,
+} from "./styles.jsx";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
-const TextButtonStyled = styled(ListItemText)(() => ({
-  fontFamily: "var(--inter-font)",
-  fontWeight: "400",
-  fontSize: "16px",
-  color: "#616161",
-  marginLeft: "10px",
-  "&.Mui-selected": {
-    color: "#373737",
-  },
-}));
-const IconBoxStyled = styled(Box)(() => ({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-  width: "22px",
-  height: "22px",
-}));
-const SidebarButtonStyled = styled(ListItemButton)(() => ({
-  "&.Mui-selected": {
-    backgroundColor: "#F5F5F6",
-  },
-}));
-const GithubProfileStyled = styled(ListItemButton)(() => ({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "flex-start",
-  alignItems: "center",
-  padding: "2px 0 2px 0",
-  width: "100%",
-}));
-
-const Sidebar = () => {
-  // State for the sidebar
-  const [selectedIndex, setSelectedIndex] = useState(0);
+import { useState } from "react";
+import { Createpost } from "./Createjobpost.jsx";
+export function Recruiter() {
+  const [Index, setIndex] = useState(0);
   const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
+    setIndex(index);
   };
-
   return (
-    <>
+    <Box
+      className="findjobs-container"
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+      }}
+    >
       {/*------------------------------------- Start Sidebar -------------------------------------*/}
       <Box
         className="sidebar-container"
         sx={{
           width: "240px",
-          height: "100vh",
+         
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "flex-start",
           backgroundColor: "background.default",
-          height: "100vh",
+          height: "100vh", 
         }}
+       
       >
         {/*------------------------------ Start Top Sidebar ------------------------------*/}
-        <Box className="sidebar-top" sx={{ width: "100%" }}>
+        <Box className="sidebar-top" sx={{ width: "100%" ,}}>
           <Box
             className="getthatjoblogo-box"
             sx={{
@@ -76,53 +55,44 @@ const Sidebar = () => {
           >
             <img src="pic/gtj-logo-1.svg" alt="getthatjoblogo" />
           </Box>
+          {/*------------------------------ End logo ------------------------------*/}
           <Box>
             <List>
               <SidebarButtonStyled
-                href="#find-that-Job"
-                selected={selectedIndex === 0}
+                href="#viewjobpost"
+                selected={Index === 0}
                 onClick={(event) => handleListItemClick(event, 0)}
               >
                 <IconBoxStyled>
-                  <img src="pic/find.svg" alt="find that job" />
+                  <img src="pic/jobposting.svg" alt="job posting" />
                 </IconBoxStyled>
-                <TextButtonStyled sx={{}}>Find that Job</TextButtonStyled>
+                <TextButtonStyled sx={{}}>Job Postings</TextButtonStyled>
               </SidebarButtonStyled>
-
+              {/*------------------------------ End jobposting ------------------------------*/}
               <SidebarButtonStyled
-                href="#your-applications"
-                selected={selectedIndex === 1}
+                href="#createjobpost"
+                selected={Index === 1}
                 onClick={(event) => handleListItemClick(event, 1)}
               >
                 <IconBoxStyled>
-                  <img src="pic/doc.svg" alt="your applications" />
+                  <img src="pic/Createnewjob.svg" alt="Createnewjob" />
                 </IconBoxStyled>
-                <TextButtonStyled>Your applications</TextButtonStyled>
+                <TextButtonStyled>Create New Job</TextButtonStyled>
               </SidebarButtonStyled>
-
-              <SidebarButtonStyled
-                href="#following"
-                selected={selectedIndex === 2}
-                onClick={(event) => handleListItemClick(event, 2)}
-              >
-                <IconBoxStyled>
-                  <img src="pic/gps.svg" alt="following" />
-                </IconBoxStyled>
-                <TextButtonStyled>Following</TextButtonStyled>
-              </SidebarButtonStyled>
+              {/*------------------------------ End createpostjob ------------------------------*/}
 
               <SidebarButtonStyled
                 component="a"
                 href="#profile"
-                selected={selectedIndex === 3}
-                onClick={(event) => handleListItemClick(event, 3)}
+                selected={Index === 2}
+                onClick={(event) => handleListItemClick(event, 2)}
               >
                 <IconBoxStyled>
                   <img src="pic/personal.svg" alt="profile" />
                 </IconBoxStyled>
                 <TextButtonStyled>Profile</TextButtonStyled>
               </SidebarButtonStyled>
-
+              {/*------------------------------ End porfile ------------------------------*/}
               <SidebarButtonStyled component="a" href="/">
                 <IconBoxStyled>
                   <img src="pic/LogoutIcon.svg" alt="log out" />
@@ -132,7 +102,7 @@ const Sidebar = () => {
             </List>
           </Box>
         </Box>
-        {/*------------------------------ End Top Sidebar ------------------------------*/}
+        {/*------------------------------ End logout ------------------------------*/}
 
         {/*------------------------------ Start Footer Sidebar ------------------------------*/}
         <Box
@@ -280,9 +250,9 @@ const Sidebar = () => {
         </Box>
         {/*------------------------------ End Footer Sidebar ------------------------------*/}
       </Box>
-      {/*------------------------------------- End Sidebar -------------------------------------*/}
-    </>
-  );
-};
 
-export default Sidebar;
+      {/*------------------------------------- End Sidebar -------------------------------------*/}
+      {Index === 1 && <Createpost />}
+    </Box>
+  );
+}

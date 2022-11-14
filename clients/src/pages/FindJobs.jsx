@@ -172,7 +172,6 @@ const FindJobs = () => {
           justifyContent: "space-between",
           alignItems: "flex-start",
           backgroundColor: "background.default",
-          height: "100vh",
         }}
       >
         <Box className="sidebar-top" sx={{ width: "100%" }}>

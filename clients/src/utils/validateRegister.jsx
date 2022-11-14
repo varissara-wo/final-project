@@ -41,3 +41,15 @@ export const validateEducation = (context) => {
   const isEducationValid = educationRegex.test(context);
   return isEducationValid;
 };
+
+export const validateAbout = (context) => {
+  const aboutRegex = /^\w{100,2000}$/;
+  const isAboutValid = aboutRegex.test(context);
+  return isAboutValid;
+};
+
+export const validateCompanyName = (context) => {
+  const companyNameRegex = /\w+/;
+  const isCompanyNameValid = companyNameRegex.test(context);
+  return isCompanyNameValid;
+};

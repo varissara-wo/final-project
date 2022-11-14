@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRegis } from "../../contexts/register.jsx";
 
 import { Stack, Typography, Box, Step, StepLabel } from "@mui/material";
 
@@ -7,7 +8,6 @@ import {
   UploadButton,
   SkipButton,
   OnelineTextField,
-  MultilineTextField,
   InputLabelStyle,
   RecruiterStepper,
   RecommendedTypography,
@@ -17,24 +17,19 @@ import {
   validateEmail,
   validatePassword,
   validateConfirmPassword,
+  validateCompanyName,
+  validateAbout,
 } from "../../utils/validateRegister.jsx";
 
 import EmailInput from "./EmailInput.jsx";
 import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
+import PasswordInput from "./PasswordInput.jsx";
 
 import { FileUploadOutlined, ArrowForwardIos } from "@mui/icons-material";
 
 const RecruiterRegister = () => {
   const steps = ["Login information", "Company information"];
-  const [account, setAccount] = useState({
-    companyName: "",
-    email: "",
-    password: "",
-    passwordConfirmation: "",
-    website: "",
-    about: "",
-  });
 
   const [userData, setUserData] = useState({
     companyName: "",
@@ -45,90 +40,7 @@ const RecruiterRegister = () => {
     about: "",
   });
 
-  const [validate, setValidate] = useState({
-    about: "Between 100 and 2000 characters",
-    useremail: "",
-    companyName: "",
-  });
-
-  //validate state
-  const [passwordMessage, setPasswordMessage] = useState("");
-  const [confirmPasswordMessage, setConfirmPasswordMessage] = useState("");
-  const [emailMessage, setEmailMessage] = useState("");
-
-  const [color, setColor] = useState({ about: "" });
-
-  //validate form input
-  //   const validatePassword = (password) => {
-  //     let isPass = false;
-  //     const passwordMessage =
-  //       "** Password should have at least one numeric digit, one special character, one uppercase and one lowercase letter";
-  //     const notMatch = "** Password not match";
-  //     const passwordRegex =
-  //       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,20}$/;
-  //     const isPasswordValid = passwordRegex.test(password);
-  //     if (isPasswordValid) {
-  //       setPasswordMessage("");
-  //       isPass = true;
-  //     } else {
-  //       setPasswordMessage(passwordMessage);
-  //     }
-  //     return isPass;
-  //   };
-
-  //   const validateConfirmPassword = (password) => {
-  //     let isPass = false;
-  //     const notMatch = "** Password not match";
-  //     if (
-  //       (account.password === account.passwordConfirmation) &
-  //       (account.password !== "")
-  //     ) {
-  //       setConfirmPasswordMessage("");
-  //       isPass = true;
-  //     } else if (
-  //       (account.password === account.passwordConfirmation) &
-  //       (account.password === "")
-  //     ) {
-  //       setConfirmPasswordMessage(notMatch);
-  //     } else if (account.password !== account.passwordConfirmation) {
-  //       setConfirmPasswordMessage(notMatch);
-  //     } else if (account.password === account.passwordConfirmation) {
-  //       setConfirmPasswordMessage("");
-  //     }
-  //     return isPass;
-  //   };
-
-  //   const validateEmail = (email) => {
-  //     const emailMessage = "** Email is not valid";
-  //     let isPass = false;
-  //     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  //     const isEmailValid = emailRegex.test(email);
-  //     if (isEmailValid) {
-  //       setEmailMessage("");
-  //       isPass = true;
-  //     } else {
-  //       setEmailMessage(emailMessage);
-  //     }
-  //     return isPass;
-  //   };
-
-  //   const validateCompanyName = () => {
-  //     const message = "** Company name is not valid";
-  //     let isPass = false;
-  //     if (account.companyName !== "") {
-  //       setValidate({ ...validate, companyName: "" });
-  //       isPass = true;
-  //     } else {
-  //       setValidate({ ...validate, companyName: message });
-  //     }
-  //     return isPass;
-  //   };
-
-  const validateAbout = (context) => {
-    const aboutRegex = /^\w{100,2000}$/;
-    const isAboutValid = aboutRegex.test(context);
-    return isAboutValid;
-  };
+  const { isRecruiterExist, isRecruiterEmailExist } = useRegis();
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
@@ -137,7 +49,7 @@ const RecruiterRegister = () => {
     return skipped.has(step);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -145,16 +57,21 @@ const RecruiterRegister = () => {
     }
 
     if (activeStep === 0) {
-      const checkPassword = validatePassword(account.password);
-      const checkEmail = validateEmail(account.email);
-      const checkCompanyName = validateCompanyName();
-      const checkConfirmPassword = validateConfirmPassword();
+      await isRecruiterEmailExist(userData.email);
+      const checkPassword = validatePassword(userData.password);
+      const checkEmail = validateEmail(userData.email);
+      const checkCompanyName = validateCompanyName(userData.name);
+      const checkConfirmPassword = validateConfirmPassword(
+        userData.password,
+        userData.confirmpassword
+      );
 
       if (
         checkEmail &
         checkPassword &
         checkCompanyName &
-        checkConfirmPassword
+        checkConfirmPassword &
+        (isRecruiterExist === false)
       ) {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
@@ -162,17 +79,10 @@ const RecruiterRegister = () => {
     }
 
     if (activeStep === 1) {
-      const checkAbout = validateAbout(account.about);
-
-      if (checkAbout || account.about === "") {
+      const checkAbout = validateAbout(userData.about);
+      if (checkAbout || userData.about === "") {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
-      } else {
-        setColor({ ...color, about: "#F48FB1" });
-        setValidate({
-          ...validate,
-          about: "** Should have characters between 100 - 2000 characters",
-        });
       }
     }
   };
@@ -183,8 +93,6 @@ const RecruiterRegister = () => {
 
   const handleSkip = () => {
     if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
       throw new Error("You can't skip a step that isn't optional.");
     }
 
@@ -225,7 +133,7 @@ const RecruiterRegister = () => {
       type: "text",
       placeholder: "MY Company S.A Doe",
       errorMessage: "** Company name is not valid",
-      pattern: /\W+/,
+      pattern: /\w+/,
       label: "NAME",
     },
   ];
@@ -243,6 +151,18 @@ const RecruiterRegister = () => {
       errorMessage: "** Password not match",
       pattern: new RegExp(userData.password),
       label: "PASSWORD CONFIRMATION",
+    },
+  ];
+
+  const aboutInput = [
+    {
+      name: "about",
+      type: "text",
+      placeholder: "My Company SA has the vision to change the way how...",
+      pattern: /.{100,2000}/,
+      label: "ABOUT THE COMPANY",
+      helperText: "Between 100 and 2000 characters",
+      errorMessage: "** Should have characters between 100 - 2000 characters",
     },
   ];
 
@@ -285,105 +205,34 @@ const RecruiterRegister = () => {
             autoComplete="off"
           >
             <Box>
-              <InputLabelStyle>COMPANY NAME</InputLabelStyle>
-              <Stack direction="row" gap="15px">
-                <OnelineTextField
-                  required
-                  onChange={(e) => {
-                    setAccount({ ...account, companyName: e.target.value });
-                  }}
-                  defaultValue=""
-                  label=""
-                  color="primary"
-                  placeholder="MY Company S.A"
-                  focused
-                  inputProps={{ style: { padding: 8 } }}
-                />
-                <Typography
-                  variant="body2"
-                  color="primary"
-                  component="span"
-                  display="flex"
-                  flex={1}
-                >
-                  {validate.companyName}
-                </Typography>
-              </Stack>
+              {companyNameInput.map((input, index) => {
+                return (
+                  <OnelineInput
+                    key={index}
+                    {...input}
+                    value={userData[input.name]}
+                    onChange={handlerInputChange}
+                  />
+                );
+              })}
 
-              <InputLabelStyle>EMAIL</InputLabelStyle>
-              <Stack direction="row" gap="15px">
-                <OnelineTextField
-                  onChange={(e) => {
-                    setAccount({ ...account, email: e.target.value });
-                  }}
-                  defaultValue=""
-                  label=""
-                  color="primary"
-                  placeholder="some.user@mail.com"
-                  focused
-                  inputProps={{ style: { padding: 8 } }}
-                />
-                <Typography
-                  variant="body2"
-                  color="primary"
-                  component="span"
-                  display="flex"
-                  flex={1}
-                >
-                  {emailMessage}
-                </Typography>
-              </Stack>
-              <InputLabelStyle>PASSWORD</InputLabelStyle>
-              <Stack direction="row" gap="15px">
-                <OnelineTextField
-                  onChange={(e) => {
-                    setAccount({ ...account, password: e.target.value });
-                  }}
-                  defaultValue=""
-                  label=""
-                  color="primary"
-                  placeholder="******"
-                  focused
-                  inputProps={{ style: { padding: 8 } }}
-                  type={showPassword ? "text" : "password"}
-                />
-                <Typography
-                  variant="body2"
-                  color="primary"
-                  component="span"
-                  display="flex"
-                  flex={1}
-                >
-                  {passwordMessage}
-                </Typography>
-              </Stack>
-              <InputLabelStyle>PASSWORD CONFIRMATION</InputLabelStyle>
-              <Stack direction="row" gap="15px">
-                <OnelineTextField
-                  onChange={(e) => {
-                    setAccount({
-                      ...account,
-                      passwordConfirmation: e.target.value,
-                    });
-                  }}
-                  defaultValue=""
-                  label=""
-                  color="primary"
-                  placeholder="******"
-                  focused
-                  inputProps={{ style: { padding: 8 } }}
-                  type={showPassword ? "text" : "password"}
-                />
-                <Typography
-                  variant="body2"
-                  color="primary"
-                  component="span"
-                  display="flex"
-                  flex={1}
-                >
-                  {confirmPasswordMessage}
-                </Typography>
-              </Stack>
+              <EmailInput
+                user="recruiter"
+                value={userData.email}
+                onChange={handlerInputChange}
+              />
+
+              {passwordInput.map((input, index) => {
+                return (
+                  <PasswordInput
+                    key={index}
+                    {...input}
+                    value={userData[input.name]}
+                    onChange={handlerInputChange}
+                  />
+                );
+              })}
+
               <Stack display="flex" alignItems="center" width="360px">
                 <NextButton
                   variant="contained"
@@ -418,7 +267,7 @@ const RecruiterRegister = () => {
             </InputLabelStyle>
             <OnelineTextField
               onChange={(e) => {
-                setAccount({ ...account, website: e.target.value });
+                setUserData({ ...userData, website: e.target.value });
               }}
               defaultValue=""
               label=""
@@ -427,26 +276,17 @@ const RecruiterRegister = () => {
               focused
               inputProps={{ style: { padding: 8 } }}
             />
-            <InputLabelStyle>ABOUT THE COMPANY</InputLabelStyle>
-            <MultilineTextField
-              onChange={(e) => {
-                setAccount({ ...account, about: e.target.value });
-              }}
-              defaultValue=""
-              style={{ marginBottom: "14px" }}
-              label=""
-              color="primary"
-              placeholder="My Company SA has the vision to change the way how..."
-              focused
-              inputProps={{ style: { padding: "8px" } }}
-              helperText={validate.about}
-              multiline
-              rows={3}
-              value={account.about}
-              FormHelperTextProps={{
-                style: { color: color.about },
-              }}
-            />
+
+            {aboutInput.map((input, index) => {
+              return (
+                <MultilineInput
+                  key={index}
+                  {...input}
+                  value={userData[input.name]}
+                  onChange={handlerInputChange}
+                />
+              );
+            })}
 
             <InputLabelStyle>UPLOAD THE COMPANY LOGO</InputLabelStyle>
             <UploadButton

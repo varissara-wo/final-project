@@ -10,18 +10,15 @@ import { Recruiter } from "./Recruiter.jsx";
 function AuthenticationApp() {
   return (
     <ThemeProvider theme={theme}>
-    
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/findjobs" element={<FindJobs />}></Route>
-          {/* -------------------------mock recruiter createpost------------------ */}
-          <Route path="/Recruiter" element={<Recruiter />}></Route>
-          {/* -------------------------mock recruiter createpost------------------ */}
-          <Route path="/auth" element={<Register />}></Route>
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/findjobs" element={<FindJobs />}></Route>
+        {/* -------------------------mock recruiter createpost------------------ */}
+        <Route path="/Recruiter" element={<Recruiter />}></Route>
+        {/* -------------------------mock recruiter createpost------------------ */}
+        <Route path="/auth" element={<Register />}></Route>
+      </Routes>
     </ThemeProvider>
   );
 }

@@ -6,7 +6,7 @@ const recruiterRouter = Router();
 
 recruiterRouter.get("/", async (req, res) => {
   try {
-    const recruiterUsers = await pool.query(`select * from recruiter`);
+    const recruiterUsers = await pool.query(`select * from recruiter_users`);
 
     return res.status(200).json({
       data: recruiterUsers.rows,
@@ -16,7 +16,7 @@ recruiterRouter.get("/", async (req, res) => {
 recruiterRouter.get("/users/exists/:email", async (req, res) => {
   try {
     const isUserExist = await pool.query(
-      `select * from recruiter where email = $1`,
+      `select * from recruiter_users where email = $1`,
       [req.params.email]
     );
 

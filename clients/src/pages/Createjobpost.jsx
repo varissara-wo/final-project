@@ -6,7 +6,7 @@ import { Input, Typography, Stack } from "@mui/material";
 import ImageListItem from "@mui/material/ImageListItem";
 import TextField from "@mui/material/TextField";
 import usePosts from "../hooks/usePost.jsx";
-import { Buttonwidth } from "../components/Authpage/Styles.jsx";
+import { Buttonwidth } from "../components/Register/Styles.jsx";
 import {
   Textinput,
   Textseacrh,

@@ -68,6 +68,7 @@ export default function NavBox() {
                                 </svg>}
                                 variant="outlined"
                                 color="primary"
+                                onClick={() => navigate("/login")}
                                 sx={{
                                     color: '#616161',
                                     borderColor: 'primary',

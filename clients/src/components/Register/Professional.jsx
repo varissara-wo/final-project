@@ -333,7 +333,6 @@ const Professional = () => {
           >
             <Box>
               <InputLabelStyle>EMAIL</InputLabelStyle>
-
               <Stack direction="row" gap="15px">
                 <OnelineTextField
                   onChange={(e) => {

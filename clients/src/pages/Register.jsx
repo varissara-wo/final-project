@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Professional from "../components/Register/Professional.jsx";
-import Recruiter from "../components/Register/Recruiter.jsx";
+
 import {
   Stack,
   Typography,
@@ -11,6 +10,8 @@ import {
 } from "@mui/material";
 
 import Navbar from "../components/Navbar.jsx";
+import ProfessionalRegister from "../components/Register/ProfessinalRegister.jsx";
+import RecruiterRegister from "../components/Register/RecruiterRegister.jsx";
 
 const Register = () => {
   //   <--------------- user type --------------->
@@ -76,8 +77,9 @@ const Register = () => {
             </Tabs>
 
             {/* -------------------------Stepper Professional------------------ */}
-            {userType === "professional" && <Professional />}
-            {userType === "recruiter" && <Recruiter />}
+            {/* {userType === "professional" && <Professional />} */}
+            {userType === "professional" && <ProfessionalRegister />}
+            {userType === "recruiter" && <RecruiterRegister />}
           </Box>
           <Box flex={1} height="100vh">
             <ImageListItem sx={{ position: "fixed", bottom: "0px" }}>

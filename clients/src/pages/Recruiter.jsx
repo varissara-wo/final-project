@@ -13,6 +13,7 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useState } from "react";
 import { Createpost } from "./Createjobpost.jsx";
+import { Jobpostings } from "../components/Recruiter/Jobpostings.jsx";
 export function Recruiter() {
   const [Index, setIndex] = useState(0);
   const handleListItemClick = (event, index) => {
@@ -33,18 +34,17 @@ export function Recruiter() {
         className="sidebar-container"
         sx={{
           width: "240px",
-         
+
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "flex-start",
           backgroundColor: "background.default",
-          height: "100vh", 
+          height: "100vh",
         }}
-       
       >
         {/*------------------------------ Start Top Sidebar ------------------------------*/}
-        <Box className="sidebar-top" sx={{ width: "100%" ,}}>
+        <Box className="sidebar-top" sx={{ width: "100%" }}>
           <Box
             className="getthatjoblogo-box"
             sx={{
@@ -252,6 +252,7 @@ export function Recruiter() {
       </Box>
 
       {/*------------------------------------- End Sidebar -------------------------------------*/}
+      {Index === 0 && <Jobpostings />}
       {Index === 1 && <Createpost />}
     </Box>
   );

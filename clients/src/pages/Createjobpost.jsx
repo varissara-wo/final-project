@@ -54,18 +54,18 @@ export function Createpost() {
   //type
   const type = ["Fulltime", "Partime"];
   return (
-    <Box sx={{ backgroundColor: "#F5F5F6", width: "1500px", height: "100vh" }}>
+    <Box sx={{ backgroundColor: "#F5F5F6", width: "1500px" }}>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
           marginLeft: "100px",
-          marginTop: "30px",
+          marginTop: "10px",
         }}
       >
         {/*------------------------------ Head------------------------------*/}
-        <Typography variant="h4" sx={{ marginBottom: "20px" }}>
+        <Typography variant="h4" sx={{ marginBottom: "10px" }}>
           Create new job posting
         </Typography>
         <Box sx={{ marginLeft: "8px" }}>

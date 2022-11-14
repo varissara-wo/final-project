@@ -11,8 +11,8 @@ import {
 
 import Navbar from "../components/Navbar.jsx";
 import ProfessionalRegister from "../components/Register/ProfessinalRegister.jsx";
-import RecruiterRegister from "../components/Register/RecruiterRegister.jsx";
-
+// import RecruiterRegister from "../components/Register/RecruiterRegister.jsx";
+import Recruiter from "../components/Register/Recruiter.jsx";
 const Register = () => {
   //   <--------------- user type --------------->
 
@@ -79,7 +79,7 @@ const Register = () => {
             {/* -------------------------Stepper Professional------------------ */}
             {/* {userType === "professional" && <Professional />} */}
             {userType === "professional" && <ProfessionalRegister />}
-            {userType === "recruiter" && <RecruiterRegister />}
+            {userType === "recruiter" && <Recruiter />}
           </Box>
           <Box flex={1} height="100vh">
             <ImageListItem sx={{ position: "fixed", bottom: "0px" }}>

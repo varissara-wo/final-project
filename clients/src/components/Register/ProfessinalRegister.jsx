@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRegis } from "../../contexts/register.jsx";
+
 import {
   validateEmail,
   validatePassword,
@@ -63,7 +64,15 @@ const ProfessionalRegister = () => {
     "Personal information",
     "Professional information",
   ];
+  const handleSubmit = (event) => {
+    
+    
+    const data = {
+     ...userData
+    };
 
+    Registerprofessional(data);
+  };
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [value, setValue] = React.useState(null);
@@ -76,9 +85,9 @@ const ProfessionalRegister = () => {
     return skipped.has(step);
   };
 
-  const { isEmailExist, isProfessionalEmailExist } = useRegis();
+  const { isEmailExist, isProfessionalEmailExist,Registerprofessional } = useRegis();
 
-  const handleNext = async () => {
+  const handleNext = async (event) => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -124,10 +133,14 @@ const ProfessionalRegister = () => {
 
       if (checkExperience || userData.experience === "") {
         if (checkEducation || userData.education === "") {
-          setActiveStep((prevActiveStep) => prevActiveStep + 1);
-          setSkipped(newSkipped);
+          const data = {
+            ...userData
+           };
+           
+           Registerprofessional(data);
         }
       }
+      
     }
   };
 
@@ -502,6 +515,7 @@ const ProfessionalRegister = () => {
                 variant="contained"
                 color="primary"
                 onClick={handleNext}
+                type="submit"
               >
                 FINISH
               </NextButton>

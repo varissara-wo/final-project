@@ -11,7 +11,7 @@ function AuthenticationApp() {
   return (
     <ThemeProvider theme={theme}>
     
-      <BrowserRouter>
+      
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/login" element={<Login />}></Route>
@@ -21,7 +21,7 @@ function AuthenticationApp() {
           {/* -------------------------mock recruiter createpost------------------ */}
           <Route path="/auth" element={<Register />}></Route>
         </Routes>
-      </BrowserRouter>
+    
     </ThemeProvider>
   );
 }

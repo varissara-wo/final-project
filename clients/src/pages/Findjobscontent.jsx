@@ -2,15 +2,16 @@ import { Textinput, Textseacrh, Textseacrh1 } from "./styles.jsx";
 import { useState } from "react";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import ImageListItem from "@mui/material/ImageListItem";
-import TextField from "@mui/material/TextField";
+
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import InputAdornment from "@mui/material/InputAdornment";
-import Box from "@mui/material/Box";
+import ImageListItem from "@mui/material/ImageListItem";
+import TextField from "@mui/material/TextField";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Input, Typography } from "@mui/material";
 import { data } from "../data/data.js";
@@ -37,7 +38,7 @@ export function Findjobssearch() {
   };
 
   return (
-    <Box sx={{ backgroundColor: "#F5F5F6", width: "100%", height: "100vh" }}>
+    <Box sx={{ backgroundColor: "#F5F5F6", width: "1500px", height: "100vh" }}>
       <Box
         sx={{
           display: "flex",

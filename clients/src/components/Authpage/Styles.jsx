@@ -21,6 +21,16 @@ export const NextButton = styled(Button)(() => ({
   width: "115px",
 }));
 
+export const Buttonwidth = styled(Button)(() => ({
+  fontFamily: "var( --inter-font)",
+  fontWeight: "500",
+  fontSize: "14px",
+  borderRadius: "16px",
+  padding: "8px 16px",
+  marginTop: "16px",
+  width: "150px",
+}));
+
 export const UploadButton = styled(NextButton)(() => ({
   borderRadius: "8px",
   width: "180px",

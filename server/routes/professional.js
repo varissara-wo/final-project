@@ -83,7 +83,7 @@ professionalRouter.post("/", async (req, res) => {
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
-  } catch (err) {}
+  } catch (err) { }
 });
 professionalRouter.put("/:id", async (req, res) => {
   const updatedUser = {

@@ -2,6 +2,9 @@ import React from 'react'
 import NavBox from '../components/Navbar.jsx'
 import Box from '@mui/material/Box';
 import { Typography, Button, styled, Divider } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+
 
 
 // .MuiBox - root.css - 8kbx29
@@ -13,8 +16,8 @@ const MultilineUnderLine = styled(`hr`)(() => ({
 }));
 
 
-
 const Homepage = () => {
+    const navigate = useNavigate();
     return (
         <>
             <Box sx={{}}>
@@ -97,6 +100,7 @@ const Homepage = () => {
                                 variant="contained"
                                 color="primary"
                                 fontFamily="button"
+                                onClick={() => navigate("/auth")}
                                 sx={{
                                     display: 'flex',
                                     color: '#FFF',

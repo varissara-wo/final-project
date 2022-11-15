@@ -29,6 +29,7 @@ import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { OpenOn, TotalCandidates, CandidatesOnTrack } from "../Status";
 import { useEffect } from "react";
+import { FormatAlignCenter } from "@mui/icons-material";
 
 export function Jobpostings() {
   const [expanded, setExpanded] = useState(false);
@@ -40,6 +41,10 @@ export function Jobpostings() {
     let a = num / 1000;
     return a;
   };
+const date =(d)=>{
+ let b = d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear()
+ return b
+}
 
   const iconCategory = (name) => {
     if (name == "Manufacturing") {
@@ -212,9 +217,9 @@ export function Jobpostings() {
                         <MonetizationOnOutlinedIcon
                           sx={{ marginRight: "6px", marginLeft: "10px" }}
                         />
-                        {`${calSalary(content.min_salary)}-${calSalary(
+                        {`${calSalary(content.min_salary)}k-${calSalary(
                           content.max_salary
-                        )}`}
+                        )}k`}
                       </Stack>
                     </Typography>
                   </Stack>
@@ -230,6 +235,7 @@ export function Jobpostings() {
                     }}
                   >
                     <OpenOn date={content.created_at} />
+                    
                     <TotalCandidates candidates={content.total_candidates} />
                     <CandidatesOnTrack
                       candidates={content.on_track_candidates}

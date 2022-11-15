@@ -3,17 +3,16 @@ import { pool } from "../utils/db.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-const loginProfessionalRouter = Router();
+const loginRecuiterRouter = Router();
 
-loginProfessionalRouter.post("/", async (req, res) => {
+loginRecuiterRouter.post("/", async (req, res) => {
 
     try {
-        const isProfessionalUser = await pool.query(
-            `select email,password from professional_users where email = $1 `, [req.body.email]
+        const isRecuiterUser = await pool.query(
+            `select email,password from recuiter_users where email = $1 `, [req.body.email]
         );
 
-
-        if (!isProfessionalUser.rows[0]) {
+        if (!isRecuiterUser.rows[0]) {
             return res.status(404).json({
                 "message": "This E-mail not found"
             })
@@ -24,17 +23,16 @@ loginProfessionalRouter.post("/", async (req, res) => {
         if (!isValidPassword) {
             return res.status(401).json({
                 "message": "Password not Correct"
-
             })
         }
 
-        const isProfessionalName = await pool.query(`select name from professional_users where email = $1`, [req.params.email])
+        const isRecuiterName = await pool.query(`select name from recuiter_users where email = $1`, [req.params.email])
 
         const token = jwt.sign(
 
             {
-                id: isProfessionalUser.row,
-                name: isProfessionalName.row
+                id: isRecuiterUser.row,
+                name: isRecuiterName.row
             },
             process.env.SECRET_KEY,
             {
@@ -54,4 +52,4 @@ loginProfessionalRouter.post("/", async (req, res) => {
 
 });
 
-export default loginProfessionalRouter;
+export default loginRecuiterRouter;

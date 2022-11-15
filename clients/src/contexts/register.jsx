@@ -29,7 +29,7 @@ function RegisProvider(props) {
     await axios.post("http://localhost:4000/professional", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    // navigate("/");
+    //navigate("/");
   };
 
   const registerRecruiter = async (data) => {

@@ -2,6 +2,7 @@ import { Router } from "express";
 import bcrypt from "bcrypt";
 import { pool } from "../utils/db.js";
 import multer from "multer";
+import { cvUpload } from "../utils/upload.js";
 
 const professionalRouter = Router();
 
@@ -42,9 +43,10 @@ const CvUpload = multerUpload.fields([{ name: "cv", maxCount: 1 }]);
 
 professionalRouter.post("/", CvUpload, async (req, res) => {
   const file = req.files.cv[0];
-  console.log(file);
+  //console.log(file);
   // try {
   const resultCvUpload = await cvUpload(file);
+  console.log(resultCvUpload);
   //   const newProfessionalUser = {
   //     email: req.body.email,
   //     password: req.body.password,

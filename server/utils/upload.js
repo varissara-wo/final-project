@@ -9,12 +9,27 @@ const cvUpload = async (file) => {
     public_id: file.originalname,
     //resource_type: "raw",
   });
-  const cvfileUrl = {
+  const cvFileUrl = {
     url: result.secure_url,
     publicId: result.public_id,
   };
   await fs.unlink(file.path);
-  return cvfileUrl;
+  return cvFileUrl;
 };
 
-export { cvUpload };
+const logoUpload = async (file) => {
+  const result = await cloudinary.uploader.upload(file.path, {
+    folder: "getthatjob/logo",
+    type: "upload",
+    public_id: file.originalname,
+    // resource_type: "image",
+  });
+  const logoFileUrl = {
+    url: result.secure_url,
+    publicId: result.public_id,
+  };
+  await fs.unlink(file.path);
+  return logoFileUrl;
+};
+
+export { cvUpload, logoUpload };

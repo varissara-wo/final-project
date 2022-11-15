@@ -1,6 +1,8 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import { pool } from "../utils/db.js";
+import multer from "multer";
+import { logoUpload } from "../utils/upload.js";
 
 const recruiterRouter = Router();
 
@@ -34,27 +36,30 @@ recruiterRouter.get("/users/exists/:email", async (req, res) => {
   }
 });
 
-recruiterRouter.post("/", async (req, res) => {
+//Upload CV PDF file to cloudinary
+const multerUpload = multer({ dest: "uploads/" });
+const LogoUpload = multerUpload.fields([{ name: "logo", maxCount: 1 }]);
+
+recruiterRouter.post("/", LogoUpload, async (req, res) => {
+  const file = req.files.logo[0];
   try {
+    const responseLogoUpload = await logoUpload(file);
+    const logoUrl = responseLogoUpload;
     const recruiterUser = {
       email: req.body.email,
       password: req.body.password,
       companyname: req.body.companyname,
       website: req.body.website,
       about: req.body.about,
-      logo: req.body.logo,
-
+      logo: logoUrl,
       created_at: new Date(),
       updated_at: new Date(),
       last_logged_in: new Date(),
     };
     const salt = await bcrypt.genSalt(10);
-
     recruiterUser.password = await bcrypt.hash(recruiterUser.password, salt);
-
     await pool.query(
-      `insert into recruiter  (company_name,email,password,website,about,logo,created_at,updated_at,last_logged_in) 
-                values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+      `insert into recruiter  (company_name,email,password,company_website,about_company,logo_url,created_at,updated_at,last_logged_in) values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
       [
         recruiterUser.companyname,
         recruiterUser.email,
@@ -67,7 +72,6 @@ recruiterRouter.post("/", async (req, res) => {
         recruiterUser.last_logged_in,
       ]
     );
-
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });

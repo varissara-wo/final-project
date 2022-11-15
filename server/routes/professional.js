@@ -43,11 +43,9 @@ const CvUpload = multerUpload.fields([{ name: "cv", maxCount: 1 }]);
 
 professionalRouter.post("/", CvUpload, async (req, res) => {
   const file = req.files.cv[0];
-  //console.log(req.body.email);
   try {
     const responseCvUpload = await cvUpload(file);
     const cvUrl = responseCvUpload;
-    console.log(cvUrl);
     const newProfessionalUser = {
       email: req.body.email,
       password: req.body.password,

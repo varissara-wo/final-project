@@ -4,6 +4,7 @@ import { pool } from "../utils/db.js";
 
 const professionalRouter = Router();
 
+//Get user profile
 professionalRouter.get("/", async (req, res) => {
   try {
 
@@ -21,6 +22,7 @@ professionalRouter.get("/", async (req, res) => {
 
 });
 
+//Check email
 professionalRouter.get("/users/exists/:email", async (req, res) => {
   try {
     const isUserExist = await pool.query(
@@ -38,6 +40,7 @@ professionalRouter.get("/users/exists/:email", async (req, res) => {
   }
 });
 
+//Create account
 professionalRouter.post("/", async (req, res) => {
   try {
     const newProfessionalUser = {
@@ -88,6 +91,8 @@ professionalRouter.post("/", async (req, res) => {
     });
   } catch (err) { }
 });
+
+//Update user
 professionalRouter.put("/:id", async (req, res) => {
   const updatedUser = {
     ...req.body,
@@ -124,6 +129,8 @@ professionalRouter.put("/:id", async (req, res) => {
     });
   }
 });
+
+//Delete user
 professionalRouter.delete("/:id", async (req, res) => {
   const userId = req.params.id;
   await pool.query(`delete from professional_users where professional_id=$1`, [

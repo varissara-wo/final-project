@@ -1,12 +1,12 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import { pool } from "../utils/db.js";
+import multer from "multer";
 
 const professionalRouter = Router();
 
 professionalRouter.get("/", async (req, res) => {
   try {
-
     const professionalUsers = await pool.query(
       `select * from professional_users`
     );
@@ -14,11 +14,9 @@ professionalRouter.get("/", async (req, res) => {
     return res.status(200).json({
       data: professionalUsers.rows,
     });
-
   } catch (err) {
     console.log(err);
   }
-
 });
 
 professionalRouter.get("/users/exists/:email", async (req, res) => {
@@ -38,55 +36,58 @@ professionalRouter.get("/users/exists/:email", async (req, res) => {
   }
 });
 
-professionalRouter.post("/", async (req, res) => {
-  try {
-    const newProfessionalUser = {
-      email: req.body.email,
-      password: req.body.password,
-      name: req.body.name,
-      phone: req.body.phone,
-      birthday: req.body.birthday,
-      likedin: req.body.likedin,
-      title: req.body.title,
-      experience: req.body.experience,
-      education: req.body.education,
-      cv: req.body.cv,
-      created_at: new Date(),
-      updated_at: new Date(),
-      last_logged_in: new Date(),
-    };
+//Upload CV PDF file to cloudinary
+const multerUpload = multer({ dest: "uploads/" });
+const CvUpload = multerUpload.fields([{ name: "cv", maxCount: 1 }]);
 
-    const salt = await bcrypt.genSalt(10);
-
-    newProfessionalUser.password = await bcrypt.hash(
-      newProfessionalUser.password,
-      salt
-    );
-
-    await pool.query(
-      `insert into professional_users (email,password,name,phone,birthday,linkedin,job_title,experience,education,cv_url,created_at,updated_at,last_logged_in) 
-      values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`,
-      [
-        newProfessionalUser.email,
-        newProfessionalUser.password,
-        newProfessionalUser.name,
-        newProfessionalUser.phone,
-        newProfessionalUser.birthday,
-        newProfessionalUser.likedin,
-        newProfessionalUser.title,
-        newProfessionalUser.experience,
-        newProfessionalUser.education,
-        newProfessionalUser.cv,
-        newProfessionalUser.created_at,
-        newProfessionalUser.updated_at,
-        newProfessionalUser.last_logged_in,
-      ]
-    );
-
-    return res.status(201).json({
-      message: "New user has been created sucessfully",
-    });
-  } catch (err) { }
+professionalRouter.post("/", CvUpload, async (req, res) => {
+  const file = req.files.cv[0];
+  console.log(file);
+  // try {
+  const resultCvUpload = await cvUpload(file);
+  //   const newProfessionalUser = {
+  //     email: req.body.email,
+  //     password: req.body.password,
+  //     name: req.body.name,
+  //     phone: req.body.phone,
+  //     birthday: req.body.birthday,
+  //     likedin: req.body.likedin,
+  //     title: req.body.title,
+  //     experience: req.body.experience,
+  //     education: req.body.education,
+  //     cv: req.body.cv,
+  //     created_at: new Date(),
+  //     updated_at: new Date(),
+  //     last_logged_in: new Date(),
+  //   };
+  //   const salt = await bcrypt.genSalt(10);
+  //   newProfessionalUser.password = await bcrypt.hash(
+  //     newProfessionalUser.password,
+  //     salt
+  //   );
+  //   await pool.query(
+  //     `insert into professional_users (email,password,name,phone,birthday,linkedin,job_title,experience,education,cv_url,created_at,updated_at,last_logged_in)
+  //     values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`,
+  //     [
+  //       newProfessionalUser.email,
+  //       newProfessionalUser.password,
+  //       newProfessionalUser.name,
+  //       newProfessionalUser.phone,
+  //       newProfessionalUser.birthday,
+  //       newProfessionalUser.likedin,
+  //       newProfessionalUser.title,
+  //       newProfessionalUser.experience,
+  //       newProfessionalUser.education,
+  //       newProfessionalUser.cv,
+  //       newProfessionalUser.created_at,
+  //       newProfessionalUser.updated_at,
+  //       newProfessionalUser.last_logged_in,
+  //     ]
+  //   );
+  //   return res.status(201).json({
+  //     message: "New user has been created sucessfully",
+  //   });
+  // } catch (err) {}
 });
 professionalRouter.put("/:id", async (req, res) => {
   const updatedUser = {

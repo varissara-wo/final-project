@@ -42,8 +42,14 @@ export function Jobpostings() {
     return a;
   };
 const date =(d)=>{
- let b = d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear()
- return b
+  d= d.toString()
+  const arr =[]
+ for(let i=0;i<d.length;i++){
+  arr.push(d[i])
+  if(d[i] == "T"){
+    return arr
+  }
+ }
 }
 
   const iconCategory = (name) => {
@@ -104,7 +110,7 @@ const date =(d)=>{
   }
   useEffect(() => {
     getPost(2);
-  });
+  },[data]);
   {
     /*------------------------------------------------รอvalue จาก context---------------------------------------------------------*/
   }
@@ -234,7 +240,7 @@ const date =(d)=>{
                       },
                     }}
                   >
-                    <OpenOn date={content.created_at} />
+                    <OpenOn date={date(content.created_at)} />
                     
                     <TotalCandidates candidates={content.total_candidates} />
                     <CandidatesOnTrack

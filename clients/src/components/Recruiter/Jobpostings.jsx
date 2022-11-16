@@ -29,7 +29,7 @@ import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { OpenOn, TotalCandidates, CandidatesOnTrack } from "../Status";
 import { useEffect } from "react";
-import { FormatAlignCenter } from "@mui/icons-material";
+import { FormatAlignCenter, TypeSpecimen } from "@mui/icons-material";
 
 export function Jobpostings() {
   const [expanded, setExpanded] = useState(false);
@@ -38,12 +38,9 @@ export function Jobpostings() {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-  const [chooseType, setChoosetype] = useState([]);
-  const handlechoose = (a, b, c) => {
-    selectPost(a, b, c);
 
-    setChoosetype(data);
-    console.log(chooseType);
+  const handlechoose = async (recruiterId, type) => {
+    await selectPost(recruiterId, type);
   };
   const calSalary = (num) => {
     let a = num / 1000;
@@ -150,7 +147,14 @@ export function Jobpostings() {
   }));
 
   return (
-    <Box sx={{ backgroundColor: "#F5F5F6", width: "1500px", height: "100vh" }}>
+    <Box
+      sx={{
+        backgroundColor: "#F5F5F6",
+        width: "100%",
+        height: "100vh",
+        minWidth: "100vh",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -175,22 +179,22 @@ export function Jobpostings() {
             name="row-radio-buttons-group"
           >
             <CheckBoxTextStyled
-              value="All"
+              value="all"
               control={<Radio />}
               label="All"
-              onClick={() => handlechoose(2, "sf", 0)}
+              onClick={(e) => handlechoose(2, e.target.value)}
             />
             <CheckBoxTextStyled
-              value="With candidates on track"
+              value="onTrack"
               control={<Radio />}
               label="With candidates on track"
-              onClick={() => handlechoose(2, "sf", 1)}
+              onClick={(e) => handlechoose(2, e.target.value)}
             />
             <CheckBoxTextStyled
-              value="Closed"
+              value="closed"
               control={<Radio />}
               label="Closed"
-              onClick={() => handlechoose(2, "closed", 0)}
+              onClick={(e) => handlechoose(2, e.target.value)}
             />
           </RadioGroup>
         </FormControl>
@@ -203,7 +207,6 @@ export function Jobpostings() {
           {data.map((content, index) => {
             return (
               <>
-                {" "}
                 <Accordion
                   expanded={expanded === `panal${index}`}
                   onChange={handleChange(`panal${index}`)}
@@ -218,6 +221,7 @@ export function Jobpostings() {
                       direction="column"
                       justifyContent="center"
                       alignItems="flex-start"
+                      width="315px"
                       spacing={0}
                     >
                       <Typography variant="h6" sx={{}}>

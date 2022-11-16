@@ -63,6 +63,7 @@ const RecruiterRegister = () => {
       const checkPassword = validatePassword(userData.password);
       const checkEmail = validateEmail(userData.email);
       const checkCompanyName = validateCompanyName(userData.companyname);
+      console.log(checkCompanyName);
       const checkConfirmPassword = validateConfirmPassword(
         userData.password,
         userData.confirmpassword

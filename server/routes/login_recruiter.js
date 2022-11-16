@@ -26,13 +26,13 @@ loginRecuiterRouter.post("/", async (req, res) => {
             })
         }
 
-        const isRecuiterName = await pool.query(`select name from recuiter_users where email = $1`, [req.params.email])
+        const isRecuiterName = await pool.query(`select name from recuiter_users where email = $1`, [isProfessionalUser.rows[0].email])
 
         const token = jwt.sign(
 
             {
-                id: isRecuiterUser.row,
-                name: isRecuiterName.row
+                id: isRecuiterUser.rows[0].email,
+                name: isRecuiterName.rows[0].name
             },
             process.env.SECRET_KEY,
             {

@@ -73,7 +73,7 @@ recruiterRouter.post("/", LogoUpload, async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     recruiterUser.password = await bcrypt.hash(recruiterUser.password, salt);
     await pool.query(
-      `insert into recruiter  (company_name,email,password,company_website,about_company,logo_url,created_at,updated_at,last_logged_in) values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+      `insert into recruiter_users (company_name,email,password,company_website,about_company,logo_url,created_at,updated_at,last_logged_in) values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
       [
         recruiterUser.companyname,
         recruiterUser.email,
@@ -89,7 +89,9 @@ recruiterRouter.post("/", LogoUpload, async (req, res) => {
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
-  } catch (err) {}
+  } catch (err) {
+    ("error");
+  }
 });
 recruiterRouter.put("/:id", async (req, res) => {
   const updatedUser = {

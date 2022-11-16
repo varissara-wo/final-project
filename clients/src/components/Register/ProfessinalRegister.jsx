@@ -174,6 +174,7 @@ const ProfessionalRegister = () => {
     } else {
       setFileStatus(`File ${file.name}`);
       setUserData({ ...userData, [event.target.name]: file });
+      console.log(userData);
     }
   };
 

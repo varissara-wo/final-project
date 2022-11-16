@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 const AuthContext = React.createContext();
 
@@ -13,7 +15,7 @@ function AuthProvider(props) {
     });
 
     const login = async (data) => {
-        await axios.post("http://localhost:4000/login_professional", data)
+        const result = await axios.post("http://localhost:4000/login_professional", data)
         const token = result.data.token
         localStorage.set("token", token)
         const userDataFromToken = jwtDecode(token);
@@ -25,7 +27,7 @@ function AuthProvider(props) {
 
     return (
         <AuthContext.Provider
-            value={{ state, login, logout, register, isAuthenticated }}
+            value={{ state, login, isAuthenticated }}
         >
             {props.children}
         </AuthContext.Provider>

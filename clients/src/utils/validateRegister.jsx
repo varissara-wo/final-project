@@ -49,7 +49,7 @@ export const validateAbout = (context) => {
 };
 
 export const validateCompanyName = (context) => {
-  const companyNameRegex = /\w+/;
+  const companyNameRegex = /.{1}/;
   const isCompanyNameValid = companyNameRegex.test(context);
   return isCompanyNameValid;
 };

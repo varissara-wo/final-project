@@ -56,6 +56,7 @@ const ProfessionalRegister = () => {
     title: "",
     experience: "",
     education: "",
+    cv: {},
   });
 
   const steps = [
@@ -131,7 +132,11 @@ const ProfessionalRegister = () => {
           const data = {
             ...userData,
           };
-          registerProfessional(data);
+          const formData = new FormData();
+          for (let key in data) {
+            formData.append(key, data[key]);
+          }
+          registerProfessional(formData);
         }
       }
     }
@@ -157,21 +162,18 @@ const ProfessionalRegister = () => {
   //handleFileChange for file upload validation
   const innitialFileData = "No file chosen";
   const [fileStatus, setFileStatus] = useState(innitialFileData);
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     //Validate the file is PDF
-    console.log(file);
     if (file.type !== "application/pdf") {
       return setFileStatus("Not a PDF file");
     }
     //Validate the file PDF size less than 5 MB
-
     if (file.size > 5 * 1024 * 1024) {
       return setFileStatus("File size more than 5 MB");
     } else {
       setFileStatus(`File ${file.name}`);
-      return file;
+      setUserData({ ...userData, [event.target.name]: file });
     }
   };
 
@@ -465,6 +467,7 @@ const ProfessionalRegister = () => {
                 accept=".pdf"
                 multiple
                 type="file"
+                name="cv"
                 onChange={handleFileChange}
               />
             </UploadButton>

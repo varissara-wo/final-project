@@ -6,6 +6,7 @@ import { cvUpload } from "../utils/upload.js";
 
 const professionalRouter = Router();
 
+//Get user profile
 professionalRouter.get("/", async (req, res) => {
   try {
     const professionalUsers = await pool.query(
@@ -20,6 +21,7 @@ professionalRouter.get("/", async (req, res) => {
   }
 });
 
+//Check email
 professionalRouter.get("/users/exists/:email", async (req, res) => {
   try {
     const isUserExist = await pool.query(
@@ -37,6 +39,7 @@ professionalRouter.get("/users/exists/:email", async (req, res) => {
   }
 });
 
+//Create account
 //Upload CV PDF file to cloudinary
 const multerUpload = multer({ dest: "uploads/" });
 const CvUpload = multerUpload.fields([{ name: "cv", maxCount: 1 }]);
@@ -90,6 +93,8 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
     });
   } catch (err) {}
 });
+
+//Update user
 professionalRouter.put("/:id", async (req, res) => {
   const updatedUser = {
     ...req.body,
@@ -126,6 +131,8 @@ professionalRouter.put("/:id", async (req, res) => {
     });
   }
 });
+
+//Delete user
 professionalRouter.delete("/:id", async (req, res) => {
   const userId = req.params.id;
   await pool.query(`delete from professional_users where professional_id=$1`, [

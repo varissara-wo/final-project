@@ -41,16 +41,16 @@ export function Jobpostings() {
     let a = num / 1000;
     return a;
   };
-const date =(d)=>{
-  d= d.toString()
-  const arr =[]
- for(let i=0;i<d.length;i++){
-  arr.push(d[i])
-  if(d[i] == "T"){
-    return arr
-  }
- }
-}
+  const date = (d) => {
+    d = d.toString();
+    const arr = [];
+    for (let i = 0; i < d.length; i++) {
+      if (d[i] == "T") {
+        return arr;
+      }
+      arr.push(d[i]);
+    }
+  };
 
   const iconCategory = (name) => {
     if (name == "Manufacturing") {
@@ -110,7 +110,7 @@ const date =(d)=>{
   }
   useEffect(() => {
     getPost(2);
-  },[data]);
+  }, [data]);
   {
     /*------------------------------------------------รอvalue จาก context---------------------------------------------------------*/
   }
@@ -179,125 +179,129 @@ const date =(d)=>{
         </Typography>
         <div>
           {/*------------------------------ Start information------------------------------*/}
-          {data.map((content,index) => {
+          {data.map((content, index) => {
             return (
-              <> <Accordion
-                expanded={expanded === `panal${index}`}
-                onChange={handleChange(`panal${index}`)}
-                sx={{ marginBottom: "16px", width: "945px" }}
-              >
-                <AccordionSummaryStyled
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
+              <>
+                {" "}
+                <Accordion
+                  expanded={expanded === `panal${index}`}
+                  onChange={handleChange(`panal${index}`)}
+                  sx={{ marginBottom: "16px", width: "945px" }}
                 >
-                  <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="flex-start"
-                    spacing={0}
+                  <AccordionSummaryStyled
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
                   >
-                    <Typography variant="h6" sx={{}}>
-                      {content.job_title}
-                    </Typography>
-                    <Typography variant="caption" color="info.main" sx={{}}>
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={0}
-                        sx={{
-                          "& .MuiSvgIcon-root": {
-                            fontSize: 20,
-                          },
-                        }}
+                    <Stack
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="flex-start"
+                      spacing={0}
+                    >
+                      <Typography variant="h6" sx={{}}>
+                        {content.job_title}
+                      </Typography>
+                      <Typography variant="caption" color="info.main" sx={{}}>
+                        <Stack
+                          direction="row"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          spacing={0}
+                          sx={{
+                            "& .MuiSvgIcon-root": {
+                              fontSize: 20,
+                            },
+                          }}
+                        >
+                          {iconCategory(content.name)}
+
+                          {content.name}
+
+                          <DateRangeOutlinedIcon
+                            sx={{ marginRight: "6px", marginLeft: "10px" }}
+                          />
+                          {content.type}
+                          <MonetizationOnOutlinedIcon
+                            sx={{ marginRight: "6px", marginLeft: "10px" }}
+                          />
+                          {`${calSalary(content.min_salary)}k-${calSalary(
+                            content.max_salary
+                          )}k`}
+                        </Stack>
+                      </Typography>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      justifyContent="center"
+                      alignItems="center"
+                      spacing={0}
+                      sx={{
+                        "& .MuiSvgIcon-root": {
+                          fontSize: 20,
+                        },
+                      }}
+                    >
+                      <OpenOn date={date(content.created_at)} />
+
+                      <TotalCandidates candidates={content.total_candidates} />
+                      <CandidatesOnTrack
+                        candidates={content.on_track_candidates}
+                      />
+                    </Stack>
+
+                    <Stack
+                      direction="row"
+                      justifyContent="center"
+                      alignItems="center"
+                      spacing={0}
+                    >
+                      <CloseButton
+                        variant="button"
+                        color="secondary.main"
+                        startIcon={
+                          <img src="pic/find.svg" alt="find that job" />
+                        }
                       >
-                        {iconCategory(content.name)}
+                        SHOW
+                      </CloseButton>
+                      <CloseButton
+                        variant="contained"
+                        color="error"
+                        startIcon={<HighlightOffIcon />}
+                        onClick={closedPost(content.job_id)}
+                      >
+                        CLOSE
+                      </CloseButton>
+                    </Stack>
+                  </AccordionSummaryStyled>
 
-                        {content.name}
-
-                        <DateRangeOutlinedIcon
-                          sx={{ marginRight: "6px", marginLeft: "10px" }}
-                        />
-                        {content.type}
-                        <MonetizationOnOutlinedIcon
-                          sx={{ marginRight: "6px", marginLeft: "10px" }}
-                        />
-                        {`${calSalary(content.min_salary)}k-${calSalary(
-                          content.max_salary
-                        )}k`}
-                      </Stack>
+                  <AccordionDetails>
+                    <Typography variant="subtitle1" color="error.main">
+                      About the job positions
                     </Typography>
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={0}
-                    sx={{
-                      "& .MuiSvgIcon-root": {
-                        fontSize: 20,
-                      },
-                    }}
-                  >
-                    <OpenOn date={date(content.created_at)} />
-                    
-                    <TotalCandidates candidates={content.total_candidates} />
-                    <CandidatesOnTrack
-                      candidates={content.on_track_candidates}
-                    />
-                  </Stack>
-
-                  <Stack
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={0}
-                  >
-                    <CloseButton
-                      variant="button"
-                      color="secondary.main"
-                      startIcon={<img src="pic/find.svg" alt="find that job" />}
-                    >
-                      SHOW
-                    </CloseButton>
-                    <CloseButton
-                      variant="contained"
-                      color="error"
-                      startIcon={<HighlightOffIcon />}
-                      onClick={closedPost(content.job_id)}
-                    >
-                      CLOSE
-                    </CloseButton>
-                  </Stack>
-                </AccordionSummaryStyled>
-
-                <AccordionDetails>
-                  <Typography variant="subtitle1" color="error.main">
-                    About the job positions
-                  </Typography>
-                  <Typography variant="body2">
-                    {content.about_job_position}
-                  </Typography>
-                </AccordionDetails>
-                <AccordionDetails>
-                  <Typography variant="subtitle1" color="error.main">
-                    Mandatory Requirements
-                  </Typography>
-                  <Typography variant="body2">
-                    {content.job_requirement}
-                  </Typography>
-                </AccordionDetails>
-                <AccordionDetails>
-                  <Typography variant="subtitle1" color="error.main">
-                    Optional Requirements
-                  </Typography>
-                  <Typography variant="body2">
-                    {content.option_requirement}
-                  </Typography>
-                </AccordionDetails>
-              </Accordion></>
-             
+                    <Typography variant="body2">
+                      {content.about_job_position}
+                    </Typography>
+                  </AccordionDetails>
+                  <AccordionDetails>
+                    <Typography variant="subtitle1" color="error.main">
+                      Mandatory Requirements
+                    </Typography>
+                    <Typography variant="body2">
+                      {content.job_requirement}
+                    </Typography>
+                  </AccordionDetails>
+                  <AccordionDetails>
+                    <Typography variant="subtitle1" color="error.main">
+                      Optional Requirements
+                    </Typography>
+                    <Typography variant="body2">
+                      {content.option_requirement}
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </>
             );
           })}
 

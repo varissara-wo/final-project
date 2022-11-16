@@ -83,7 +83,6 @@ export const CandidatesOnTrack = (props) => {
       alignItems="center"
       spacing={0}
       sx={{ marginLeft: "10px", marginRight: "10px" }}
-      color="secondary"
     >
       <Stack
         direction="row"
@@ -92,16 +91,16 @@ export const CandidatesOnTrack = (props) => {
         spacing={0.2}
         color="secondary"
       >
-        <AccountCircleOutlinedIcon color="secondary" />
-        <Typography variant="caption" color="secondary">
+        <AccountCircleOutlinedIcon color="primary" />
+        <Typography variant="caption" color="primary">
           {candidates}
         </Typography>
       </Stack>
-      <Typography variant="caption" color="secondary">
-        Total
-      </Typography>
-      <Typography variant="caption" color="secondary">
+      <Typography variant="caption" color="primary">
         Candidates
+      </Typography>
+      <Typography variant="caption" color="primary">
+        on track
       </Typography>
     </Stack>
   );

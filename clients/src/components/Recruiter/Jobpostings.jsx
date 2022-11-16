@@ -64,7 +64,14 @@ export function Jobpostings() {
   }));
 
   return (
-    <Box sx={{ backgroundColor: "#F5F5F6", width: "1500px", height: "100vh" }}>
+    <Box
+      sx={{
+        backgroundColor: "#F5F5F6",
+        width: "100vw",
+        height: "100vh",
+        marginLeft: "240px",
+      }}
+    >
       <Box
         sx={{
           display: "flex",

@@ -1,40 +1,37 @@
 import { useState } from "react";
 import React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import { Input, Typography, Stack } from "@mui/material";
-import ImageListItem from "@mui/material/ImageListItem";
+
+import { Typography } from "@mui/material";
+
 import TextField from "@mui/material/TextField";
 import usePosts from "../hooks/usePost.jsx";
 import { Buttonwidth } from "../components/Register/Styles.jsx";
-import {
-  Textinput,
-  Textseacrh,
-  Textseacrh1,
-  Textseacrhre,
-  Categoryinput,
-  Informationbox,
-} from "./styles.jsx";
+
+import MultilineInputJobPost from "../components/Recruiter/MultilineInputJobPost.jsx";
+import OnelineInputJobPost from "../components/Recruiter/OnelineInputJobPost.jsx";
+import { Textseacrh1, Categoryinput } from "./styles.jsx";
 
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import InputAdornment from "@mui/material/InputAdornment";
+
 export function Createpost() {
   const { createPost } = usePosts();
   console.log(createPost);
   const [inputValue, setInputValue] = React.useState("");
   const [inputValue1, setInputValue1] = React.useState("");
   const [info, setInfo] = useState({
+    category: "",
     title: "",
-    category1: "",
     type: "",
-    salarymin: 0,
-    salarymax: 0,
-    jobdetial: "",
-    requiement: "",
+    minSalary: 0,
+    maxSalary: 0,
+    about: "",
+    requirement: "",
     optional: "",
   });
-  console.log(info);
+
   //categeory
   const category = [
     "Manufacturing",
@@ -43,7 +40,7 @@ export function Createpost() {
     "Goverment",
     "Sales",
   ];
-  const handle = (event) => {
+  const handleSubmit = (event) => {
     console.log(info);
     event.preventDefault();
     createPost({
@@ -51,10 +48,49 @@ export function Createpost() {
     });
   };
 
+  const handlerInputChange = (e) => {
+    setInfo({ ...info, [e.target.name]: e.target.value });
+  };
+
+  const mainInputs = [
+    {
+      name: "title",
+      placeholder: "Software engineer",
+      label: "JOB TITLE",
+    },
+  ];
+
+  const additionalInputs = [
+    {
+      name: "about",
+      placeholder:
+        "Describe the main functions and characteristics of your job position",
+      label: "ABOUT THE JOB POSITION",
+    },
+    {
+      name: "requirement",
+      placeholder: "List each mandatory requirement in a new line",
+      label: "MANDATORY REQUIREMENTS",
+    },
+    {
+      name: "optional",
+      placeholder: "List each optional requirement in a new line",
+      label: "OPTIONAL REQUIREMENTS",
+    },
+  ];
+
   //type
   const type = ["Fulltime", "Partime"];
   return (
-    <Box sx={{ backgroundColor: "#F5F5F6", width: "1500px" }}>
+    <Box
+      sx={{
+        backgroundColor: "#F5F5F6",
+        width: "100%",
+        marginLeft: "240px",
+        height: "100%",
+        minHeight: "100vh",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -65,12 +101,19 @@ export function Createpost() {
         }}
       >
         {/*------------------------------ Head------------------------------*/}
-        <Typography variant="h4" sx={{ marginBottom: "10px" }}>
+        <Typography
+          variant="h4"
+          sx={{ marginTop: "24px", marginBottom: "24px", fontWeight: "400" }}
+        >
           Create new job posting
         </Typography>
-        <Box sx={{ marginLeft: "8px" }}>
-          {" "}
-          <Typography variant="h5">Main information </Typography>
+        <Box>
+          <Typography
+            variant="h5"
+            style={{ fontWeight: "400", marginBottom: "8px" }}
+          >
+            Main information
+          </Typography>
           <Typography
             sx={{
               display: "flex",
@@ -79,27 +122,26 @@ export function Createpost() {
             }}
           >
             {/*------------------------------ Start titlebox ------------------------------*/}
-            <Typography variant="overline" sx={{ marginBottom: "3px" }}>
-              Job title
-            </Typography>
-            <Textseacrhre
-              id="outlined-basic"
-              variant="outlined"
-              placeholder="software engineer"
-              color="primary"
-              focused
-              sx={{ width: "420px", height: "36px", marginBottom: "8px" }}
-              onChange={(e) => {
-                setInfo({
-                  ...info,
-                  title: e.target.value,
-                });
-              }}
-            />
+
+            {mainInputs.map((input, index) => {
+              return (
+                <OnelineInputJobPost
+                  key={index}
+                  {...input}
+                  value={info[input.name]}
+                  onChange={handlerInputChange}
+                />
+              );
+            })}
           </Typography>
           {/*------------------------------ Dropdown category ------------------------------*/}
           <Typography>
-            <Typography variant="overline">Category</Typography>
+            <Typography
+              variant="overline"
+              inputProps={{ style: { marginBottom: "4px" } }}
+            >
+              Category
+            </Typography>
             <Categoryinput
               size="small"
               value={inputValue}
@@ -110,7 +152,7 @@ export function Createpost() {
                 setInputValue(newInputValue);
                 setInfo({
                   ...info,
-                  category1: newInputValue,
+                  category: newInputValue,
                 });
               }}
               id="controllable-states-demo"
@@ -120,9 +162,17 @@ export function Createpost() {
                 height: "40px",
                 borderRadius: "8px",
                 paddindTop: "0px",
+                "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#F48FB1",
+                  },
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Select or create category" />
+                <TextField
+                  {...params}
+                  label=""
+                  placeholder="Select or create category"
+                />
               )}
             />
           </Typography>
@@ -149,9 +199,13 @@ export function Createpost() {
                 height: "40px",
                 borderRadius: "8px",
                 paddindTop: "0px",
+                "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#F48FB1",
+                  },
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Select a type" />
+                <TextField {...params} label="" placeholder="Select a type" />
               )}
             />
           </Typography>
@@ -189,7 +243,7 @@ export function Createpost() {
                 onChange={(e) => {
                   setInfo({
                     ...info,
-                    salarymin: e.target.value,
+                    minSalary: e.target.value,
                   });
                 }}
                 InputProps={{
@@ -216,7 +270,7 @@ export function Createpost() {
                 onChange={(e) => {
                   setInfo({
                     ...info,
-                    salarymax: e.target.value,
+                    maxSalary: e.target.value,
                   });
                 }}
                 sx={{ marginLeft: "5px" }}
@@ -231,66 +285,30 @@ export function Createpost() {
             </Box>
           </Typography>
           {/*------------------------------ Start information------------------------------*/}
-          <Typography variant="h5">Addtional information </Typography>
+          <Typography variant="h5" mb="8px" style={{ fontWeight: "400" }}>
+            Addtional information{" "}
+          </Typography>
         </Box>
-        <Typography variant="overline" sx={{ marginBottom: "3px" }}>
-          Job title
-        </Typography>
-        <Informationbox
-          id="outlined-basic"
-          variant="outlined"
-          placeholder="Describe the main functions and characteristics of your job position"
-          color="primary"
-          focused
-          sx={{ width: "420px", height: "36px", marginBottom: "50px" }}
-          onChange={(e) => {
-            setInfo({
-              ...info,
-              jobdetial: e.target.value,
-            });
-          }}
-        />
-        <Typography variant="overline" sx={{ marginBottom: "3px" }}>
-          Mandatory Requirements
-        </Typography>
-        <Informationbox
-          id="outlined-basic"
-          variant="outlined"
-          placeholder="List each mandatory requirement in a new line"
-          color="primary"
-          focused
-          sx={{ width: "420px", height: "36px", marginBottom: "50px" }}
-          onChange={(e) => {
-            setInfo({
-              ...info,
-              requiement: e.target.value,
-            });
-          }}
-        />
-        <Typography variant="overline" sx={{ marginBottom: "3px" }}>
-          Optional Requirements
-        </Typography>
-        <Informationbox
-          id="outlined-basic"
-          variant="outlined"
-          placeholder="List each optional requirement in a new line"
-          color="primary"
-          focused
-          sx={{ width: "420px", height: "36px", marginBottom: "50px" }}
-          onChange={(e) => {
-            setInfo({
-              ...info,
-              optional: e.target.value,
-            });
-          }}
-        />
+
+        {additionalInputs.map((input, index) => {
+          return (
+            <MultilineInputJobPost
+              key={index}
+              {...input}
+              value={info[input.name]}
+              onChange={handlerInputChange}
+            />
+          );
+        })}
+
         <Buttonwidth
           variant="contained"
           color="primary"
           onClick={(e) => {
-            handle(e);
+            handleSubmit(e);
           }}
           type="submit"
+          sx={{ marginBottom: "100px" }}
         >
           POST THIS JOB
         </Buttonwidth>

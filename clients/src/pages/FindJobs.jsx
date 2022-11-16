@@ -47,7 +47,7 @@ const FindJobs = () => {
         }}
       >
         {/*------------------------------ Start Top Sidebar ------------------------------*/}
-        <Box className="sidebar-top" sx={{ width: "100%" }}>
+        <Box className="sidebar-top" sx={{ width: "100%", height: "100%" }}>
           <Box
             className="getthatjoblogo-box"
             sx={{

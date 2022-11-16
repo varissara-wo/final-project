@@ -158,6 +158,7 @@ recruiterRouter.post("/createpost", async (req, res) => {
 });
 recruiterRouter.get("/jobs/:id", async (req, res) => {
   const recruiter_id = req.params.id;
+ 
   try {
     const recruiterjobs = await pool.query(
       `select * from jobs   inner join categories on jobs.categories_id =  categories.categories_id where recruiter_id = $1`,
@@ -194,7 +195,7 @@ recruiterRouter.put("/jobs/:id", async (req, res) => {
   try {
       
       await pool.query(
-        `UPDATE jobs SET closed_at=$1 recruit_status=$2 where job_id=$3
+        `UPDATE jobs SET closed_at=$1, recruit_status=$2 where job_id=$3
        `,
         [
           updatejob.closed_at,

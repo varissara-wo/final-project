@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import React from "react";
 import FactoryIcon from "@mui/icons-material/Factory";
 import BalanceIcon from "@mui/icons-material/Balance";
@@ -33,9 +33,17 @@ import { FormatAlignCenter } from "@mui/icons-material";
 
 export function Jobpostings() {
   const [expanded, setExpanded] = useState(false);
-  const { data, getPost, numberOfJobs, closedPost } = usePosts();
+  const { data, getPost, numberOfJobs, closedPost, selectPost } = usePosts();
+  console.log(data.job_id);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+  };
+  const [chooseType, setChoosetype] = useState([]);
+  const handlechoose = (a, b, c) => {
+    selectPost(a, b, c);
+
+    setChoosetype(data);
+    console.log(chooseType);
   };
   const calSalary = (num) => {
     let a = num / 1000;
@@ -51,7 +59,13 @@ export function Jobpostings() {
       arr.push(d[i]);
     }
   };
+  {
+    /*------------------------------------------------debouce---------------------------------------------------------*/
+  }
 
+  {
+    /*------------------------------------------------debouce---------------------------------------------------------*/
+  }
   const iconCategory = (name) => {
     if (name == "Manufacturing") {
       return (
@@ -110,7 +124,7 @@ export function Jobpostings() {
   }
   useEffect(() => {
     getPost(2);
-  }, [data]);
+  }, []);
   {
     /*------------------------------------------------รอvalue จาก context---------------------------------------------------------*/
   }
@@ -122,7 +136,7 @@ export function Jobpostings() {
       alignItems: "center",
     },
   }));
-
+  console.log(selectPost);
   const CloseButton = styled(Button)(() => ({
     fontFamily: "var( --inter-font)",
     fontWeight: "500",
@@ -160,16 +174,23 @@ export function Jobpostings() {
             aria-labelledby="demo-row-radio-buttons-group-label"
             name="row-radio-buttons-group"
           >
-            <CheckBoxTextStyled value="All" control={<Radio />} label="All" />
+            <CheckBoxTextStyled
+              value="All"
+              control={<Radio />}
+              label="All"
+              onClick={() => handlechoose(2, "sf", 0)}
+            />
             <CheckBoxTextStyled
               value="With candidates on track"
               control={<Radio />}
               label="With candidates on track"
+              onClick={() => handlechoose(2, "sf", 1)}
             />
             <CheckBoxTextStyled
               value="Closed"
               control={<Radio />}
               label="Closed"
+              onClick={() => handlechoose(2, "closed", 0)}
             />
           </RadioGroup>
         </FormControl>
@@ -269,7 +290,7 @@ export function Jobpostings() {
                         variant="contained"
                         color="error"
                         startIcon={<HighlightOffIcon />}
-                        onClick={closedPost(content.job_id)}
+                        onClick={() => closedPost(content.job_id)}
                       >
                         CLOSE
                       </CloseButton>

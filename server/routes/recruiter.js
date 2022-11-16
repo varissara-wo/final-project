@@ -16,23 +16,37 @@ recruiterRouter.get("/", async (req, res) => {
   } catch {}
 });
 recruiterRouter.get("/users/exists/:email", async (req, res) => {
+  // try {
+  //   const isUserExist = await pool.query(
+  //     `select * from recruiter_users where email = $1`,
+  //     [req.params.email]
+  //   );
+
+  //   console.log(isUserExist.rows.length);
+  //   let message =
+  //     isUserExist.rows.length === 1
+  //       ? "This email is already available"
+  //       : "Can use this email";
+
+  //   return res.status(200).json({
+  //     data: message,
+  //   });
+  // } catch (err) {
+  //   throw err;
+  // }
   try {
     const isUserExist = await pool.query(
       `select * from recruiter_users where email = $1`,
       [req.params.email]
     );
 
-    console.log(isUserExist.rows.length);
-    let message =
-      isUserExist.rows.length === 1
-        ? "This email is already available"
-        : "Can use this email";
+    let check = isUserExist.rows.length === 1 ? true : false;
 
     return res.status(200).json({
-      data: message,
+      isEmailExist: check,
     });
   } catch (err) {
-    throw err;
+    console.log(err);
   }
 });
 

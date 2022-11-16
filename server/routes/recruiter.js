@@ -1,9 +1,12 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import { pool } from "../utils/db.js";
+import multer from "multer";
+import { logoUpload } from "../utils/upload.js";
 
 const recruiterRouter = Router();
 
+//Get user profile
 recruiterRouter.get("/", async (req, res) => {
   try {
     const recruiterUsers = await pool.query(`select * from recruiter_users`);
@@ -13,6 +16,8 @@ recruiterRouter.get("/", async (req, res) => {
     });
   } catch {}
 });
+
+//Check email
 recruiterRouter.get("/users/exists/:email", async (req, res) => {
   try {
     const isUserExist = await pool.query(
@@ -20,40 +25,41 @@ recruiterRouter.get("/users/exists/:email", async (req, res) => {
       [req.params.email]
     );
 
-    console.log(isUserExist.rows.length);
-    let message =
-      isUserExist.rows.length === 1
-        ? "This email is already available"
-        : "Can use this email";
+    let check = isUserExist.rows.length === 1 ? true : false;
 
     return res.status(200).json({
-      data: message,
+      isEmailExist: check,
     });
   } catch (err) {
     throw err;
   }
 });
 
-recruiterRouter.post("/", async (req, res) => {
+//Create account
+//Upload CV PDF file to cloudinary
+const multerUpload = multer({ dest: "uploads/" });
+const LogoUpload = multerUpload.fields([{ name: "logo", maxCount: 1 }]);
+
+recruiterRouter.post("/", LogoUpload, async (req, res) => {
+  const file = req.files.logo[0];
   try {
+    const responseLogoUpload = await logoUpload(file);
+    const logoUrl = responseLogoUpload;
     const recruiterUser = {
       email: req.body.email,
       password: req.body.password,
       companyname: req.body.companyname,
       website: req.body.website,
       about: req.body.about,
-      logo: req.body.logo,
-
+      logo: logoUrl,
       created_at: new Date(),
       updated_at: new Date(),
       last_logged_in: new Date(),
     };
     const salt = await bcrypt.genSalt(10);
-
     recruiterUser.password = await bcrypt.hash(recruiterUser.password, salt);
-
     await pool.query(
-      `insert into recruiter  (company_name,email,password,website,about,logo,created_at,updated_at,last_logged_in) 
+      `insert into recruiter_users  (company_name,email,password,company_website,about_company,logo_url,created_at,updated_at,last_logged_in) 
                 values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
       [
         recruiterUser.companyname,
@@ -67,12 +73,13 @@ recruiterRouter.post("/", async (req, res) => {
         recruiterUser.last_logged_in,
       ]
     );
-
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
   } catch (err) {}
 });
+
+//Update profile
 recruiterRouter.put("/:id", async (req, res) => {
   const updatedUser = {
     ...req.body,
@@ -107,6 +114,8 @@ recruiterRouter.put("/:id", async (req, res) => {
     });
   }
 });
+
+//Delete account
 recruiterRouter.delete("/:id", async (req, res) => {
   const userId = req.params.id;
   await pool.query(`delete from recruiter where recruiter_id=$1`, [userId]);
@@ -114,31 +123,37 @@ recruiterRouter.delete("/:id", async (req, res) => {
     message: `User ${userId} has been deleted.`,
   });
 });
+
+//Create new job applicant
 recruiterRouter.post("/createpost", async (req, res) => {
   try {
-    const category_id = await pool.query(
-      `select * from categories where name =$1`,
-      [req.body.category1]
+    const categories_id = await pool.query(
+      `select categories_id from categories where name =$1`,
+      [req.body.category]
     );
     const post = {
-      recruiter_id: 1,
-      category_id: category_id.category_id,
+      recruiter_id: 2,
+      categories_id: categories_id.rows[0].categories_id,
+      job_title: req.body.title,
       type: req.body.type,
-      min_salary: req.body.salarymin,
-      max_salary: req.body.salarymax,
-      about_job_position: req.body.jobdetial,
-      job_requirement: req.body.requiement,
+      min_salary: req.body.minSalary,
+      max_salary: req.body.maxSalary,
+      about_job_position: req.body.about,
+      job_requirement: req.body.requirement,
       option_requirement: req.body.optional,
       created_at: new Date(),
-      job_id: 4,
+      updated_at: new Date(),
     };
+
     console.log(post);
-    console.log("5555");
+
     await pool.query(
-      `insert into jobs  ( recruiter_id, type,min_salary, max_salary,about_job_postition, job_require,option_require,  created_at,job_id) 
-                values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+      `insert into jobs  ( recruiter_id,categories_id,job_title, type,min_salary, max_salary,about_job_position, job_requirement,option_requirement, created_at,updated_at) 
+                values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
       [
         post.recruiter_id,
+        post.categories_id,
+        post.job_title,
         post.type,
         post.min_salary,
         post.max_salary,
@@ -146,7 +161,7 @@ recruiterRouter.post("/createpost", async (req, res) => {
         post.job_requirement,
         post.option_requirement,
         post.created_at,
-        post.job_id,
+        post.updated_at,
       ]
     );
     return res.status(201).json({

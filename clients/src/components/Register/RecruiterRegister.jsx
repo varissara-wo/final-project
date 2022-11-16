@@ -38,7 +38,7 @@ const RecruiterRegister = () => {
     confirmpassword: "",
     website: "",
     about: "",
-    logo: "",
+    logo: {},
   });
 
   const { isRecruiterExist, isRecruiterEmailExist, registerRecruiter } =
@@ -86,7 +86,11 @@ const RecruiterRegister = () => {
         const data = {
           ...userData,
         };
-        registerRecruiter(data);
+        const formData = new FormData();
+        for (let key in data) {
+          formData.append(key, data[key]);
+        }
+        registerRecruiter(formData);
       }
     }
   };
@@ -113,17 +117,18 @@ const RecruiterRegister = () => {
   const [fileStatus, setFileStatus] = useState(innitialFileData);
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    //console.log(file);
+    const fileType = file.type.split("/");
     //Validate the file is PDF
-    if (file.type !== "application/pdf") {
-      return setFileStatus("Not a PDF file");
+    if (fileType[1] !== "jpeg" && fileType[1] !== "png") {
+      return setFileStatus("Not a PNG, JPEG, IMG file");
     }
     //Validate the file PDF size less than 5 MB
-
     if (file.size > 5 * 1024 * 1024) {
       return setFileStatus("File size more than 5 MB");
     } else {
       setFileStatus(`File ${file.name}`);
-      return file;
+      setUserData({ ...userData, [event.target.name]: file });
     }
   };
 
@@ -306,9 +311,10 @@ const RecruiterRegister = () => {
                 left="10px"
                 hidden
                 width="300px"
-                accept=".pdf"
+                accept=".png,.jpeg,.img"
                 multiple
                 type="file"
+                name="logo"
                 onChange={handleFileChange}
               />
             </UploadButton>
@@ -324,7 +330,7 @@ const RecruiterRegister = () => {
               color="info.main"
               textTransform="none"
             >
-              Only PDF. Max size 5MB
+              Only PNG JPEG IMG. Max size 5MB
             </Typography>
             <Stack
               direction="row"

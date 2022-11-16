@@ -3,8 +3,10 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { RegisProvider } from "./contexts/register";
 import { AuthProvider } from "./contexts/professionalAuth";
-
+import jwtInterceptor from "./utils/jwtInterceptor";
 import App from "./App";
+
+jwtInterceptor();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

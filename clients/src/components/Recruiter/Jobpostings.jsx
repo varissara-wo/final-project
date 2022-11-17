@@ -155,7 +155,6 @@ export function Jobpostings() {
         height: "100vh",
         minWidth: "100vh",
         marginLeft: "240px",
-
       }}
     >
       <Box

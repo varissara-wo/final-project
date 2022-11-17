@@ -29,7 +29,6 @@ export function Recruiter() {
         alignItems: "flex-start",
       }}
       height="100vh important!"
-      // inputProps={{ style: { height: "100vh" } }}
     >
       {/*------------------------------------- Start Sidebar -------------------------------------*/}
       <Box position="fixed">
@@ -37,7 +36,6 @@ export function Recruiter() {
           className="sidebar-container"
           sx={{
             width: "240px",
-
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",

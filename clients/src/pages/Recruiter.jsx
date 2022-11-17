@@ -14,6 +14,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useState } from "react";
 import { Createpost } from "./Createjobpost.jsx";
 import { Jobpostings } from "../components/Recruiter/Jobpostings.jsx";
+import Profile from "./Profile";
 export function Recruiter() {
   const [Index, setIndex] = useState(0);
   const handleListItemClick = (event, index) => {
@@ -262,6 +263,7 @@ export function Recruiter() {
       {/*------------------------------------- End Sidebar -------------------------------------*/}
       {Index === 0 && <Jobpostings />}
       {Index === 1 && <Createpost />}
+      {Index === 2 && <Profile />}
     </Box>
   );
 }

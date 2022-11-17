@@ -11,7 +11,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { Typography, CircularProgress, Stack } from "@mui/material";
 import Button from "@mui/material/Button";
-import { Input, Typography } from "@mui/material";
+import { Input } from "@mui/material";
 import { data } from "../data/data.js";
 import JobWrapper from "../components/Professional/JobWrapper.jsx";
 import usePosts from "../hooks/usePost.jsx";

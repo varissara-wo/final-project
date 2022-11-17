@@ -19,24 +19,6 @@ recruiterRouter.get("/", async (req, res) => {
 
 //Check email
 recruiterRouter.get("/users/exists/:email", async (req, res) => {
-  // try {
-  //   const isUserExist = await pool.query(
-  //     `select * from recruiter_users where email = $1`,
-  //     [req.params.email]
-  //   );
-
-  //   console.log(isUserExist.rows.length);
-  //   let message =
-  //     isUserExist.rows.length === 1
-  //       ? "This email is already available"
-  //       : "Can use this email";
-
-  //   return res.status(200).json({
-  //     data: message,
-  //   });
-  // } catch (err) {
-  //   throw err;
-  // }
   try {
     const isUserExist = await pool.query(
       `select * from recruiter_users where email = $1`,
@@ -47,8 +29,10 @@ recruiterRouter.get("/users/exists/:email", async (req, res) => {
 
     return res.status(200).json({
       isEmailExist: check,
+      isEmailExist: check,
     });
   } catch (err) {
+    console.log(err);
     console.log(err);
   }
 });
@@ -77,12 +61,9 @@ recruiterRouter.post("/", LogoUpload, async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     recruiterUser.password = await bcrypt.hash(recruiterUser.password, salt);
     await pool.query(
-<<<<<<< HEAD
       `insert into recruiter_users  (company_name,email,password,company_website,about_company,logo_url,created_at,updated_at,last_logged_in) 
                 values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-=======
-      `insert into recruiter_users (company_name,email,password,company_website,about_company,logo_url,created_at,updated_at,last_logged_in) values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
->>>>>>> faca506ef8d24554619871971bdd7b93ae2103bf
+
       [
         recruiterUser.companyname,
         recruiterUser.email,
@@ -197,15 +178,15 @@ recruiterRouter.post("/createpost", async (req, res) => {
 });
 recruiterRouter.get("/jobs/:id", async (req, res) => {
   const recruiter_id = req.params.id;
- 
+
   try {
     const recruiterjobs = await pool.query(
       `select * from jobs   inner join categories on jobs.categories_id =  categories.categories_id where recruiter_id = $1`,
       [recruiter_id]
     );
-      return res.status(200).json({
-          data: recruiterjobs.rows,
-        });
+    return res.status(200).json({
+      data: recruiterjobs.rows,
+    });
   } catch (err) {
     throw err;
   }
@@ -217,9 +198,9 @@ recruiterRouter.get("/categories/:id", async (req, res) => {
       `select * from categories where categories_id = $1`,
       [categories_id]
     );
-      return res.status(200).json({
-          data: categories.rows,
-        });
+    return res.status(200).json({
+      data: categories.rows,
+    });
   } catch (err) {
     throw err;
   }
@@ -227,20 +208,15 @@ recruiterRouter.get("/categories/:id", async (req, res) => {
 recruiterRouter.put("/jobs/:id", async (req, res) => {
   const jobs_id = req.params.id;
   const updatejob = {
-    closed_at:new Date(),
-    recruit_status:"closed"
+    closed_at: new Date(),
+    recruit_status: "closed",
   };
-  
+
   try {
-      
-      await pool.query(
-        `UPDATE jobs SET closed_at=$1, recruit_status=$2 where job_id=$3
+    await pool.query(
+      `UPDATE jobs SET closed_at=$1, recruit_status=$2 where job_id=$3
        `,
-        [
-          updatejob.closed_at,
-          updatejob.recruit_status,
-          jobs_id
-        ]
+      [updatejob.closed_at, updatejob.recruit_status, jobs_id]
     );
     return res.json({
       message: ` ${jobs_id} has been closed.`,

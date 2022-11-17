@@ -2,16 +2,24 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { RegisProvider } from "./contexts/register";
-
+import { AuthProvider } from "./contexts/professionalAuth";
+import { AuthRecruiterProvider } from "./contexts/recruiterAuth";
+import jwtInterceptor from "./utils/jwtInterceptor";
 import App from "./App";
+
+jwtInterceptor();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <RegisProvider>
-        <App />
-      </RegisProvider>
+      <AuthRecruiterProvider>
+        <AuthProvider>
+          <RegisProvider>
+            <App />
+          </RegisProvider>
+        </AuthProvider>
+      </AuthRecruiterProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

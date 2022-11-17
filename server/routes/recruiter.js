@@ -14,7 +14,7 @@ recruiterRouter.get("/", async (req, res) => {
     return res.status(200).json({
       data: recruiterUsers.rows,
     });
-  } catch {}
+  } catch { }
 });
 
 //Check email
@@ -79,9 +79,11 @@ recruiterRouter.post("/", LogoUpload, async (req, res) => {
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
+
   } catch (err) {
     ("error");
   }
+
 });
 
 //Update profile

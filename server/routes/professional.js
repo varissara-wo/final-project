@@ -144,9 +144,8 @@ professionalRouter.delete("/:id", async (req, res) => {
 });
 //followjobs
 professionalRouter.get("/follow/:id", async (req, res) => {
- 
   try {
-     const professId = req.params.id;
+    const professId = req.params.id;
     const followjobs = await pool.query(
       `select* from follow_jobs inner join jobs on jobs.job_id = follow_jobs.job_id  
       inner join categories  on  categories.categories_id =  jobs.categories_id
@@ -163,7 +162,7 @@ professionalRouter.get("/follow/:id", async (req, res) => {
 });
 
 //get jobs
-professionalRouter.get("/jobs", async (req, res) => {
+professionalRouter.get("/", async (req, res) => {
   try {
     const getJob = await pool.query(
       `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
@@ -183,5 +182,210 @@ professionalRouter.get("/jobs", async (req, res) => {
     console.log(err);
   }
 });
+//query search
+professionalRouter.get("/searchjobs", async (req, res) => {
+  const keywords = req.query.keywords || "";
+  const category = req.query.category || "";
+  const maxPrice = req.query.maxPrice || 0;
+  const minPrice = req.query.minPrice || 0;
+  console.log(keywords);
 
+  let query = "";
+  let values = [];
+  //ครบ4
+  if (keywords && category && maxPrice && minPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where jobs.job_title ilike '%'||$1||'%' and categories.name ilike '%'||$2||'% and 
+     categories.name ilike '%'||$2||'%' and (jobs.max_salary  <=$3) and (jobs.min_salarye  >=$3) 
+     and jobs.recruit_status = 'open' `;
+    values = [keywords, category, maxPrice, minPrice];
+  } //ไม่มีkeyword
+  else if (category && maxPrice && minPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where  categories.name ilike '%'||$1||'% and 
+     categories.name ilike '%'||$1||'%' and (jobs.max_salary  <=$2) and (jobs.min_salarye  >=$3) 
+     and jobs.recruit_status = 'open'`;
+    values = [category, maxPrice, minPrice];
+  } //ไม่มีcategory
+  else if (keywords && maxPrice && minPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where  jobs.job_title ilike '%'||$1||'%' and 
+     categories.name ilike '%'||$1||'%' and (jobs.max_salary  <=$2) and (jobs.min_salarye  >=$3) 
+     and jobs.recruit_status = 'open'`;
+    values = [keywords, maxPrice, minPrice];
+  } //ไม่มีmaxprice
+  else if (keywords && category && minPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where  jobs.job_title ilike '%'||$1||'%' and 
+     categories.name ilike '%'||$2||'%'  and (jobs.min_salarye  >=$3) and jobs.recruit_status = 'open'`;
+    values = [keywords, category, minPrice];
+  }
+  //ไม่มีminprice
+  else if (keywords && category && maxPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where  jobs.job_title ilike '%'||$1||'%' and 
+     categories.name ilike '%'||$2||'%'  and (jobs.max_salary  <=$3) and jobs.recruit_status = 'open'`;
+    values = [keywords, category, maxPrice];
+  }
+  //มีแต่ keywords and categories
+  else if (keywords && category) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where jobs.job_title ilike '%'||$1||'%' and categories.name ilike '%'||$2||'%'  and jobs.recruit_status = 'open'`;
+    values = [keywords, category];
+  }
+  //มีแต่ keywords and maxprice
+  else if (keywords && maxPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where  jobs.job_title ilike '%'||$1||'%' and 
+    (jobs.min_salary  >=$2) and jobs.recruit_status = 'open'`;
+    values = [keywords, maxPrice];
+  } //มีแต่ keywords and minprice
+  else if (keywords && minPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where  jobs.job_title ilike '%'||$1||'%' and 
+    (jobs.max_salary  <=$2) and jobs.recruit_status = 'open'`;
+    values = [keywords, minPrice];
+  } //มีแต่ category and minprice
+  else if (category && minPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where  categories.name ilike '%'||$2||'% and 
+    (jobs.min_salarye  >=$2) and jobs.recruit_status = 'open'`;
+    values = [keywords, minPrice];
+  } //มีแต่ category and maxprice
+  else if (category && maxPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where  categories.name ilike '%'||$1||'%' and 
+    (jobs.max_salary  <=$2) and jobs.recruit_status = 'open'`;
+    values = [category, maxPrice];
+  } //มีแต่ maxprice and minprice
+  else if (minPrice && maxPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where  (jobs.max_salary  <=$1) and (jobs.min_salarye  >=$2) and jobs.recruit_status = 'open'`;
+    values = [maxPrice, minPrice];
+  } //มีแต่ keywords
+  else if (keywords) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where jobs.job_title ilike '%'||$1||'%' and jobs.recruit_status = 'open'`;
+    values = [keywords];
+  } //มีแต่ category
+  else if (category) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where categories.name ilike '%'||$1||'%' and jobs.recruit_status = 'open'`;
+    values = [category];
+  } //มีแต่ minsalary
+  else if (minPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where (jobs.min_salarye  >=$1) and jobs.recruit_status = 'open'`;
+    values = [minPrice];
+  } //มีแต่ maxsalary
+  else if (maxPrice) {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where (jobs.max_salary  <=$1) and jobs.recruit_status = 'open'`;
+    values = [maxPrice];
+  } else {
+    query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where recruit_status = 'open'`;
+  }
+  const results = await pool.query(query, values);
+  console.log(results);
+  return res.status(200).json({
+    data: results.rows,
+  });
+});
 export default professionalRouter;

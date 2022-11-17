@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ConnectingAirportsOutlined } from "@mui/icons-material";
 
 function usePosts() {
   const [data, setData] = useState([]);
@@ -55,24 +56,14 @@ function usePosts() {
     }
   };
 
-  const getJobs = async () => {
-    const results = await axios.get(`http://localhost:4000/professional/jobs/`);
-    const jobData = results.data.data;
-    setGetJobData([...jobData]);
-    console.log(getJobData);
-  };
-
-  return {
-    createPost,
-    getPost,
-    data,
-    numberOfJobs,
-    closedPost,
-    selectPost,
-    getJobs,
-    getJobData,
-  };
-
+  // const getJobs = async (text,cate,type,salary) => {
+  //   const results = await axios.get(`http://localhost:4000/professional/jobs/`);
+  //   const jobData = results.data.data;
+  //   console.log(jobData[0].job_title.toLowerCase())
+    
+  //   setGetJobData([...jobData]);
+    
+  // };
   const getFollow = async (professionalId) => {
     const results = await axios.get(
       `http://localhost:4000/professional/follow/${professionalId}`
@@ -83,7 +74,35 @@ function usePosts() {
     setNumberOffollow(results.data.data.length);
     console.log(numberOfJobs)
   };
-  return { createPost, getPost, data, numberOfJobs, closedPost, selectPost,follow,getFollow,numberOfJobs};
+  const getSearch = async (keyword,categories,minprice,maxprice) => {
+    if(keyword &&categories &&minprice&&maxprice){
+      const results = await axios.get(
+      `http://localhost:4000/professional/searchjobs?keywords=${keyword}`
+    );
+    setGetJobData(results.data.data)
+    }else if()
+    // const results = await axios.get(
+    //   `http://localhost:4000/professional/searchjobs?keywords=${keyword}&maxPrice=${categories}& minPrice=${minprice}&category=${maxprice}`
+    // );
+    // setGetJobData(results.data.data)
+  
+
+   
+  };
+  return {
+    createPost,
+    getPost,
+    data,
+    numberOfJobs,
+    closedPost,
+    selectPost,
+   
+    getJobData,follow,getFollow,numberOfJobs, getSearch
+  };
+
+  
+
+  
 
 
 }

@@ -41,10 +41,10 @@ export function Findjobssearch() {
     setNumber(data1.length);
   };
 
-  const { getJobs, getJobData } = usePosts();
+  const {  getJobData , getSearch} = usePosts();
 
   useEffect(() => {
-    getJobs();
+    getSearch("foo");
   }, []);
 
   return (

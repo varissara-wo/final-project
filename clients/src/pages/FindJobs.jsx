@@ -14,7 +14,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Findjobssearch } from "./Findjobscontent.jsx";
 import { useState } from "react";
 import { YourApplications } from "../components/Professional/YourApplications.jsx";
-
+import { Following } from "../components/Professional/Following.jsx";
 const FindJobs = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event, index) => {
@@ -266,6 +266,7 @@ const FindJobs = () => {
       {/*------------------------------------- End Sidebar -------------------------------------*/}
       {selectedIndex === 0 && <Findjobssearch />}
       {selectedIndex === 1 && <YourApplications />}
+      {selectedIndex === 2 && <Following />}
     </Box>
   );
 };

@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { CompressOutlined } from "@mui/icons-material";
 function usePosts() {
   const [data, setData] = useState([]);
+
+  const [follow,setFollow] =useState([])
+  const [numberOffollow, setNumberOffollow] = useState(0);
   const [numberOfJobs, setNumberOfJobs] = useState(0);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
@@ -61,7 +64,17 @@ function usePosts() {
     // }
     // console.log(data);
   };
-  return { createPost, getPost, data, numberOfJobs, closedPost, selectPost };
+  const getFollow = async (professionalId) => {
+    const results = await axios.get(
+      `http://localhost:4000/professional/follow/${professionalId}`
+    );
+
+    setFollow(results.data.data);
+
+    setNumberOffollow(results.data.data.length);
+    console.log(numberOfJobs)
+  };
+  return { createPost, getPost, data, numberOfJobs, closedPost, selectPost,follow,getFollow,numberOfJobs};
 }
 export default usePosts;
 //อย่าลืม http อย่าลืม

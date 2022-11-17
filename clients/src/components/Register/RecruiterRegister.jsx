@@ -21,7 +21,7 @@ import {
   validateAbout,
 } from "../../utils/validateRegister.jsx";
 
-import EmailInput from "./EmailInput.jsx";
+import EmailInput from "./EmailInputs.jsx";
 import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
 import PasswordInput from "./PasswordInput.jsx";
@@ -32,15 +32,17 @@ const RecruiterRegister = () => {
   const steps = ["Login information", "Company information"];
 
   const [userData, setUserData] = useState({
-    companyName: "",
+    companyname: "",
     email: "",
     password: "",
     confirmpassword: "",
     website: "",
     about: "",
+    logo: {},
   });
 
-  const { isRecruiterExist, isRecruiterEmailExist } = useRegis();
+  const { isRecruiterExist, isRecruiterEmailExist, registerRecruiter } =
+    useRegis();
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
@@ -60,7 +62,8 @@ const RecruiterRegister = () => {
       await isRecruiterEmailExist(userData.email);
       const checkPassword = validatePassword(userData.password);
       const checkEmail = validateEmail(userData.email);
-      const checkCompanyName = validateCompanyName(userData.name);
+      const checkCompanyName = validateCompanyName(userData.companyname);
+      console.log(checkCompanyName);
       const checkConfirmPassword = validateConfirmPassword(
         userData.password,
         userData.confirmpassword
@@ -81,8 +84,14 @@ const RecruiterRegister = () => {
     if (activeStep === 1) {
       const checkAbout = validateAbout(userData.about);
       if (checkAbout || userData.about === "") {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
+        const data = {
+          ...userData,
+        };
+        const formData = new FormData();
+        for (let key in data) {
+          formData.append(key, data[key]);
+        }
+        registerRecruiter(formData);
       }
     }
   };
@@ -109,17 +118,18 @@ const RecruiterRegister = () => {
   const [fileStatus, setFileStatus] = useState(innitialFileData);
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    //console.log(file);
+    const fileType = file.type.split("/");
     //Validate the file is PDF
-    if (file.type !== "application/pdf") {
-      return setFileStatus("Not a PDF file");
+    if (fileType[1] !== "jpeg" && fileType[1] !== "png") {
+      return setFileStatus("Not a PNG, JPEG, IMG file");
     }
     //Validate the file PDF size less than 5 MB
-
     if (file.size > 5 * 1024 * 1024) {
       return setFileStatus("File size more than 5 MB");
     } else {
       setFileStatus(`File ${file.name}`);
-      return file;
+      setUserData({ ...userData, [event.target.name]: file });
     }
   };
 
@@ -129,11 +139,11 @@ const RecruiterRegister = () => {
 
   const companyNameInput = [
     {
-      name: "name",
+      name: "companyname",
       type: "text",
       placeholder: "MY Company S.A Doe",
       errorMessage: "** Company name is not valid",
-      pattern: /\w+/,
+      pattern: /^\w+\w*$/,
       label: "NAME",
     },
   ];
@@ -210,7 +220,7 @@ const RecruiterRegister = () => {
                   <OnelineInput
                     key={index}
                     {...input}
-                    value={userData[input.name]}
+                    value={userData[input.companyname]}
                     onChange={handlerInputChange}
                   />
                 );
@@ -302,9 +312,10 @@ const RecruiterRegister = () => {
                 left="10px"
                 hidden
                 width="300px"
-                accept=".pdf"
+                accept=".png,.jpeg,.img"
                 multiple
                 type="file"
+                name="logo"
                 onChange={handleFileChange}
               />
             </UploadButton>
@@ -320,7 +331,7 @@ const RecruiterRegister = () => {
               color="info.main"
               textTransform="none"
             >
-              Only PDF. Max size 5MB
+              Only PNG JPEG IMG. Max size 5MB
             </Typography>
             <Stack
               direction="row"

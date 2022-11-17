@@ -21,6 +21,7 @@ import {
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import PasswordInput from "./PasswordInput.jsx";
 
 import {
   NextButton,
@@ -39,14 +40,13 @@ import {
   ArrowBackIosNew,
 } from "@mui/icons-material";
 
-import EmailInput from "./EmailInput.jsx";
+import EmailInput from "./EmailInputs.jsx";
 import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
-import PasswordInput from "./PasswordInput.jsx";
 
 const ProfessionalRegister = () => {
   const [userData, setUserData] = useState({
-    professionalemail: "",
+    email: "",
     password: "",
     confirmpassword: "",
     name: "",
@@ -56,6 +56,7 @@ const ProfessionalRegister = () => {
     title: "",
     experience: "",
     education: "",
+    cv: {},
   });
 
   const steps = [
@@ -76,7 +77,11 @@ const ProfessionalRegister = () => {
     return skipped.has(step);
   };
 
-  const { isProfessionalExist, isProfessionalEmailExist } = useRegis();
+  const {
+    isProfessionalEmailExist,
+    isProfessionalExist,
+    registerProfessional,
+  } = useRegis();
 
   const handleNext = async () => {
     let newSkipped = skipped;
@@ -87,7 +92,6 @@ const ProfessionalRegister = () => {
 
     if (activeStep === 0) {
       await isProfessionalEmailExist(userData.email);
-
       const checkPassword = validatePassword(userData.password);
       const checkEmail = validateEmail(userData.email);
       const checkConfirmPassword = validateConfirmPassword(
@@ -101,6 +105,7 @@ const ProfessionalRegister = () => {
         checkConfirmPassword &
         (isProfessionalExist === false)
       ) {
+        console.log("pass");
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
       }
@@ -124,8 +129,15 @@ const ProfessionalRegister = () => {
 
       if (checkExperience || userData.experience === "") {
         if (checkEducation || userData.education === "") {
-          setActiveStep((prevActiveStep) => prevActiveStep + 1);
-          setSkipped(newSkipped);
+          setUserData({ ...userData, birthday: String(userData.birthday) });
+          const data = {
+            ...userData,
+          };
+          const formData = new FormData();
+          for (let key in data) {
+            formData.append(key, data[key]);
+          }
+          registerProfessional(formData);
         }
       }
     }
@@ -151,21 +163,19 @@ const ProfessionalRegister = () => {
   //handleFileChange for file upload validation
   const innitialFileData = "No file chosen";
   const [fileStatus, setFileStatus] = useState(innitialFileData);
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     //Validate the file is PDF
-    console.log(file);
     if (file.type !== "application/pdf") {
       return setFileStatus("Not a PDF file");
     }
     //Validate the file PDF size less than 5 MB
-
     if (file.size > 5 * 1024 * 1024) {
       return setFileStatus("File size more than 5 MB");
     } else {
       setFileStatus(`File ${file.name}`);
-      return file;
+      setUserData({ ...userData, [event.target.name]: file });
+      console.log(userData);
     }
   };
 
@@ -459,6 +469,7 @@ const ProfessionalRegister = () => {
                 accept=".pdf"
                 multiple
                 type="file"
+                name="cv"
                 onChange={handleFileChange}
               />
             </UploadButton>

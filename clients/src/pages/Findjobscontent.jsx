@@ -15,6 +15,10 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Input, Typography } from "@mui/material";
 import { data } from "../data/data.js";
+import JobWrapper from "../components/Professional/JobWrapper.jsx";
+import usePosts from "../hooks/usePost.jsx";
+import { useEffect } from "react";
+
 export function Findjobssearch() {
   const [value, setValue] = React.useState();
   const [inputValue, setInputValue] = React.useState("");
@@ -36,6 +40,12 @@ export function Findjobssearch() {
   const changenum = (event) => {
     setNumber(data1.length);
   };
+
+  const { getJobs, getJobData } = usePosts();
+
+  useEffect(() => {
+    getJobs();
+  }, []);
 
   return (
     <Box sx={{ backgroundColor: "#F5F5F6", width: "1500px", height: "100vh" }}>
@@ -210,7 +220,6 @@ export function Findjobssearch() {
           variant="h6"
           sx={{ maginTop: "10px", marginLeft: "5px", marginBottom: "10px" }}
         >
-          {" "}
           {data.length} jobs for you
         </Typography>
         {/*------------------------------------- Mapdata -------------------------------------*/}
@@ -224,150 +233,19 @@ export function Findjobssearch() {
             flexWrap: "wrap",
           }}
         >
-          {data1.map((item, itemIndex) => {
+          {getJobData.map((item, index) => {
+            const img = JSON.parse(item.logo_url).url;
             return (
-              <>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    backgroundColor: "background.paper",
-                    width: "290px",
-                    height: "170px",
-                    borderRadius: "8px",
-                    boxShadow: "0px 2px 2px #00000033",
-                    key: { itemIndex },
-                    margin: "10px",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    {/*------------------------------------- รูป-------------------------------------*/}
-                    <ImageListItem
-                      sx={{
-                        width: "75px",
-                        height: "75px",
-                        marginTop: "15px",
-                        marginLeft: "5px",
-                      }}
-                    >
-                      <img
-                        src={`${item.img}?w=75&fit=crop&auto=format`}
-                        //srcSet={`${item.img}?w=75&fit=crop&auto=format&dpr=2 2x`}
-                      />{" "}
-                    </ImageListItem>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        marginLeft: "18px",
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          width: "100px",
-                          height: "15px",
-                          marginBottom: "10px",
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "flex-start",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <BungalowIcon color="info" />
-
-                        <Typography
-                          variant="caption"
-                          sx={{ marginLeft: "10px", marginTop: "5px" }}
-                          color="#8E8E8E"
-                        >
-                          {" "}
-                          {item.category}
-                        </Typography>
-                      </Box>
-                      {/*------------------------------------- title -------------------------------------*/}
-                      <Box
-                        sx={{ width: "180px", height: "28px" }}
-                        className="title"
-                      >
-                        <Typography variant="h6">The Job Title </Typography>
-                      </Box>
-                      <Box sx={{ width: "170px", height: "28px" }}>
-                        <Typography variant="subtitle2" color="#8E8E8E">
-                          {item.name}
-                        </Typography>
-                      </Box>
-                      {/*------------------------------------- Type -------------------------------------*/}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "flex-start",
-                          width: "250px",
-                          height: "20px",
-                          marginBottom: "10px",
-                        }}
-                      >
-                        <Box>
-                          <CalendarMonthIcon color="info" />
-                        </Box>
-                        <Box sx={{ marginBottom: "5px", marginRight: "4px" }}>
-                          <Typography variant="caption" color="#8E8E8E">
-                            {item.type}{" "}
-                          </Typography>{" "}
-                        </Box>
-                        <Box>
-                          <MonetizationOnIcon color="info" />
-                        </Box>
-                        <Box>
-                          <Typography variant="caption" color="#8E8E8E">
-                            {item.salary}{" "}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    <Box></Box>
-                    <Box>
-                      <Button>
-                        {" "}
-                        <GpsFixedIcon
-                          sx={{
-                            color: "#616161",
-                            marginRight: "10px",
-                            marginLeft: "10px",
-                          }}
-                          color="info"
-                        />
-                        <Typography variant="button" sx={{ color: "#616161" }}>
-                          Follow{" "}
-                        </Typography>
-                      </Button>
-                    </Box>
-                    <Box sx={{ marginLeft: "40px" }}>
-                      <Button variant="outlined" sx={{ borderRadius: "13px" }}>
-                        <Typography variant="button" sx={{ color: "#616161" }}>
-                          see more{" "}
-                        </Typography>
-                      </Button>
-                    </Box>
-                  </Box>
-                </Box>
-              </>
+              <JobWrapper
+                key={index}
+                img={img}
+                category={item.name}
+                type={item.type}
+                name={item.company_name}
+                minSalary={item.min_salary}
+                maxSalary={item.max_salary}
+                jobTitle={item.job_title}
+              />
             );
           })}
         </Box>

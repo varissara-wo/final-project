@@ -1,12 +1,14 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import { pool } from "../utils/db.js";
+import multer from "multer";
+import { cvUpload } from "../utils/upload.js";
 
 const professionalRouter = Router();
 
+//Get user profile
 professionalRouter.get("/", async (req, res) => {
   try {
-
     const professionalUsers = await pool.query(
       `select * from professional_users`
     );
@@ -14,13 +16,12 @@ professionalRouter.get("/", async (req, res) => {
     return res.status(200).json({
       data: professionalUsers.rows,
     });
-
   } catch (err) {
     console.log(err);
   }
-
 });
 
+//Check email
 professionalRouter.get("/users/exists/:email", async (req, res) => {
   try {
     const isUserExist = await pool.query(
@@ -38,8 +39,16 @@ professionalRouter.get("/users/exists/:email", async (req, res) => {
   }
 });
 
-professionalRouter.post("/", async (req, res) => {
+//Create account
+//Upload CV PDF file to cloudinary
+const multerUpload = multer({ dest: "uploads/" });
+const CvUpload = multerUpload.fields([{ name: "cv", maxCount: 1 }]);
+
+professionalRouter.post("/", CvUpload, async (req, res) => {
+  const file = req.files.cv[0];
   try {
+    const responseCvUpload = await cvUpload(file);
+    const cvUrl = responseCvUpload;
     const newProfessionalUser = {
       email: req.body.email,
       password: req.body.password,
@@ -50,19 +59,16 @@ professionalRouter.post("/", async (req, res) => {
       title: req.body.title,
       experience: req.body.experience,
       education: req.body.education,
-      cv: req.body.cv,
+      cv: cvUrl,
       created_at: new Date(),
       updated_at: new Date(),
       last_logged_in: new Date(),
     };
-
     const salt = await bcrypt.genSalt(10);
-
     newProfessionalUser.password = await bcrypt.hash(
       newProfessionalUser.password,
       salt
     );
-
     await pool.query(
       `insert into professional_users (email,password,name,phone,birthday,linkedin,job_title,experience,education,cv_url,created_at,updated_at,last_logged_in) 
       values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`,
@@ -82,12 +88,13 @@ professionalRouter.post("/", async (req, res) => {
         newProfessionalUser.last_logged_in,
       ]
     );
-
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
-  } catch (err) { }
+  } catch (err) {}
 });
+
+//Update user
 professionalRouter.put("/:id", async (req, res) => {
   const updatedUser = {
     ...req.body,
@@ -124,6 +131,8 @@ professionalRouter.put("/:id", async (req, res) => {
     });
   }
 });
+
+//Delete user
 professionalRouter.delete("/:id", async (req, res) => {
   const userId = req.params.id;
   await pool.query(`delete from professional_users where professional_id=$1`, [
@@ -132,6 +141,47 @@ professionalRouter.delete("/:id", async (req, res) => {
   return res.json({
     message: `User ${userId} has been deleted.`,
   });
+});
+//followjobs
+professionalRouter.get("/follow/:id", async (req, res) => {
+ 
+  try {
+     const professId = req.params.id;
+    const followjobs = await pool.query(
+      `select* from follow_jobs inner join jobs on jobs.job_id = follow_jobs.job_id  
+      inner join categories  on  categories.categories_id =  jobs.categories_id
+      inner join recruiter_users on  recruiter_users.recruiter_id =  jobs.recruiter_id 
+      where professional_id =$1`,
+      [professId]
+    );
+    return res.status(200).json({
+      data: followjobs.rows,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//get jobs
+professionalRouter.get("/jobs", async (req, res) => {
+  try {
+    const getJob = await pool.query(
+      `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where recruit_status = 'open'`
+    );
+
+    return res.json({
+      data: getJob.rows,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 export default professionalRouter;

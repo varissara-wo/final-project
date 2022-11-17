@@ -15,7 +15,6 @@ import { Findjobssearch } from "./Findjobscontent.jsx";
 import { useState } from "react";
 import { YourApplications } from "../components/Professional/YourApplications.jsx";
 import { Following } from "../components/Professional/Following.jsx";
-import { SeeMoreJobDetails } from "../components/Professional/SeeMoreJobDetails.jsx";
 
 const FindJobs = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -272,7 +271,6 @@ const FindJobs = () => {
           {/*------------------------------ End Footer Sidebar ------------------------------*/}
         </Box>
       </Box>
-
       {/*------------------------------------- End Sidebar -------------------------------------*/}
       {selectedIndex === 0 && <Findjobssearch />}
       {selectedIndex === 1 && <YourApplications />}

@@ -41,7 +41,7 @@ app.use("/professional", professionalRouter);
 app.use("/recruiter", recruiterRouter);
 
 app.use("/login_professional", loginProfessionalRouter);
-app.use("/login_recuiter", loginRecuiterRouter);
+app.use("/login_recruiter", loginRecuiterRouter);
 
 app.listen(PORT, () => {
   connectDb();

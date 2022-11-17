@@ -2,19 +2,12 @@ import { Textinput, Textseacrh, Textseacrh1 } from "./styles.jsx";
 import { useState } from "react";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
-
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import InputAdornment from "@mui/material/InputAdornment";
-import ImageListItem from "@mui/material/ImageListItem";
 import TextField from "@mui/material/TextField";
-import BungalowIcon from "@mui/icons-material/Bungalow";
-import GpsFixedIcon from "@mui/icons-material/GpsFixed";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import { Input, Typography } from "@mui/material";
-import { data } from "../data/data.js";
+import { Typography, CircularProgress, Stack } from "@mui/material";
 import JobWrapper from "../components/Professional/JobWrapper.jsx";
 import usePosts from "../hooks/usePost.jsx";
 import { useEffect } from "react";
@@ -24,28 +17,27 @@ export function Findjobssearch() {
   const [inputValue, setInputValue] = React.useState("");
   const [value1, setValue1] = React.useState();
   const [inputValue1, setInputValue1] = React.useState("");
-  const [number, setNumber] = useState(0);
   const [search, setSearch] = useState("");
+
   //categeory
   const options = ["Manufacturing", "Legal", "Education", "Goverment", "Sales"];
   //type
   const options1 = ["Fulltime", "Partime"];
-  const data1 = data;
+
+  const { getJobs, getJobData, isLoading } = usePosts();
   //function รับค่าsearch
   const inputchange = (event) => {
     setSearch(event.target.value);
     console.log(search);
   };
-  //function โชว์เลขว่ามีกี่กล่อง
-  const changenum = (event) => {
-    setNumber(data1.length);
-  };
-
-  const { getJobs, getJobData } = usePosts();
 
   useEffect(() => {
-    getJobs();
-  }, []);
+    setTimeout(() => {
+      getJobs();
+    }, 800);
+
+    console.log(isLoading);
+  }, [isLoading]);
 
   return (
     <Box
@@ -67,7 +59,12 @@ export function Findjobssearch() {
         }}
       >
         {/*------------------------------------- Search tilebox -------------------------------------*/}
-        <Typography variant="h4">Find that job</Typography>
+        <Typography
+          variant="h4"
+          sx={{ marginTop: "24px", marginBottom: "16px", fontWeight: "400" }}
+        >
+          Find that job
+        </Typography>
         <Typography
           sx={{
             display: "flex",
@@ -84,7 +81,7 @@ export function Findjobssearch() {
             placeholder="manufacturing, sales, swim"
             color="primary"
             focused
-            sx={{ width: "420px", height: "36px", marginBottom: "40px" }}
+            sx={{ width: "420px", height: "36px", marginBottom: "8px" }}
             onChange={inputchange}
             InputProps={{
               startAdornment: (
@@ -124,9 +121,17 @@ export function Findjobssearch() {
                 height: "50px",
                 borderRadius: "8px",
                 paddindTop: "50px",
+                "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#F48FB1",
+                  },
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Select a category" />
+                <TextField
+                  {...params}
+                  label=""
+                  placeholder="Select a category"
+                />
               )}
             />
           </Typography>
@@ -153,9 +158,17 @@ export function Findjobssearch() {
                 height: "40px",
                 borderRadius: "8px",
                 marginLeft: "10px",
+                "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#F48FB1",
+                  },
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Select a type" />
+                <TextField
+                  {...params}
+                  label=""
+                  placeholder="Select a category"
+                />
               )}
             />
           </Typography>
@@ -197,9 +210,7 @@ export function Findjobssearch() {
                     </InputAdornment>
                   ),
                 }}
-              >
-                {" "}
-              </Textseacrh1>
+              ></Textseacrh1>
               <HorizontalRuleIcon
                 sx={{ marginTop: "8px", marginLeft: "18px" }}
               />
@@ -228,9 +239,21 @@ export function Findjobssearch() {
           variant="h6"
           sx={{ maginTop: "10px", marginLeft: "5px", marginBottom: "10px" }}
         >
-          {data.length} jobs for you
+          {getJobData.length} jobs for you
         </Typography>
         {/*------------------------------------- Mapdata -------------------------------------*/}
+
+        {isLoading === true && (
+          <Stack
+            width="90%"
+            flexDirection="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <CircularProgress disableShrink />
+          </Stack>
+        )}
+
         <Box
           sx={{
             width: "100%",
@@ -241,21 +264,22 @@ export function Findjobssearch() {
             flexWrap: "wrap",
           }}
         >
-          {getJobData.map((item, index) => {
-            const img = JSON.parse(item.logo_url).url;
-            return (
-              <JobWrapper
-                key={index}
-                img={img}
-                category={item.name}
-                type={item.type}
-                name={item.company_name}
-                minSalary={item.min_salary}
-                maxSalary={item.max_salary}
-                jobTitle={item.job_title}
-              />
-            );
-          })}
+          {isLoading === false &&
+            getJobData.map((item, index) => {
+              const img = JSON.parse(item.logo_url).url;
+              return (
+                <JobWrapper
+                  key={index}
+                  img={img}
+                  category={item.name}
+                  type={item.type}
+                  name={item.company_name}
+                  minSalary={item.min_salary}
+                  maxSalary={item.max_salary}
+                  jobTitle={item.job_title}
+                />
+              );
+            })}
         </Box>
       </Box>
     </Box>

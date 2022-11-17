@@ -19,6 +19,24 @@ recruiterRouter.get("/", async (req, res) => {
 
 //Check email
 recruiterRouter.get("/users/exists/:email", async (req, res) => {
+  // try {
+  //   const isUserExist = await pool.query(
+  //     `select * from recruiter_users where email = $1`,
+  //     [req.params.email]
+  //   );
+
+  //   console.log(isUserExist.rows.length);
+  //   let message =
+  //     isUserExist.rows.length === 1
+  //       ? "This email is already available"
+  //       : "Can use this email";
+
+  //   return res.status(200).json({
+  //     data: message,
+  //   });
+  // } catch (err) {
+  //   throw err;
+  // }
   try {
     const isUserExist = await pool.query(
       `select * from recruiter_users where email = $1`,
@@ -31,7 +49,7 @@ recruiterRouter.get("/users/exists/:email", async (req, res) => {
       isEmailExist: check,
     });
   } catch (err) {
-    throw err;
+    console.log(err);
   }
 });
 
@@ -59,8 +77,12 @@ recruiterRouter.post("/", LogoUpload, async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     recruiterUser.password = await bcrypt.hash(recruiterUser.password, salt);
     await pool.query(
+<<<<<<< HEAD
       `insert into recruiter_users  (company_name,email,password,company_website,about_company,logo_url,created_at,updated_at,last_logged_in) 
                 values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+=======
+      `insert into recruiter_users (company_name,email,password,company_website,about_company,logo_url,created_at,updated_at,last_logged_in) values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+>>>>>>> faca506ef8d24554619871971bdd7b93ae2103bf
       [
         recruiterUser.companyname,
         recruiterUser.email,
@@ -76,7 +98,9 @@ recruiterRouter.post("/", LogoUpload, async (req, res) => {
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
-  } catch (err) {}
+  } catch (err) {
+    ("error");
+  }
 });
 
 //Update profile

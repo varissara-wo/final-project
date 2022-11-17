@@ -2,7 +2,6 @@ import { Textinput, Textseacrh, Textseacrh1 } from "./styles.jsx";
 import { useState } from "react";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import { useNavigate } from "react-router-dom";
 
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
@@ -18,7 +17,6 @@ import usePosts from "../hooks/usePost.jsx";
 import { useEffect } from "react";
 
 export function Findjobssearch() {
-  const navigate = useNavigate();
   const [value, setValue] = React.useState();
   const [inputValue, setInputValue] = React.useState("");
   const [value1, setValue1] = React.useState();

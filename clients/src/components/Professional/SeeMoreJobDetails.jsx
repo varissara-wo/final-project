@@ -10,6 +10,7 @@ import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import VillaOutlinedIcon from "@mui/icons-material/VillaOutlined";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import Sidebar from "../ProfessionalSidebar";
 
 const DisplayStyle = styled(Stack)(() => ({
   border: "1px solid #BF5F82",

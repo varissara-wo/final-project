@@ -277,7 +277,6 @@ const FindJobs = () => {
       {selectedIndex === 0 && <Findjobssearch />}
       {selectedIndex === 1 && <YourApplications />}
       {selectedIndex === 2 && <Following />}
-      {selectedIndex === 3 && <SeeMoreJobDetails />}
     </Box>
   );
 };

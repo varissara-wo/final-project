@@ -296,6 +296,7 @@ export function Findjobssearch() {
                 minSalary={item.min_salary}
                 maxSalary={item.max_salary}
                 jobTitle={item.job_title}
+                jobId={item.job_id}
               />
             );
           })}

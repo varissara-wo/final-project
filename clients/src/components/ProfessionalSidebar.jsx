@@ -10,8 +10,6 @@ import ListItemText from "@mui/material/ListItemText";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useAuth } from "../contexts/professionalAuth";
 
-const { logout } = useAuth();
-
 const TextButtonStyled = styled(ListItemText)(() => ({
   fontFamily: "var(--inter-font)",
   fontWeight: "400",
@@ -45,6 +43,7 @@ const GithubProfileStyled = styled(ListItemButton)(() => ({
 }));
 
 const Sidebar = () => {
+  const { logout } = useAuth();
   // State for the sidebar
   const [initIndex, setInitindex] = useState("");
   let index = initIndex;
@@ -136,8 +135,12 @@ const Sidebar = () => {
                   <img src="pic/LogoutIcon.svg" alt="log out" />
                 </IconBoxStyled>
                 <TextButtonStyled
-                  onClick={() => { logout(); }}>
-                  Log out</TextButtonStyled>
+                  onClick={() => {
+                    logout();
+                  }}
+                >
+                  Log out
+                </TextButtonStyled>
               </SidebarButtonStyled>
             </List>
           </Box>

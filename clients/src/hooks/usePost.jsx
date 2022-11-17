@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 function usePosts() {
   const [data, setData] = useState([]);
 
-
-  const [follow,setFollow] =useState([])
+  const [follow, setFollow] = useState([]);
   const [numberOffollow, setNumberOffollow] = useState(0);
 
   const [getJobData, setGetJobData] = useState([]);
 
   const [numberOfJobs, setNumberOfJobs] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const createPost = async (data) => {
@@ -59,7 +59,7 @@ function usePosts() {
     const results = await axios.get(`http://localhost:4000/professional/jobs/`);
     const jobData = results.data.data;
     setGetJobData([...jobData]);
-    console.log(getJobData);
+    setIsLoading(false);
   };
 
   return {
@@ -71,6 +71,7 @@ function usePosts() {
     selectPost,
     getJobs,
     getJobData,
+    isLoading,
   };
 
   const getFollow = async (professionalId) => {
@@ -81,10 +82,18 @@ function usePosts() {
     setFollow(results.data.data);
 
     setNumberOffollow(results.data.data.length);
-    console.log(numberOfJobs)
+    console.log(numberOfJobs);
   };
-  return { createPost, getPost, data, numberOfJobs, closedPost, selectPost,follow,getFollow,numberOfJobs};
-
-
+  return {
+    createPost,
+    getPost,
+    data,
+    numberOfJobs,
+    closedPost,
+    selectPost,
+    follow,
+    getFollow,
+    numberOfJobs,
+  };
 }
 export default usePosts;

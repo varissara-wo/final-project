@@ -105,6 +105,7 @@ const ProfessionalRegister = () => {
         checkConfirmPassword &
         (isProfessionalExist === false)
       ) {
+        console.log("pass");
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
       }
@@ -174,6 +175,7 @@ const ProfessionalRegister = () => {
     } else {
       setFileStatus(`File ${file.name}`);
       setUserData({ ...userData, [event.target.name]: file });
+      console.log(userData);
     }
   };
 

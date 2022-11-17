@@ -142,6 +142,25 @@ professionalRouter.delete("/:id", async (req, res) => {
     message: `User ${userId} has been deleted.`,
   });
 });
+//followjobs
+professionalRouter.get("/follow/:id", async (req, res) => {
+ 
+  try {
+     const professId = req.params.id;
+    const followjobs = await pool.query(
+      `select* from follow_jobs inner join jobs on jobs.job_id = follow_jobs.job_id  
+      inner join categories  on  categories.categories_id =  jobs.categories_id
+      inner join recruiter_users on  recruiter_users.recruiter_id =  jobs.recruiter_id 
+      where professional_id =$1`,
+      [professId]
+    );
+    return res.status(200).json({
+      data: followjobs.rows,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 //get jobs
 professionalRouter.get("/jobs", async (req, res) => {

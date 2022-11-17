@@ -2,14 +2,17 @@ import { Router } from "express";
 import { pool } from "../utils/db.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { protect } from "../middlewares/protect.js"
 
 const loginRecuiterRouter = Router();
+
+loginRecuiterRouter.use(protect);
 
 loginRecuiterRouter.post("/", async (req, res) => {
 
     try {
         const isRecuiterUser = await pool.query(
-            `select email,password from recuiter_users where email = $1 `, [req.body.email]
+            `select email,password from recruiter_users  where email = $1 `, [req.body.email]
         );
 
         if (!isRecuiterUser.rows[0]) {
@@ -18,7 +21,7 @@ loginRecuiterRouter.post("/", async (req, res) => {
             })
         }
 
-        const isValidPassword = await bcrypt.compare(`${req.body.password}`, `${isProfessionalUser.rows[0].password}`);
+        const isValidPassword = await bcrypt.compare(`${req.body.password}`, `${isRecuiterUser.rows[0].password}`);
 
         if (!isValidPassword) {
             return res.status(401).json({
@@ -26,7 +29,7 @@ loginRecuiterRouter.post("/", async (req, res) => {
             })
         }
 
-        const isRecuiterName = await pool.query(`select name from recuiter_users where email = $1`, [isProfessionalUser.rows[0].email])
+        const isRecuiterName = await pool.query(`select company_name from recruiter_users  where email = $1`, [isRecuiterUser.rows[0].email])
 
         const token = jwt.sign(
 
@@ -40,14 +43,15 @@ loginRecuiterRouter.post("/", async (req, res) => {
             }
         );
 
+
         return res.json({
             message: "Login Succesfully",
             token
         })
 
-    } catch (err) {
-        console.log("this is error" + err)
-        throw err;
+    } catch (error) {
+        console.log("this is error" + error)
+        throw error;
     }
 
 });

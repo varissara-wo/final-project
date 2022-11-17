@@ -84,7 +84,7 @@ const Professional = () => {
   //     }
   // };
 
-  //   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <>

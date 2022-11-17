@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 app.use("/professional", professionalRouter);
 app.use("/recruiter", recruiterRouter);
 app.use("/login_professional", loginProfessionalRouter)
-app.use("/login_Recuiter", loginRecuiterRouter)
+app.use("/login_recuiter", loginRecuiterRouter)
 
 app.listen(PORT, () => {
   connectDb();

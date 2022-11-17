@@ -2,8 +2,11 @@ import { Router } from "express";
 import { pool } from "../utils/db.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { protect } from "../middlewares/protect.js"
 
 const loginProfessionalRouter = Router();
+
+loginProfessionalRouter.use(protect);
 
 loginProfessionalRouter.post("/", async (req, res) => {
 
@@ -49,9 +52,9 @@ loginProfessionalRouter.post("/", async (req, res) => {
             token
         })
 
-    } catch (err) {
-        console.log("this is error" + err)
-        throw err;
+    } catch (error) {
+        console.log("this is error" + error)
+        throw error;
     }
 
 });

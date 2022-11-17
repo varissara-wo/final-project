@@ -8,6 +8,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useAuth } from "../contexts/professionalAuth";
+
+const { logout } = useAuth();
 
 const TextButtonStyled = styled(ListItemText)(() => ({
   fontFamily: "var(--inter-font)",
@@ -132,7 +135,9 @@ const Sidebar = () => {
                 <IconBoxStyled>
                   <img src="pic/LogoutIcon.svg" alt="log out" />
                 </IconBoxStyled>
-                <TextButtonStyled>Log out</TextButtonStyled>
+                <TextButtonStyled
+                  onClick={() => { logout(); }}>
+                  Log out</TextButtonStyled>
               </SidebarButtonStyled>
             </List>
           </Box>

@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { RegisProvider } from "./contexts/register";
 import { AuthProvider } from "./contexts/professionalAuth";
+import { AuthRecruiterProvider } from "./contexts/recruiterAuth";
 import jwtInterceptor from "./utils/jwtInterceptor";
 import App from "./App";
 
@@ -12,11 +13,13 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <RegisProvider>
-          <App />
-        </RegisProvider>
-      </AuthProvider>
+      <AuthRecruiterProvider>
+        <AuthProvider>
+          <RegisProvider>
+            <App />
+          </RegisProvider>
+        </AuthProvider>
+      </AuthRecruiterProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

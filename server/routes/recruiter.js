@@ -11,7 +11,7 @@ recruiterRouter.get("/", async (req, res) => {
     return res.status(200).json({
       data: recruiterUsers.rows,
     });
-  } catch {}
+  } catch { }
 });
 recruiterRouter.get("/users/exists/:email", async (req, res) => {
   try {
@@ -53,7 +53,7 @@ recruiterRouter.post("/", async (req, res) => {
     recruiterUser.password = await bcrypt.hash(recruiterUser.password, salt);
 
     await pool.query(
-      `insert into recruiter  (company_name,email,password,website,about,logo,created_at,updated_at,last_logged_in) 
+      `insert into recruiter_users  (company_name,email,password,company_website,about_company,logo_url,created_at,updated_at,last_logged_in) 
                 values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
       [
         recruiterUser.companyname,
@@ -71,7 +71,7 @@ recruiterRouter.post("/", async (req, res) => {
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
-  } catch (err) {}
+  } catch (err) { }
 });
 recruiterRouter.put("/:id", async (req, res) => {
   const updatedUser = {

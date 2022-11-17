@@ -5,6 +5,8 @@ function jwtInterceptor() {
         (req) => {
             const hasToken = Boolean(window.localStorage.getItem("token"));
 
+            console.log(req.headers)
+
             if (hasToken) {
                 req.headers = {
                     ...req.headers,
@@ -22,6 +24,7 @@ function jwtInterceptor() {
             return req;
         },
         (error) => {
+            console.log(error)
             if (
                 error.response.status === 401 && error.response.statusText === "Unauthorized"
             ) {

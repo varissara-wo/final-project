@@ -1,14 +1,18 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { CompressOutlined } from "@mui/icons-material";
+
 function usePosts() {
   const [data, setData] = useState([]);
 
+
   const [follow,setFollow] =useState([])
   const [numberOffollow, setNumberOffollow] = useState(0);
+
+  const [getJobData, setGetJobData] = useState([]);
+
   const [numberOfJobs, setNumberOfJobs] = useState(0);
-  const [categories, setCategories] = useState([]);
+
   const navigate = useNavigate();
   const createPost = async (data) => {
     console.log(data);
@@ -49,21 +53,26 @@ function usePosts() {
       );
       setData(closeJob);
     }
-
-    // for (let i = 0; i < results.data.data.length; i++) {
-    //   const arr = results.data.data;
-    //   console.log(i);
-    //   if (arr[i].recruit_status === "closed" && status === "closed") {
-    //     setData(...data, results[i].data.data);
-    //     console.log(...data, results[i].data.data);
-    //   } else if (arr[i].on_track_candidates > 0 && num > 0) {
-    //     setData(...data, results[i].data.data);
-    //   } else {
-    //     setData(results.data.data);
-    //   }
-    // }
-    // console.log(data);
   };
+
+  const getJobs = async () => {
+    const results = await axios.get(`http://localhost:4000/professional/jobs/`);
+    const jobData = results.data.data;
+    setGetJobData([...jobData]);
+    console.log(getJobData);
+  };
+
+  return {
+    createPost,
+    getPost,
+    data,
+    numberOfJobs,
+    closedPost,
+    selectPost,
+    getJobs,
+    getJobData,
+  };
+
   const getFollow = async (professionalId) => {
     const results = await axios.get(
       `http://localhost:4000/professional/follow/${professionalId}`
@@ -75,9 +84,7 @@ function usePosts() {
     console.log(numberOfJobs)
   };
   return { createPost, getPost, data, numberOfJobs, closedPost, selectPost,follow,getFollow,numberOfJobs};
+
+
 }
 export default usePosts;
-//อย่าลืม http อย่าลืม
-//อย่าลืม http อย่าลืม
-//อย่าลืม http อย่าลืม
-//อย่าลืม http อย่าลืม

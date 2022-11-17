@@ -29,9 +29,11 @@ recruiterRouter.get("/users/exists/:email", async (req, res) => {
 
     return res.status(200).json({
       isEmailExist: check,
+      isEmailExist: check,
     });
   } catch (err) {
-    throw err;
+    console.log(err);
+    console.log(err);
   }
 });
 
@@ -61,6 +63,7 @@ recruiterRouter.post("/", LogoUpload, async (req, res) => {
     await pool.query(
       `insert into recruiter_users  (company_name,email,password,company_website,about_company,logo_url,created_at,updated_at,last_logged_in) 
                 values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+
       [
         recruiterUser.companyname,
         recruiterUser.email,
@@ -76,7 +79,9 @@ recruiterRouter.post("/", LogoUpload, async (req, res) => {
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
-  } catch (err) {}
+  } catch (err) {
+    ("error");
+  }
 });
 
 //Update profile
@@ -173,15 +178,15 @@ recruiterRouter.post("/createpost", async (req, res) => {
 });
 recruiterRouter.get("/jobs/:id", async (req, res) => {
   const recruiter_id = req.params.id;
- 
+
   try {
     const recruiterjobs = await pool.query(
       `select * from jobs   inner join categories on jobs.categories_id =  categories.categories_id where recruiter_id = $1`,
       [recruiter_id]
     );
-      return res.status(200).json({
-          data: recruiterjobs.rows,
-        });
+    return res.status(200).json({
+      data: recruiterjobs.rows,
+    });
   } catch (err) {
     throw err;
   }
@@ -193,9 +198,9 @@ recruiterRouter.get("/categories/:id", async (req, res) => {
       `select * from categories where categories_id = $1`,
       [categories_id]
     );
-      return res.status(200).json({
-          data: categories.rows,
-        });
+    return res.status(200).json({
+      data: categories.rows,
+    });
   } catch (err) {
     throw err;
   }
@@ -203,20 +208,15 @@ recruiterRouter.get("/categories/:id", async (req, res) => {
 recruiterRouter.put("/jobs/:id", async (req, res) => {
   const jobs_id = req.params.id;
   const updatejob = {
-    closed_at:new Date(),
-    recruit_status:"closed"
+    closed_at: new Date(),
+    recruit_status: "closed",
   };
-  
+
   try {
-      
-      await pool.query(
-        `UPDATE jobs SET closed_at=$1, recruit_status=$2 where job_id=$3
+    await pool.query(
+      `UPDATE jobs SET closed_at=$1, recruit_status=$2 where job_id=$3
        `,
-        [
-          updatejob.closed_at,
-          updatejob.recruit_status,
-          jobs_id
-        ]
+      [updatejob.closed_at, updatejob.recruit_status, jobs_id]
     );
     return res.json({
       message: ` ${jobs_id} has been closed.`,

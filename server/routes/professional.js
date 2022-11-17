@@ -70,7 +70,7 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
       salt
     );
     await pool.query(
-      `insert into professional_users (email,password,name,phone,birthday,linkedin,job_title,experience,education,cv_url,created_at,updated_at,last_logged_in)
+      `insert into professional_users (email,password,name,phone,birthday,linkedin,job_title,experience,education,cv_url,created_at,updated_at,last_logged_in) 
       values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)`,
       [
         newProfessionalUser.email,
@@ -156,6 +156,28 @@ professionalRouter.get("/follow/:id", async (req, res) => {
     );
     return res.status(200).json({
       data: followjobs.rows,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//get jobs
+professionalRouter.get("/jobs", async (req, res) => {
+  try {
+    const getJob = await pool.query(
+      `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+    recruiter_users.logo_url from jobs 
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where recruit_status = 'open'`
+    );
+
+    return res.json({
+      data: getJob.rows,
     });
   } catch (err) {
     console.log(err);

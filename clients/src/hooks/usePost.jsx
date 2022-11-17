@@ -64,24 +64,11 @@ function usePosts() {
     setIsLoading(false);
   };
 
-<<<<<<< HEAD
-  return {
-    createPost,
-    getPost,
-    data,
-    numberOfJobs,
-    closedPost,
-    selectPost,
-    getJobs,
-    getJobData,
-    isLoading,
-=======
   const getJobById = async (jobId) => {
     const results = await axios.get(
       `http://localhost:4000/professional/jobs/${jobId}`
     );
     setGetJobByIdData(...results.data.data);
->>>>>>> 6103930 (fix:update see more job details page)
   };
 
   const getFollow = async (professionalId) => {
@@ -93,20 +80,6 @@ function usePosts() {
 
     setNumberOffollow(results.data.data.length);
     console.log(numberOfJobs);
-<<<<<<< HEAD
-  };
-  return {
-    createPost,
-    getPost,
-    data,
-    numberOfJobs,
-    closedPost,
-    selectPost,
-    follow,
-    getFollow,
-    numberOfJobs,
-  };
-=======
   };
 
   return {
@@ -124,6 +97,5 @@ function usePosts() {
     getJobById,
     getJobByIdData,
   };
->>>>>>> 6103930 (fix:update see more job details page)
 }
 export default usePosts;

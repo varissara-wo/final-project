@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import styled from "@emotion/styled";
@@ -11,6 +11,8 @@ import VillaOutlinedIcon from "@mui/icons-material/VillaOutlined";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import Sidebar from "../ProfessionalSidebar";
+import usePosts from "../../hooks/usePost";
+import { json, useParams } from "react-router-dom";
 
 const DisplayStyle = styled(Stack)(() => ({
   border: "1px solid #BF5F82",
@@ -27,6 +29,22 @@ const DisplayStyle = styled(Stack)(() => ({
 
 export function SeeMoreJobDetails(props) {
   //const {  } = props;
+  const params = useParams();
+  const jobId = params.jobId;
+
+  const { getJobById, getJobByIdData } = usePosts();
+  console.log(getJobByIdData);
+  //const logo = JSON.parse(getJobByIdData.logo_url).url;
+  // const option_requirement = getJobByIdData.option_requirement.split("-");
+  // option_requirement.shift();
+  // for (let i = 0; i < option_requirement.length; i++) {
+  //   option_requirement[i] = "- " + option_requirement[i];
+  // }
+
+  useEffect(() => {
+    getJobById(jobId);
+  }, []);
+
   return (
     <Box
       className="seemore-container"
@@ -91,14 +109,14 @@ export function SeeMoreJobDetails(props) {
               <Box sx={{ width: "75px", height: "75px" }}>
                 <img
                   alt="logo"
-                  src="/images/company-logo/Baby.png"
+                  src="{JSON.parse(getJobByIdData.logo_url).url}"
                   width="100%"
                   height="auto"
                 />
               </Box>
               <Stack sx={{ marginLeft: "18px" }}>
                 <Typography variant="h5" sx={{ marginBottom: "8px" }}>
-                  The company name SA
+                  {getJobByIdData.company_name}
                 </Typography>
                 <Following />
               </Stack>
@@ -112,7 +130,7 @@ export function SeeMoreJobDetails(props) {
             alignItems="center"
             width={"90%"}
           >
-            <Typography variant="h3">The job title</Typography>
+            <Typography variant="h3">{getJobByIdData.job_title}</Typography>
             <Typography
               variant="overline"
               sx={{
@@ -155,7 +173,7 @@ export function SeeMoreJobDetails(props) {
                   <DateRangeOutlinedIcon
                     sx={{ fontSize: 25, marginRight: "12px" }}
                   />
-                  <Typography variant="h5">Full time</Typography>
+                  <Typography variant="h5">{getJobByIdData.type}</Typography>
                 </Stack>
               </DisplayStyle>
               <DisplayStyle>
@@ -170,7 +188,9 @@ export function SeeMoreJobDetails(props) {
                   <MonetizationOnOutlinedIcon
                     sx={{ fontSize: 25, marginRight: "12px" }}
                   />
-                  <Typography variant="h5">2,000 - 2,500</Typography>
+                  <Typography variant="h5">
+                    {getJobByIdData.min_salary} - {getJobByIdData.max_salary}
+                  </Typography>
                 </Stack>
               </DisplayStyle>
             </Stack>
@@ -179,20 +199,10 @@ export function SeeMoreJobDetails(props) {
           <Stack width={"90%"} marginTop="54px">
             <Stack marginBottom="16px">
               <Typography variant="h5" color="error">
-                About The company name SA
+                About The {getJobByIdData.company_name}
               </Typography>
               <Typography variant="body1" color="warning.main">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Pellentesque porta nunc viverra velit tincidunt, non vehicula
-                augue vehicula. Donec viverra luctus nisl, sed vehicula ligula.
-                Vivamus maximus metus a magna fermentum ullamcorper. Phasellus
-                ultrices vestibulum ligula ut pellentesque. Quisque quis congue
-                quam. Nunc porttitor risus lorem, in blandit augue iaculis
-                vitae. Cras sit amet fringilla neque. Fusce ac elit ut quam
-                ultrices bibendum. Curabitur vitae dignissim quam. Suspendisse
-                aliquet massa id orci volutpat ullamcorper. Nunc at ante sem.
-                Etiam elementum, mi eget aliquam lobortis, elit libero tempus
-                ex, vel pretium nisi risus ac augue.
+                {getJobByIdData.about_company}
               </Typography>
             </Stack>
             <Stack marginBottom="16px">
@@ -200,18 +210,7 @@ export function SeeMoreJobDetails(props) {
                 About the job position
               </Typography>
               <Typography variant="body1" color="warning.main">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-                quis diam fringilla, luctus lectus dictum, volutpat lacus.
-                Vivamus lacinia felis ut mauris lacinia elementum. Sed faucibus
-                dapibus egestas. Etiam dolor neque, posuere at purus cursus,
-                molestie eleifend lacus. Aenean eu diam eu enim commodo accumsan
-                ut sit amet odio. Nam maximus varius leo, et porttitor ante
-                sodales ut. Pellentesque euismod commodo nunc ut tincidunt. Sed
-                fringilla nunc leo, a euismod ipsum aliquet placerat. Integer
-                suscipit semper mi, sit amet mollis augue mollis in. Proin
-                vestibulum accumsan elit, id pellentesque diam fermentum eget.
-                Aliquam mattis quis quam ut faucibus. Duis finibus nulla nec
-                enim eleifend dapibus.
+                {getJobByIdData.about_job_position}
               </Typography>
             </Stack>
             <Stack marginBottom="16px">
@@ -227,8 +226,15 @@ export function SeeMoreJobDetails(props) {
                 Optional Requirements
               </Typography>
               <Typography variant="body1" color="warning.main">
-                - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                {getJobByIdData.option_requirement}
               </Typography>
+              {/* {option_requirement.map((requirement) => {
+                return (
+                  <Typography variant="body1" color="warning.main">
+                    {requirement}
+                  </Typography>
+                );
+              })} */}
             </Stack>
           </Stack>
           {/*------------------------------ Job Apply Now ------------------------------*/}

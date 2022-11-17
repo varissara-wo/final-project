@@ -38,7 +38,7 @@ export const theme = createTheme({
   palette: {
     primary: {
       main: "#F48FB1",
-      contrastText: "#FFF"
+      contrastText: "#FFF",
     },
     secondary: {
       main: "#616161",
@@ -83,7 +83,7 @@ export const theme = createTheme({
     },
     h5: {
       fontFamily: "var(--montserrat-font)",
-      fontWeight: "300",
+      fontWeight: "400",
       fontSize: "24px",
     },
     h6: {
@@ -113,7 +113,7 @@ export const theme = createTheme({
     },
     body1: {
       fontFamily: "var(--inter-font)",
-      fontWeight: "500",
+      fontWeight: "400",
       fontSize: "16px",
     },
     subtitle2: {
@@ -143,7 +143,3 @@ export const theme = createTheme({
     },
   },
 });
-
-
-
-

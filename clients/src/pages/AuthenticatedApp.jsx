@@ -7,6 +7,7 @@ import Register from "./Register.jsx";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme.js";
 import { Recruiter } from "./Recruiter.jsx";
+
 function AuthenticationApp() {
   return (
     <ThemeProvider theme={theme}>

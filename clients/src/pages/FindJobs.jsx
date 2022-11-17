@@ -14,7 +14,12 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Findjobssearch } from "./Findjobscontent.jsx";
 import { useState } from "react";
 import { YourApplications } from "../components/Professional/YourApplications.jsx";
+<<<<<<< HEAD
 import { Following } from "../components/Professional/Following.jsx";
+=======
+import { SeeMoreJobDetails } from "../components/Professional/SeeMoreJobDetails.jsx";
+
+>>>>>>> 300d992 (feat:add see more component page)
 const FindJobs = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event, index) => {
@@ -274,7 +279,11 @@ const FindJobs = () => {
       {/*------------------------------------- End Sidebar -------------------------------------*/}
       {selectedIndex === 0 && <Findjobssearch />}
       {selectedIndex === 1 && <YourApplications />}
+<<<<<<< HEAD
       {selectedIndex === 2 && <Following />}
+=======
+      {selectedIndex === 3 && <SeeMoreJobDetails />}
+>>>>>>> 300d992 (feat:add see more component page)
     </Box>
   );
 };

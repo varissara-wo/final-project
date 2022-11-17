@@ -2,7 +2,7 @@ import { Textinput, Textseacrh, Textseacrh1 } from "./styles.jsx";
 import { useState } from "react";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
-
+import axios from "axios";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -26,11 +26,13 @@ export function Findjobssearch() {
   const [inputValue1, setInputValue1] = React.useState("");
   const [number, setNumber] = useState(0);
   const [search, setSearch] = useState("");
+  const [dataSearch,setDataSearch] = useState([])
   //categeory
-  const options = ["Manufacturing", "Legal", "Education", "Goverment", "Sales"];
+  const options = ["Manufacturing", "Legal", "Education", "Government", "Sales"];
   //type
   const options1 = ["Fulltime", "Partime"];
   const data1 = data;
+  const [salary,setSalary] =useState({})
   //function รับค่าsearch
   const inputchange = (event) => {
     setSearch(event.target.value);
@@ -40,11 +42,25 @@ export function Findjobssearch() {
   const changenum = (event) => {
     setNumber(data1.length);
   };
-
-  const {  getJobData , getSearch} = usePosts();
-
+  console.log(salary)
+  const { getJobData ,getSearch} = usePosts();
+  console.log(search,value)
+  // const getSearch = async (keywords, category, minPrice, maxPrice) => {
+    
+  //   // const results = await axios.get(
+  //   //   `http://localhost:4000/professional/searchjobs?keywords=${keywords}&maxPrice=${maxPrice}& 
+  //   // minPrice=${minPrice}&category=${category}`
+    
+  //   // );
+  //   const results = await axios.get(
+  //     `http://localhost:4000/professional/searchjobs?`
+    
+  //   );
+  // setDataSearch(results.data.data)
+  
+  // }
   useEffect(() => {
-    getSearch("foo");
+    getSearch();
   }, []);
 
   return (
@@ -182,6 +198,7 @@ export function Findjobssearch() {
                 type="number"
                 color="primary"
                 focused
+                onChange={(e)=>setSalary({...salary,min:e.target.value})}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -204,6 +221,8 @@ export function Findjobssearch() {
                 focused
                 type="number"
                 sx={{ marginLeft: "5px" }}
+                
+                onChange={(e)=>setSalary({...salary,max:e.target.value})}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -220,7 +239,7 @@ export function Findjobssearch() {
           variant="h6"
           sx={{ maginTop: "10px", marginLeft: "5px", marginBottom: "10px" }}
         >
-          {data.length} jobs for you
+          {getJobData.length} jobs for you
         </Typography>
         {/*------------------------------------- Mapdata -------------------------------------*/}
         <Box

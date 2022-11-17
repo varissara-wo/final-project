@@ -34,7 +34,7 @@ import { FormatAlignCenter, TypeSpecimen } from "@mui/icons-material";
 export function Jobpostings() {
   const [expanded, setExpanded] = useState(false);
   const { data, getPost, numberOfJobs, closedPost, selectPost } = usePosts();
-  console.log(data.job_id);
+  
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };

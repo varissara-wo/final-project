@@ -61,19 +61,6 @@ function usePosts() {
     setGetJobData([...jobData]);
     setIsLoading(false);
   };
-
-  return {
-    createPost,
-    getPost,
-    data,
-    numberOfJobs,
-    closedPost,
-    selectPost,
-    getJobs,
-    getJobData,
-    isLoading,
-  };
-
   const getFollow = async (professionalId) => {
     const results = await axios.get(
       `http://localhost:4000/professional/follow/${professionalId}`
@@ -84,6 +71,20 @@ function usePosts() {
     setNumberOffollow(results.data.data.length);
     console.log(numberOfJobs);
   };
+  const getSearch = async (keywords, category, minPrice, maxPrice, type) => {
+    let key = keywords || "";
+    let cat = category || "";
+    let min = minPrice || "";
+    let max = maxPrice || "";
+    let type1 = type || "";
+
+    const results = await axios.get(
+      `http://localhost:4000/professional/searchjobs?maxPrice=${max}&minPrice=${min}&category=${cat}&keywords=${key}&type=${type1}`
+    );
+
+    setGetJobData(results.data.data);
+    setIsLoading(false);
+  };
   return {
     createPost,
     getPost,
@@ -91,9 +92,13 @@ function usePosts() {
     numberOfJobs,
     closedPost,
     selectPost,
-    follow,
+    getJobs,
+    getJobData,
+    isLoading,
     getFollow,
+    follow,
     numberOfJobs,
+    getSearch,
   };
 }
 export default usePosts;

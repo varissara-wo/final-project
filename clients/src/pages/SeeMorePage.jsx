@@ -1,32 +1,31 @@
+import { useState } from "react";
 import React from "react";
+import { Box, List, ListItem, Typography } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import Box from "@mui/material/Box";
-import { Input, Typography } from "@mui/material";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useParams } from "react-router-dom";
 import {
-  TextButtonStyled,
+  GithubProfileStyled,
   IconBoxStyled,
   SidebarButtonStyled,
-  GithubProfileStyled,
-} from "./styles.jsx";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Findjobssearch } from "./Findjobscontent.jsx";
-import { useState } from "react";
-import { YourApplications } from "../components/Professional/YourApplications.jsx";
-import { Following } from "../components/Professional/Following.jsx";
+  TextButtonStyled,
+} from "./styles";
+import { JobDetails } from "../components/Professional/JobDetails";
+import { YourApplications } from "../components/Professional/YourApplications";
+import { Following } from "../components/Professional/Following";
 
-const FindJobs = () => {
+export function SeeMorePage() {
+  const params = useParams();
+  const jobId = params.jobId;
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
-  //  const [initIndex,setInitindex] = useState("")
-  // let index = initIndex
-  // const [selectedIndex, setSelectedIndex] = useState(index);
+
   return (
     <Box
-      className="findjobs-container"
+      className="seemore-container"
       sx={{
         display: "flex",
         flexDirection: "row",
@@ -58,7 +57,7 @@ const FindJobs = () => {
                 cursor: "pointer",
               }}
             >
-              <img src="pic/gtj-logo-1.svg" alt="getthatjoblogo" />
+              <img src="/pic/gtj-logo-1.svg" alt="getthatjoblogo" />
             </Box>
             <Box>
               <List>
@@ -68,18 +67,18 @@ const FindJobs = () => {
                   onClick={(event) => handleListItemClick(event, 0)}
                 >
                   <IconBoxStyled>
-                    <img src="pic/find.svg" alt="find that job" />
+                    <img src="/pic/find.svg" alt="find that job" />
                   </IconBoxStyled>
                   <TextButtonStyled sx={{}}>Find that Job</TextButtonStyled>
                 </SidebarButtonStyled>
 
                 <SidebarButtonStyled
-                  href="#your-applications"
+                  //   href="#your-applications"
                   selected={selectedIndex === 1}
                   onClick={(event) => handleListItemClick(event, 1)}
                 >
                   <IconBoxStyled>
-                    <img src="pic/doc.svg" alt="your applications" />
+                    <img src="/pic/doc.svg" alt="your applications" />
                   </IconBoxStyled>
                   <TextButtonStyled>Your applications</TextButtonStyled>
                 </SidebarButtonStyled>
@@ -90,7 +89,7 @@ const FindJobs = () => {
                   onClick={(event) => handleListItemClick(event, 2)}
                 >
                   <IconBoxStyled>
-                    <img src="pic/gps.svg" alt="following" />
+                    <img src="/pic/gps.svg" alt="following" />
                   </IconBoxStyled>
                   <TextButtonStyled>Following</TextButtonStyled>
                 </SidebarButtonStyled>
@@ -102,14 +101,14 @@ const FindJobs = () => {
                   onClick={(event) => handleListItemClick(event, 3)}
                 >
                   <IconBoxStyled>
-                    <img src="pic/personal.svg" alt="profile" />
+                    <img src="/pic/personal.svg" alt="profile" />
                   </IconBoxStyled>
                   <TextButtonStyled>Profile</TextButtonStyled>
                 </SidebarButtonStyled>
 
                 <SidebarButtonStyled component="a" href="/">
                   <IconBoxStyled>
-                    <img src="pic/LogoutIcon.svg" alt="log out" />
+                    <img src="/pic/LogoutIcon.svg" alt="log out" />
                   </IconBoxStyled>
                   <TextButtonStyled>Log out</TextButtonStyled>
                 </SidebarButtonStyled>
@@ -255,7 +254,7 @@ const FindJobs = () => {
                     height: "14px",
                   }}
                 >
-                  <img src="pic/react.svg" alt="getthatjoblogo" />
+                  <img src="/pic/react.svg" alt="getthatjoblogo" />
                 </Box>
 
                 <Typography
@@ -272,10 +271,9 @@ const FindJobs = () => {
         </Box>
       </Box>
       {/*------------------------------------- End Sidebar -------------------------------------*/}
-      {selectedIndex === 0 && <Findjobssearch />}
-      {selectedIndex === 1 && <YourApplications />}
-      {selectedIndex === 2 && <Following />}
+      {{ jobId } && <JobDetails />}
+      {/* {selectedIndex === 1 && <YourApplications />}
+      {selectedIndex === 2 && <Following />} */}
     </Box>
   );
-};
-export default FindJobs;
+}

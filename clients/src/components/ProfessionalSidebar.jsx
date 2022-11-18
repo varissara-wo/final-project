@@ -10,8 +10,6 @@ import ListItemText from "@mui/material/ListItemText";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useAuth } from "../contexts/professionalAuth";
 
-const { logout } = useAuth();
-
 const TextButtonStyled = styled(ListItemText)(() => ({
   fontFamily: "var(--inter-font)",
   fontWeight: "400",
@@ -44,24 +42,21 @@ const GithubProfileStyled = styled(ListItemButton)(() => ({
   width: "100%",
 }));
 
-const Sidebar = () => {
+const Sidebar = (props) => {
+  const { selectedInit } = props;
+  const logout = useAuth();
   // State for the sidebar
-  const [initIndex, setInitindex] = useState("");
-  let index = initIndex;
-  const [selectedIndex, setSelectedIndex] = useState(index);
-
+  const [selectedIndex, setSelectedIndex] = useState(selectedInit);
   const handleListItemClick = (event, index) => {
-    setInitindex(index);
+    setSelectedIndex(index);
   };
 
   return (
-    <>
-      {/*------------------------------------- Start Sidebar -------------------------------------*/}
+    <Box position="fixed">
       <Box
         className="sidebar-container"
         sx={{
           width: "240px",
-          height: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -71,7 +66,7 @@ const Sidebar = () => {
         }}
       >
         {/*------------------------------ Start Top Sidebar ------------------------------*/}
-        <Box className="sidebar-top" sx={{ width: "100%" }}>
+        <Box className="sidebar-top" sx={{ width: "100%", height: "100%" }}>
           <Box
             className="getthatjoblogo-box"
             sx={{
@@ -79,8 +74,9 @@ const Sidebar = () => {
               width: "136px",
               cursor: "pointer",
             }}
+            href="/"
           >
-            <img src="pic/gtj-logo-1.svg" alt="getthatjoblogo" />
+            <img src="/pic/gtj-logo-1.svg" alt="getthatjoblogo" />
           </Box>
           <Box>
             <List>
@@ -90,54 +86,50 @@ const Sidebar = () => {
                 onClick={(event) => handleListItemClick(event, 0)}
               >
                 <IconBoxStyled>
-                  <img src="pic/find.svg" alt="find that job" />
+                  <img src="/pic/find.svg" alt="find that job" />
                 </IconBoxStyled>
                 <TextButtonStyled sx={{}}>Find that Job</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                href="#your-applications"
+                // href="your-applications"
                 selected={selectedIndex === 1}
                 onClick={(event) => handleListItemClick(event, 1)}
               >
                 <IconBoxStyled>
-                  <img src="pic/doc.svg" alt="your applications" />
+                  <img src="/pic/doc.svg" alt="your applications" />
                 </IconBoxStyled>
                 <TextButtonStyled>Your applications</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                href="#following"
+                // href="#following"
                 selected={selectedIndex === 2}
                 onClick={(event) => handleListItemClick(event, 2)}
               >
                 <IconBoxStyled>
-                  <img src="pic/gps.svg" alt="following" />
+                  <img src="/pic/gps.svg" alt="following" />
                 </IconBoxStyled>
                 <TextButtonStyled>Following</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
                 component="a"
-                href="#profile"
+                // href="#profile"
                 selected={selectedIndex === 3}
-                onClick={(event) => {
-                  handleListItemClick(event, 3);
-                }}
+                onClick={(event) => handleListItemClick(event, 3)}
               >
                 <IconBoxStyled>
-                  <img src="pic/personal.svg" alt="profile" />
+                  <img src="/pic/personal.svg" alt="profile" />
                 </IconBoxStyled>
                 <TextButtonStyled>Profile</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled component="a" href="/">
                 <IconBoxStyled>
-                  <img src="pic/LogoutIcon.svg" alt="log out" />
+                  <img src="/pic/LogoutIcon.svg" alt="log out" />
                 </IconBoxStyled>
-                <TextButtonStyled
-                  onClick={() => { logout(); }}>
-                  Log out</TextButtonStyled>
+                <TextButtonStyled>Log out</TextButtonStyled>
               </SidebarButtonStyled>
             </List>
           </Box>
@@ -153,6 +145,9 @@ const Sidebar = () => {
             flexDirection: "column",
             alignItems: "flex-start",
             width: "100%",
+            height: "100%",
+            maxHeight: "300px",
+            marginBottom: "32px",
           }}
         >
           <Typography
@@ -275,7 +270,7 @@ const Sidebar = () => {
                   height: "14px",
                 }}
               >
-                <img src="pic/react.svg" alt="getthatjoblogo" />
+                <img src="/pic/react.svg" alt="getthatjoblogo" />
               </Box>
 
               <Typography
@@ -290,8 +285,7 @@ const Sidebar = () => {
         </Box>
         {/*------------------------------ End Footer Sidebar ------------------------------*/}
       </Box>
-      {/*------------------------------------- End Sidebar -------------------------------------*/}
-    </>
+    </Box>
   );
 };
 

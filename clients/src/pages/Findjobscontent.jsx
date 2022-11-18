@@ -2,12 +2,16 @@ import { Textinput, Textseacrh, Textseacrh1 } from "./styles.jsx";
 import { useState } from "react";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
+
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { Typography, CircularProgress, Stack } from "@mui/material";
+import Button from "@mui/material/Button";
+import { Input } from "@mui/material";
+import { data } from "../data/data.js";
 import JobWrapper from "../components/Professional/JobWrapper.jsx";
 import usePosts from "../hooks/usePost.jsx";
 import { useEffect } from "react";
@@ -280,6 +284,22 @@ export function Findjobssearch() {
                 />
               );
             })}
+          {getJobData.map((item, index) => {
+            const img = JSON.parse(item.logo_url).url;
+            return (
+              <JobWrapper
+                key={index}
+                img={img}
+                category={item.name}
+                type={item.type}
+                name={item.company_name}
+                minSalary={item.min_salary}
+                maxSalary={item.max_salary}
+                jobTitle={item.job_title}
+                jobId={item.job_id}
+              />
+            );
+          })}
         </Box>
       </Box>
     </Box>

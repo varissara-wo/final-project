@@ -7,6 +7,8 @@ import Register from "./Register.jsx";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme.js";
 import { Recruiter } from "./Recruiter.jsx";
+import { SeeMorePage } from "./SeeMorePage.jsx";
+
 function AuthenticationApp() {
   return (
     <ThemeProvider theme={theme}>
@@ -14,6 +16,7 @@ function AuthenticationApp() {
         <Route path="/" element={<HomePage />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/findjobs" element={<FindJobs />}></Route>
+        <Route path="/findjobs/:jobId" element={<SeeMorePage />}></Route>
         {/* -------------------------mock recruiter createpost------------------ */}
         <Route path="/recruiter" element={<Recruiter />}></Route>
         {/* -------------------------mock recruiter createpost------------------ */}

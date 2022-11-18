@@ -144,8 +144,9 @@ professionalRouter.delete("/:id", async (req, res) => {
 });
 //followjobs
 professionalRouter.get("/follow/:id", async (req, res) => {
+ 
   try {
-    const professId = req.params.id;
+     const professId = req.params.id;
     const followjobs = await pool.query(
       `select* from follow_jobs inner join jobs on jobs.job_id = follow_jobs.job_id  
       inner join categories  on  categories.categories_id =  jobs.categories_id
@@ -527,28 +528,6 @@ professionalRouter.get("/searchjobs", async (req, res) => {
   return res.status(200).json({
     data: results.rows,
   });
-});
-
-professionalRouter.get("/jobs/:jobId", async (req, res) => {
-  const jobId = req.params.jobId;
-  try {
-    const getJobById = await pool.query(
-      `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
-    jobs.min_salary,jobs.max_salary, recruiter_users.company_name, recruiter_users.about_company,
-    recruiter_users.logo_url, jobs.about_job_position, jobs.job_requirement, jobs.option_requirement, jobs.created_at, categories.name from jobs
-    left join recruiter_users
-    on jobs.recruiter_id =  recruiter_users.recruiter_id
-    left join categories
-    on jobs.categories_id =  categories.categories_id
-    where recruit_status = 'open' and job_id = $1`,
-      [jobId]
-    );
-    return res.json({
-      data: getJobById.rows,
-    });
-  } catch (err) {
-    console.log(err);
-  }
 });
 
 export default professionalRouter;

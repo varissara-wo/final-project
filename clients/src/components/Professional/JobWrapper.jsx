@@ -2,23 +2,11 @@ import React from "react";
 import { ImageListItem, Box, Typography, Button } from "@mui/material";
 import { MonetizationOn, CalendarMonth, GpsFixed } from "@mui/icons-material/";
 import { iconCategory, calSalary } from "../../utils/utilsFunction.js";
-import { useNavigate } from "react-router-dom";
 
 const JobWrapper = (props) => {
-  const {
-    key,
-    img,
-    category,
-    type,
-    name,
-    minSalary,
-    maxSalary,
-    jobTitle,
-    jobId,
-  } = props;
+  const { key, img, category, type, name, minSalary, maxSalary, jobTitle } =
+    props;
   const categoryIcon = iconCategory(category);
-  const navigate = useNavigate();
-
   return (
     <>
       <Box
@@ -162,13 +150,7 @@ const JobWrapper = (props) => {
             </Button>
           </Box>
           <Box sx={{ marginLeft: "40px" }}>
-            <Button
-              variant="outlined"
-              sx={{ borderRadius: "13px" }}
-              onClick={() => {
-                navigate(`/findjobs/${jobId}`);
-              }}
-            >
+            <Button variant="outlined" sx={{ borderRadius: "13px" }}>
               <Typography variant="button" sx={{ color: "#616161" }}>
                 see more
               </Typography>

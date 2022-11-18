@@ -25,6 +25,7 @@ export function Findjobssearch() {
   const [value1, setValue1] = React.useState();
   const [inputValue1, setInputValue1] = React.useState("");
   const [number, setNumber] = useState(0);
+  const [number, setNumber] = useState(0);
   const [search, setSearch] = useState("");
   //categeory
   const options = ["Manufacturing", "Legal", "Education", "Goverment", "Sales"];
@@ -32,18 +33,27 @@ export function Findjobssearch() {
   const options1 = ["Fulltime", "Partime"];
   const [salary, setSalary] = useState({});
   const { getSearch, getJobData, isLoading } = usePosts();
+  const data1 = data;
   //function รับค่าsearch
   const inputchange = (event) => {
     setSearch(event.target.value);
     console.log(search);
   };
   //function โชว์เลขว่ามีกี่กล่อง
+  //function โชว์เลขว่ามีกี่กล่อง
+  const changenum = (event) => {
+    setNumber(data1.length);
+  };
+
+  const { getJobs, getJobData } = usePosts();
 
   useEffect(() => {
     setTimeout(() => {
       getSearch(search, value, salary.min, salary.max, value1);
     }, 800);
   }, [search, value, salary, value1, isLoading]);
+    getJobs();
+  }, []);
 
   return (
     <Box
@@ -66,6 +76,7 @@ export function Findjobssearch() {
       >
         {/*------------------------------------- Search tilebox -------------------------------------*/}
         <Typography variant="h4">Find that job</Typography>
+        <Typography variant="h4">Find that job</Typography>
         <Typography
           sx={{
             display: "flex",
@@ -82,6 +93,7 @@ export function Findjobssearch() {
             placeholder="manufacturing, sales, swim"
             color="primary"
             focused
+            sx={{ width: "420px", height: "36px", marginBottom: "40px" }}
             sx={{ width: "420px", height: "36px", marginBottom: "40px" }}
             onChange={inputchange}
             InputProps={{
@@ -125,6 +137,7 @@ export function Findjobssearch() {
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Select a category" />
+                <TextField {...params} label="Select a category" />
               )}
             />
           </Typography>
@@ -153,6 +166,7 @@ export function Findjobssearch() {
                 marginLeft: "10px",
               }}
               renderInput={(params) => (
+                <TextField {...params} label="Select a type" />
                 <TextField {...params} label="Select a type" />
               )}
             />
@@ -199,6 +213,9 @@ export function Findjobssearch() {
               >
                 {" "}
               </Textseacrh1>
+              >
+                {" "}
+              </Textseacrh1>
               <HorizontalRuleIcon
                 sx={{ marginTop: "8px", marginLeft: "18px" }}
               />
@@ -229,6 +246,7 @@ export function Findjobssearch() {
           sx={{ maginTop: "10px", marginLeft: "5px", marginBottom: "10px" }}
         >
           {data.length} jobs for you
+          {data.length} jobs for you
         </Typography>
         {/*------------------------------------- Mapdata -------------------------------------*/}
         <Box
@@ -241,6 +259,21 @@ export function Findjobssearch() {
             flexWrap: "wrap",
           }}
         >
+          {getJobData.map((item, index) => {
+            const img = JSON.parse(item.logo_url).url;
+            return (
+              <JobWrapper
+                key={index}
+                img={img}
+                category={item.name}
+                type={item.type}
+                name={item.company_name}
+                minSalary={item.min_salary}
+                maxSalary={item.max_salary}
+                jobTitle={item.job_title}
+              />
+            );
+          })}
           {getJobData.map((item, index) => {
             const img = JSON.parse(item.logo_url).url;
             return (

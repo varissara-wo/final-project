@@ -144,9 +144,8 @@ professionalRouter.delete("/:id", async (req, res) => {
 });
 //followjobs
 professionalRouter.get("/follow/:id", async (req, res) => {
- 
   try {
-     const professId = req.params.id;
+    const professId = req.params.id;
     const followjobs = await pool.query(
       `select* from follow_jobs inner join jobs on jobs.job_id = follow_jobs.job_id  
       inner join categories  on  categories.categories_id =  jobs.categories_id

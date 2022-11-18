@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 function usePosts() {
   const [data, setData] = useState([]);
 
-
-  const [follow,setFollow] =useState([])
+  const [follow, setFollow] = useState([]);
   const [numberOffollow, setNumberOffollow] = useState(0);
 
   const [getJobData, setGetJobData] = useState([]);
@@ -73,18 +72,16 @@ function usePosts() {
     getJobData,
   };
 
-  const getFollow = async (professionalId) => {
-    const results = await axios.get(
-      `http://localhost:4000/professional/follow/${professionalId}`
-    );
+  // const getFollow = async (professionalId) => {
+  //   const results = await axios.get(
+  //     `http://localhost:4000/professional/follow/${professionalId}`
+  //   );
 
-    setFollow(results.data.data);
+  //   setFollow(results.data.data);
 
-    setNumberOffollow(results.data.data.length);
-    console.log(numberOfJobs)
-  };
-  return { createPost, getPost, data, numberOfJobs, closedPost, selectPost,follow,getFollow,numberOfJobs};
-
-
+  //   setNumberOffollow(results.data.data.length);
+  //   console.log(numberOfJobs)
+  // };
+  // return { createPost, getPost, data, numberOfJobs, closedPost, selectPost,follow,getFollow,numberOfJobs};
 }
 export default usePosts;

@@ -2,7 +2,6 @@ import { Textinput, Textseacrh, Textseacrh1 } from "./styles.jsx";
 import { useState } from "react";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
-
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import InputAdornment from "@mui/material/InputAdornment";

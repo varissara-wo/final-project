@@ -12,7 +12,14 @@ import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import Sidebar from "../ProfessionalSidebar";
 import usePosts from "../../hooks/usePost";
-import { json, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import {
+  AccountBalance,
+  AutoGraph,
+  Balance,
+  Factory,
+  School,
+} from "@mui/icons-material";
 
 const DisplayStyle = styled(Stack)(() => ({
   border: "1px solid #BF5F82",
@@ -33,13 +40,42 @@ export function SeeMoreJobDetails(props) {
   const jobId = params.jobId;
 
   const { getJobById, getJobByIdData } = usePosts();
-  console.log(getJobByIdData);
+  //console.log(getJobByIdData);
   //const logo = JSON.parse(getJobByIdData.logo_url).url;
   // const option_requirement = getJobByIdData.option_requirement.split("-");
   // option_requirement.shift();
   // for (let i = 0; i < option_requirement.length; i++) {
   //   option_requirement[i] = "- " + option_requirement[i];
   // }
+  const category = getJobByIdData.name;
+
+  const iconCategory = (categoryName) => {
+    if (categoryName === "Manufacturing") {
+      return (
+        <Factory sx={{ fontSize: 25, marginRight: "12px", color: "#616161" }} />
+      );
+    } else if (categoryName === "Legal") {
+      return (
+        <Balance sx={{ fontSize: 25, marginRight: "12px", color: "#616161" }} />
+      );
+    } else if (categoryName === "Education") {
+      return (
+        <School sx={{ fontSize: 25, marginRight: "12px", color: "#616161" }} />
+      );
+    } else if (categoryName === "Goverment") {
+      return (
+        <AccountBalance
+          sx={{ fontSize: 25, marginRight: "12px", color: "#616161" }}
+        />
+      );
+    } else if (categoryName === "Sales") {
+      return (
+        <AutoGraph
+          sx={{ fontSize: 25, marginRight: "12px", color: "#616161" }}
+        />
+      );
+    }
+  };
 
   useEffect(() => {
     getJobById(jobId);
@@ -155,10 +191,11 @@ export function SeeMoreJobDetails(props) {
                   justifyContent="cebter"
                   alignItems="center"
                 >
-                  <VillaOutlinedIcon
+                  {/* <VillaOutlinedIcon
                     sx={{ fontSize: 25, marginRight: "12px" }}
-                  />
-                  <Typography variant="h5">Manufacturing</Typography>
+                  /> */}
+                  {iconCategory(category)}
+                  <Typography variant="h5">{category}</Typography>
                 </Stack>
               </DisplayStyle>
               <DisplayStyle>

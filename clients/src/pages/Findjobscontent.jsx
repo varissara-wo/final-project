@@ -27,8 +27,8 @@ export function Findjobssearch() {
   const options = ["Manufacturing", "Legal", "Education", "Goverment", "Sales"];
   //type
   const options1 = ["Fulltime", "Partime"];
-
-  const { getJobs, getJobData, isLoading } = usePosts();
+  const [salary, setSalary] = useState({});
+  const { getSearch , getJobData, isLoading } = usePosts();
   //function รับค่าsearch
   const inputchange = (event) => {
     setSearch(event.target.value);
@@ -36,12 +36,10 @@ export function Findjobssearch() {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      getJobs();
-    }, 800);
+    setTimeout(()=> {getSearch(search, value, salary.min, salary.max, value1)},800)
+   
+  }, [search, value, salary, value1,isLoading]);
 
-    console.log(isLoading);
-  }, [isLoading]);
 
   return (
     <Box
@@ -207,6 +205,7 @@ export function Findjobssearch() {
                 type="number"
                 color="primary"
                 focused
+                onChange={(e) => setSalary({ ...salary, min: e.target.value })}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -225,6 +224,7 @@ export function Findjobssearch() {
                 placeholder="max"
                 color="primary"
                 focused
+                onChange={(e) => setSalary({ ...salary, max: e.target.value })}
                 type="number"
                 sx={{ marginLeft: "5px" }}
                 InputProps={{

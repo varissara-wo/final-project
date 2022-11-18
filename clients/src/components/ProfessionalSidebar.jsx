@@ -92,7 +92,7 @@ const Sidebar = (props) => {
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                // href="#your-applications"
+                // href="your-applications"
                 selected={selectedIndex === 1}
                 onClick={(event) => handleListItemClick(event, 1)}
               >

@@ -75,15 +75,7 @@ export function YourApplications() {
   }));
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "#F5F5F6",
-        width: "100%",
-        height: "100vh",
-        minWidth: "100vh",
-        marginLeft: "240px",
-      }}
-    >
+    <Box sx={{ backgroundColor: "#F5F5F6", width: "1500px", height: "100vh" }}>
       <Box
         sx={{
           display: "flex",
@@ -94,10 +86,7 @@ export function YourApplications() {
         }}
       >
         {/*------------------------------ Head------------------------------*/}
-        <Typography
-          variant="h4"
-          sx={{ marginBottom: "20px", fontWeight: "400" }}
-        >
+        <Typography variant="h4" sx={{ marginBottom: "20px" }}>
           Job Postngs
         </Typography>
         {/*------------------------------ Start Filter Jobs ------------------------------*/}

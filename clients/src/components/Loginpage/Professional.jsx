@@ -9,8 +9,6 @@ import { FileUploadOutlined, ArrowForwardIos } from "@mui/icons-material";
 import { useAuth } from "../../contexts/professionalAuth.jsx";
 
 const Professional = () => {
-  const { login, state } = useAuth();
-
   const [account, setAccount] = useState({
     email: "",
     password: "",
@@ -51,14 +49,14 @@ const Professional = () => {
   //     return isPass;
   // };
 
+  const { login } = useAuth();
+
   const handleSubmit = (event) => {
-    console.log(login);
     login({
       email: account.email,
       password: account.password,
     });
-    console.log(state);
-    event.preventDefalt();
+    // event.preventDefalt();
   };
 
   // const [activeStep, setActiveStep] = React.useState(0);

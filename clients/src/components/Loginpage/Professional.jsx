@@ -134,6 +134,7 @@ const Professional = () => {
                 placeholder="******"
                 focused
                 inputProps={{ style: { padding: 8 } }}
+                type={showPassword ? "text" : "password"}
               />
               <Typography
                 variant="body2"

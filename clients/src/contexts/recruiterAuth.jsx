@@ -15,19 +15,14 @@ function AuthRecruiterProvider(props) {
 
   const login = async (data) => {
     const result = await axios.post(
-      "http://localhost:4000/login_recuiter",
+      "http://localhost:4000/login_recruiter",
       data
     );
-    console.log("im here")
-    console.log(result)
     const token = result.data.token;
-    console.log("im here")
     localStorage.setItem("token", token);
-    console.log("im here")
     const userDataFromToken = jwtDecode(token);
-    console.log("im here")
     setState({ ...state, user: userDataFromToken });
-    navigate("/findjobs");
+    navigate("/Recruiter");
   };
 
   const logout = () => {

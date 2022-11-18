@@ -15,7 +15,12 @@ import { useState } from "react";
 import { Createpost } from "./Createjobpost.jsx";
 import { Jobpostings } from "../components/Recruiter/Jobpostings.jsx";
 import Profile from "./Profile";
+import { useNavigate } from 'react-router-dom';
+
+
+
 export function Recruiter() {
+  const navigate = useNavigate();
   const [Index, setIndex] = useState(0);
   const handleListItemClick = (event, index) => {
     setIndex(index);
@@ -49,13 +54,14 @@ export function Recruiter() {
           <Box className="sidebar-top" sx={{ width: "100%", height: "100%" }}>
             <Box
               className="getthatjoblogo-box"
+
               sx={{
                 margin: "32px 16px 32px 16px",
                 width: "136px",
                 cursor: "pointer",
               }}
             >
-              <img src="pic/gtj-logo-1.svg" alt="getthatjoblogo" />
+              <img onClick={() => navigate("/Recruiter")} src="pic/gtj-logo-1.svg" alt="getthatjoblogo" />
             </Box>
             {/*------------------------------ End logo ------------------------------*/}
             <Box>

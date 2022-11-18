@@ -27,7 +27,7 @@ const Recruiter = () => {
       password: account.password,
     });
     console.log(state);
-    event.preventDefalt();
+    // event.preventDefalt();
   };
 
   const [showPassword, setShowPassword] = useState(false);

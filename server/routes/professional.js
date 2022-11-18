@@ -188,6 +188,7 @@ professionalRouter.get("/searchjobs", async (req, res) => {
   const category = req.query.category || "";
   const maxPrice = req.query.maxPrice || 0;
   const minPrice = req.query.minPrice || 0;
+  const type = req.query.type || ""
   console.log(keywords);
 
   let query = "";
@@ -201,8 +202,8 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     on jobs.recruiter_id =  recruiter_users.recruiter_id
     left join categories
     on jobs.categories_id =  categories.categories_id
-    where jobs.job_title ilike '%'||$1||'%' and categories.name ilike '%'||$2||'% and 
-     categories.name ilike '%'||$2||'%' and (jobs.max_salary  <=$3) and (jobs.min_salarye  >=$3) 
+    where jobs.job_title ilike '%'||$1||'%' or recruiter_users.company_name ilike '%'||$1||'%'and categories.name ilike '%'||$2||'% and 
+     categories.name ilike '%'||$2||'%' and (jobs.max_salary  <=$3) and (jobs.min_salary  >=$3) 
      and jobs.recruit_status = 'open' `;
     values = [keywords, category, maxPrice, minPrice];
   } //ไม่มีkeyword
@@ -215,7 +216,7 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     left join categories
     on jobs.categories_id =  categories.categories_id
     where  categories.name ilike '%'||$1||'% and 
-     categories.name ilike '%'||$1||'%' and (jobs.max_salary  <=$2) and (jobs.min_salarye  >=$3) 
+     categories.name ilike '%'||$1||'%' and (jobs.max_salary  <=$2) and (jobs.min_salary  >=$3) 
      and jobs.recruit_status = 'open'`;
     values = [category, maxPrice, minPrice];
   } //ไม่มีcategory
@@ -227,8 +228,8 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     on jobs.recruiter_id =  recruiter_users.recruiter_id
     left join categories
     on jobs.categories_id =  categories.categories_id
-    where  jobs.job_title ilike '%'||$1||'%' and 
-     categories.name ilike '%'||$1||'%' and (jobs.max_salary  <=$2) and (jobs.min_salarye  >=$3) 
+    where  jobs.job_title ilike '%'||$1||'%' or recruiter_users.company_name ilike '%'||$1||'%'and 
+     categories.name ilike '%'||$1||'%' and (jobs.max_salary  <=$2) and (jobs.min_salary  >=$3) 
      and jobs.recruit_status = 'open'`;
     values = [keywords, maxPrice, minPrice];
   } //ไม่มีmaxprice
@@ -240,8 +241,8 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     on jobs.recruiter_id =  recruiter_users.recruiter_id
     left join categories
     on jobs.categories_id =  categories.categories_id
-    where  jobs.job_title ilike '%'||$1||'%' and 
-     categories.name ilike '%'||$2||'%'  and (jobs.min_salarye  >=$3) and jobs.recruit_status = 'open'`;
+    where  jobs.job_title ilike '%'||$1||'%' or recruiter_users.company_name ilike '%'||$1||'%' and 
+     categories.name ilike '%'||$2||'%'  and (jobs.min_salary  >=$3) and jobs.recruit_status = 'open'`;
     values = [keywords, category, minPrice];
   }
   //ไม่มีminprice
@@ -253,7 +254,7 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     on jobs.recruiter_id =  recruiter_users.recruiter_id
     left join categories
     on jobs.categories_id =  categories.categories_id
-    where  jobs.job_title ilike '%'||$1||'%' and 
+    where  jobs.job_title ilike '%'||$1||'%' or recruiter_users.company_name ilike '%'||$1||'%' and 
      categories.name ilike '%'||$2||'%'  and (jobs.max_salary  <=$3) and jobs.recruit_status = 'open'`;
     values = [keywords, category, maxPrice];
   }
@@ -266,7 +267,7 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     on jobs.recruiter_id =  recruiter_users.recruiter_id
     left join categories
     on jobs.categories_id =  categories.categories_id
-    where jobs.job_title ilike '%'||$1||'%' and categories.name ilike '%'||$2||'%'  and jobs.recruit_status = 'open'`;
+    where jobs.job_title ilike '%'||$1||'%' or recruiter_users.company_name ilike '%'||$1||'%' and categories.name ilike '%'||$2||'%'  and jobs.recruit_status = 'open'`;
     values = [keywords, category];
   }
   //มีแต่ keywords and maxprice
@@ -278,7 +279,7 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     on jobs.recruiter_id =  recruiter_users.recruiter_id
     left join categories
     on jobs.categories_id =  categories.categories_id
-    where  jobs.job_title ilike '%'||$1||'%' and 
+    where  jobs.job_title ilike '%'||$1||'%' or recruiter_users.company_name ilike '%'||$1||'%' and 
     (jobs.min_salary  >=$2) and jobs.recruit_status = 'open'`;
     values = [keywords, maxPrice];
   } //มีแต่ keywords and minprice
@@ -290,7 +291,7 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     on jobs.recruiter_id =  recruiter_users.recruiter_id
     left join categories
     on jobs.categories_id =  categories.categories_id
-    where  jobs.job_title ilike '%'||$1||'%' and 
+    where  jobs.job_title ilike '%'||$1||'%' or recruiter_users.company_name '%'||$1||'%' and 
     (jobs.max_salary  <=$2) and jobs.recruit_status = 'open'`;
     values = [keywords, minPrice];
   } //มีแต่ category and minprice
@@ -303,8 +304,8 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     left join categories
     on jobs.categories_id =  categories.categories_id
     where  categories.name ilike '%'||$2||'% and 
-    (jobs.min_salarye  >=$2) and jobs.recruit_status = 'open'`;
-    values = [keywords, minPrice];
+    (jobs.min_salary  >=$2) and jobs.recruit_status = 'open'`;
+    values = [category, minPrice];
   } //มีแต่ category and maxprice
   else if (category && maxPrice) {
     query = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
@@ -326,7 +327,7 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     on jobs.recruiter_id =  recruiter_users.recruiter_id
     left join categories
     on jobs.categories_id =  categories.categories_id
-    where  (jobs.max_salary  <=$1) and (jobs.min_salarye  >=$2) and jobs.recruit_status = 'open'`;
+    where  (jobs.max_salary  <=$1) and (jobs.min_salary  >=$2) and jobs.recruit_status = 'open'`;
     values = [maxPrice, minPrice];
   } //มีแต่ keywords
   else if (keywords) {
@@ -337,7 +338,7 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     on jobs.recruiter_id =  recruiter_users.recruiter_id
     left join categories
     on jobs.categories_id =  categories.categories_id
-    where jobs.job_title ilike '%'||$1||'%' and jobs.recruit_status = 'open'`;
+    where jobs.job_title ilike '%'||$1||'%' or recruiter_users.company_name ilike '%'||$1||'%' and jobs.recruit_status = 'open'`;
     values = [keywords];
   } //มีแต่ category
   else if (category) {
@@ -359,7 +360,7 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     on jobs.recruiter_id =  recruiter_users.recruiter_id
     left join categories
     on jobs.categories_id =  categories.categories_id
-    where (jobs.min_salarye  >=$1) and jobs.recruit_status = 'open'`;
+    where (jobs.min_salary  >=$1) and jobs.recruit_status = 'open'`;
     values = [minPrice];
   } //มีแต่ maxsalary
   else if (maxPrice) {

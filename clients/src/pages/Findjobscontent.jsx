@@ -1,5 +1,5 @@
 import { Textinput, Textseacrh, Textseacrh1 } from "./styles.jsx";
-import { useState ,useCallback} from "react";
+import { useState, useCallback } from "react";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
@@ -26,16 +26,22 @@ export function Findjobssearch() {
   const [inputValue1, setInputValue1] = React.useState("");
   const [number, setNumber] = useState(0);
   const [search, setSearch] = useState("");
-  const [dataSearch,setDataSearch] = useState([])
+  const [dataSearch, setDataSearch] = useState([]);
   //categeory
-  const options = ["Manufacturing", "Legal", "Education", "Government", "Sales"];
+  const options = [
+    "Manufacturing",
+    "Legal",
+    "Education",
+    "Government",
+    "Sales",
+  ];
   //type
   const options1 = ["Fulltime", "Partime"];
   const data1 = data;
-  const [salary,setSalary] =useState({})
+  const [salary, setSalary] = useState({});
   //function รับค่าsearch
   const inputchange = (event) => {
-   setSearch(event.target.value);
+    setSearch(event.target.value);
     console.log(search);
   };
   //function โชว์เลขว่ามีกี่กล่อง
@@ -43,17 +49,15 @@ export function Findjobssearch() {
     setNumber(data1.length);
   };
 
-  console.log(salary)
-  const { getJobData ,getSearch} = usePosts();
-  console.log(search,value,)
- 
-  // }
-  
-  useEffect(() => {
-     getSearch(search,value,salary.min,salary.max)
+  console.log(salary);
+  const { getJobData, getSearch } = usePosts();
+  console.log(value1);
 
-   ;
-  }, [search,value,salary]);
+  // }
+
+  useEffect(() => {
+    getSearch(search, value, salary.min, salary.max, value1);
+  }, [search, value, salary, value1]);
   const debounce = (func) => {
     let timer;
     return function (...args) {
@@ -201,7 +205,7 @@ export function Findjobssearch() {
                 type="number"
                 color="primary"
                 focused
-                onChange={(e)=>setSalary({...salary,min:e.target.value})}
+                onChange={(e) => setSalary({ ...salary, min: e.target.value })}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -224,8 +228,7 @@ export function Findjobssearch() {
                 focused
                 type="number"
                 sx={{ marginLeft: "5px" }}
-                
-                onChange={(e)=>setSalary({...salary,max:e.target.value})}
+                onChange={(e) => setSalary({ ...salary, max: e.target.value })}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">

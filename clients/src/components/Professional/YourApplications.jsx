@@ -75,7 +75,15 @@ export function YourApplications() {
   }));
 
   return (
-    <Box sx={{ backgroundColor: "#F5F5F6", width: "1500px", height: "100vh" }}>
+    <Box
+      sx={{
+        backgroundColor: "#F5F5F6",
+        width: "100%",
+        height: "100vh",
+        minWidth: "100vh",
+        marginLeft: "240px",
+      }}
+    >
       <Box
         sx={{
           display: "flex",

@@ -11,6 +11,7 @@ function usePosts() {
   const [getJobData, setGetJobData] = useState([]);
 
   const [numberOfJobs, setNumberOfJobs] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const createPost = async (data) => {
@@ -58,7 +59,7 @@ function usePosts() {
     const results = await axios.get(`http://localhost:4000/professional/jobs/`);
     const jobData = results.data.data;
     setGetJobData([...jobData]);
-    console.log(getJobData);
+    setIsLoading(false);
   };
 
   return {
@@ -70,18 +71,29 @@ function usePosts() {
     selectPost,
     getJobs,
     getJobData,
+    isLoading,
   };
 
-  // const getFollow = async (professionalId) => {
-  //   const results = await axios.get(
-  //     `http://localhost:4000/professional/follow/${professionalId}`
-  //   );
+  //   const getFollow = async (professionalId) => {
+  //     const results = await axios.get(
+  //       `http://localhost:4000/professional/follow/${professionalId}`
+  //     );
 
-  //   setFollow(results.data.data);
+  //     setFollow(results.data.data);
 
-  //   setNumberOffollow(results.data.data.length);
-  //   console.log(numberOfJobs)
-  // };
-  // return { createPost, getPost, data, numberOfJobs, closedPost, selectPost,follow,getFollow,numberOfJobs};
+  //     setNumberOffollow(results.data.data.length);
+  //     console.log(numberOfJobs);
+  //   };
+  //   return {
+  //     createPost,
+  //     getPost,
+  //     data,
+  //     numberOfJobs,
+  //     closedPost,
+  //     selectPost,
+  //     follow,
+  //     getFollow,
+  //     numberOfJobs,
+  //   };
 }
 export default usePosts;

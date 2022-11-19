@@ -202,6 +202,34 @@ professionalRouter.get("/", async (req, res) => {
     console.log(err);
   }
 });
+
+professionalRouter.get("/jobs/:jobId", async (req, res) => {
+  const jobId = req.params.jobId;
+
+  try {
+    const getJobById = await pool.query(
+      `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
+    jobs.min_salary,jobs.max_salary, recruiter_users.company_name, recruiter_users.about_company,
+    recruiter_users.logo_url, jobs.about_job_position, jobs.job_requirement, jobs.option_requirement, jobs.created_at, categories.name from jobs
+    left join recruiter_users
+    on jobs.recruiter_id =  recruiter_users.recruiter_id
+    left join categories
+    on jobs.categories_id =  categories.categories_id
+    where recruit_status = 'open' and job_id = $1`,
+      [jobId]
+    );
+
+    const data = getJobById.rows[0];
+    data.logo_url = JSON.parse(data.logo_url).url;
+
+    return res.json({
+      data: data,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 //query search
 professionalRouter.get("/searchjobs", async (req, res) => {
   const keywords = req.query.keywords || "";

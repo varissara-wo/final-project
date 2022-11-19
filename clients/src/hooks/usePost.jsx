@@ -9,7 +9,7 @@ function usePosts() {
   const [numberOffollow, setNumberOffollow] = useState(0);
 
   const [getJobData, setGetJobData] = useState([]);
-
+  const [getJobByIdData, setGetJobByIdData] = useState({});
   const [numberOfJobs, setNumberOfJobs] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -62,6 +62,14 @@ function usePosts() {
     setIsLoading(false);
   };
 
+  const getJobById = async (jobId) => {
+    const results = await axios.get(
+      `http://localhost:4000/professional/jobs/${jobId}`
+    );
+    const jobData = results.data.data;
+    setGetJobByIdData(jobData);
+  };
+
   return {
     createPost,
     getPost,
@@ -72,6 +80,8 @@ function usePosts() {
     getJobs,
     getJobData,
     isLoading,
+    getJobById,
+    getJobByIdData,
   };
 
   //   const getFollow = async (professionalId) => {

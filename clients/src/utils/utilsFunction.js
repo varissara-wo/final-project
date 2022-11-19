@@ -70,3 +70,62 @@ export const iconCategory = (name) => {
     );
   }
 };
+
+export const bigIconCategory = (name) => {
+  if (name === "Manufacturing") {
+    return (
+      <Factory
+        sx={{
+          marginRight: "6px",
+          color: "#8E8E8E",
+          width: "25px",
+          height: "25px",
+        }}
+      />
+    );
+  } else if (name === "Legal") {
+    return (
+      <Balance
+        sx={{
+          marginRight: "6px",
+          color: "#8E8E8E",
+          width: "25px",
+          height: "25px",
+        }}
+      />
+    );
+  } else if (name === "Education") {
+    return (
+      <School
+        sx={{
+          marginRight: "6px",
+          color: "#8E8E8E",
+          width: "25px",
+          height: "25px",
+        }}
+      />
+    );
+  } else if (name === "Goverment") {
+    return (
+      <AccountBalance
+        sx={{
+          marginRight: "6px",
+          color: "#8E8E8E",
+          width: "25px",
+          height: "25px",
+        }}
+      />
+    );
+  } else if (name === "Sales") {
+    return (
+      <AutoGraph
+        sx={{
+          marginRight: "6px",
+          color: "#8E8E8E",
+          width: "25px",
+          height: "25px",
+        }}
+      />
+    );
+  }
+};

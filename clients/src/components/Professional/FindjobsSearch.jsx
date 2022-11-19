@@ -1,16 +1,18 @@
 import { Textinput, Textseacrh, Textseacrh1 } from "./styles.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import { Typography, CircularProgress, Stack } from "@mui/material";
-import JobWrapper from "../components/Professional/JobWrapper.jsx";
-import usePosts from "../hooks/usePost.jsx";
-import { useEffect } from "react";
+
+import { Search, MonetizationOn, HorizontalRule } from "@mui/icons-material";
+import {
+  Typography,
+  CircularProgress,
+  Stack,
+  Box,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
+import JobWrapper from "./JobWrapper.jsx";
+import usePosts from "../../hooks/usePost.jsx";
 
 export function Findjobssearch() {
   const [value, setValue] = React.useState();
@@ -21,11 +23,9 @@ export function Findjobssearch() {
 
   //categeory
   const options = ["Manufacturing", "Legal", "Education", "Goverment", "Sales"];
-  //type
   const options1 = ["Fulltime", "Partime"];
 
   const { getJobs, getJobData, isLoading } = usePosts();
-  //function รับค่าsearch
   const inputchange = (event) => {
     setSearch(event.target.value);
     console.log(search);
@@ -35,16 +35,15 @@ export function Findjobssearch() {
     setTimeout(() => {
       getJobs();
     }, 800);
-
-    console.log(isLoading);
-  }, [isLoading]);
+  }, [getJobs, isLoading]);
 
   return (
     <Box
       sx={{
         backgroundColor: "#F5F5F6",
         width: "100%",
-        height: "100vh",
+        height: "100%",
+        minHeight: "100vh",
         minWidth: "100vh",
         marginLeft: "240px",
       }}
@@ -86,7 +85,7 @@ export function Findjobssearch() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <Search />
                 </InputAdornment>
               ),
             }}
@@ -206,14 +205,12 @@ export function Findjobssearch() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <MonetizationOnIcon />
+                      <MonetizationOn />
                     </InputAdornment>
                   ),
                 }}
               ></Textseacrh1>
-              <HorizontalRuleIcon
-                sx={{ marginTop: "8px", marginLeft: "18px" }}
-              />
+              <HorizontalRule sx={{ marginTop: "8px", marginLeft: "18px" }} />
 
               <Textseacrh1
                 id="outlined-basic"
@@ -226,7 +223,7 @@ export function Findjobssearch() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <MonetizationOnIcon />
+                      <MonetizationOn />
                     </InputAdornment>
                   ),
                 }}
@@ -277,6 +274,7 @@ export function Findjobssearch() {
                   minSalary={item.min_salary}
                   maxSalary={item.max_salary}
                   jobTitle={item.job_title}
+                  jobId={item.job_id}
                 />
               );
             })}

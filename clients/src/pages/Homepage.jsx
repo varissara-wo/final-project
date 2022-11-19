@@ -1,7 +1,7 @@
 import React from "react";
 import NavBox from "../components/Navbar.jsx";
 import Profile from "../components/Homepage/Profile.jsx";
-import { Typography, Button, Divider, Link, Box } from "@mui/material";
+import { Typography, Button, Divider, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {

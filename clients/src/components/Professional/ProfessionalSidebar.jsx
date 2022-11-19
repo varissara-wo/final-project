@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, List, ListItem, Box } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 import {
   TextButtonStyled,
   IconBoxStyled,
@@ -9,11 +9,17 @@ import {
 } from "./styles.jsx";
 import { Favorite, GitHub } from "@mui/icons-material";
 
-const ProfessionalSidebar = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const handleListItemClick = (event, index) => {
+const ProfessionalSidebar = (props) => {
+  const index = Number(props.selectedIndex);
+  const navigate = useNavigate();
+  const [selectedIndex, setSelectedIndex] = useState(index);
+
+  const handleListItemClick = (path, index) => {
     setSelectedIndex(index);
+    navigate(path);
   };
+  useEffect(() => {}, [index]);
+
   return (
     <Box position="fixed">
       <Box
@@ -43,20 +49,18 @@ const ProfessionalSidebar = () => {
           <Box>
             <List>
               <SidebarButtonStyled
-                href="/findjobs"
                 selected={selectedIndex === 0}
-                onClick={(event) => handleListItemClick(event, 0)}
+                onClick={() => handleListItemClick("/findjobs", 0)}
               >
                 <IconBoxStyled>
-                  <img src="pic/find.svg" alt="find that job" />
+                  <img src="images/find.svg" alt="find that job" />
                 </IconBoxStyled>
                 <TextButtonStyled sx={{}}>Find that Job</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                href="#your-applications"
                 selected={selectedIndex === 1}
-                onClick={(event) => handleListItemClick(event, 1)}
+                onClick={() => handleListItemClick("/application", 1)}
               >
                 <IconBoxStyled>
                   <img src="pic/doc.svg" alt="your applications" />

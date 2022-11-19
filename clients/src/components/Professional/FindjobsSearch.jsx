@@ -23,9 +23,11 @@ export function Findjobssearch() {
 
   //categeory
   const options = ["Manufacturing", "Legal", "Education", "Goverment", "Sales"];
+  //type
   const options1 = ["Fulltime", "Partime"];
-
-  const { getJobs, getJobData, isLoading } = usePosts();
+  const [salary, setSalary] = useState({});
+  const { getSearch, getJobData, isLoading } = usePosts();
+  //function รับค่าsearch
   const inputchange = (event) => {
     setSearch(event.target.value);
     console.log(search);
@@ -33,17 +35,16 @@ export function Findjobssearch() {
 
   useEffect(() => {
     setTimeout(() => {
-      getJobs();
+      getSearch(search, value, salary.min, salary.max, value1);
     }, 800);
-  }, [getJobs, isLoading]);
+  }, [search, value, salary, value1, isLoading]);
 
   return (
     <Box
       sx={{
         backgroundColor: "#F5F5F6",
         width: "100%",
-        height: "100%",
-        minHeight: "100vh",
+        height: "100vh",
         minWidth: "100vh",
         marginLeft: "240px",
       }}
@@ -202,6 +203,7 @@ export function Findjobssearch() {
                 type="number"
                 color="primary"
                 focused
+                onChange={(e) => setSalary({ ...salary, min: e.target.value })}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -218,6 +220,7 @@ export function Findjobssearch() {
                 placeholder="max"
                 color="primary"
                 focused
+                onChange={(e) => setSalary({ ...salary, max: e.target.value })}
                 type="number"
                 sx={{ marginLeft: "5px" }}
                 InputProps={{
@@ -263,18 +266,16 @@ export function Findjobssearch() {
         >
           {isLoading === false &&
             getJobData.map((item, index) => {
-              const img = JSON.parse(item.logo_url).url;
               return (
                 <JobWrapper
                   key={index}
-                  img={img}
+                  img={item.logo_url}
                   category={item.name}
                   type={item.type}
                   name={item.company_name}
                   minSalary={item.min_salary}
                   maxSalary={item.max_salary}
                   jobTitle={item.job_title}
-                  jobId={item.job_id}
                 />
               );
             })}

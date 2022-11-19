@@ -70,6 +70,21 @@ function usePosts() {
     setGetJobByIdData(jobData);
   };
 
+  const getSearch = async (keywords, category, minPrice, maxPrice, type) => {
+    let key = keywords || "";
+    let cat = category || "";
+    let min = minPrice || "";
+    let max = maxPrice || "";
+    let type1 = type || "";
+
+    const results = await axios.get(
+      `http://localhost:4000/professional/searchjobs?maxPrice=${max}&minPrice=${min}&category=${cat}&keywords=${key}&type=${type1}`
+    );
+
+    setGetJobData(results.data.data);
+    setIsLoading(false);
+  };
+
   return {
     createPost,
     getPost,
@@ -82,6 +97,7 @@ function usePosts() {
     isLoading,
     getJobById,
     getJobByIdData,
+    getSearch,
   };
 
   //   const getFollow = async (professionalId) => {

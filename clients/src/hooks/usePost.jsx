@@ -9,8 +9,9 @@ function usePosts() {
   const [numberOffollow, setNumberOffollow] = useState(0);
 
   const [getJobData, setGetJobData] = useState([]);
-
+  const [getJobByIdData, setGetJobByIdData] = useState({});
   const [numberOfJobs, setNumberOfJobs] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const createPost = async (data) => {
@@ -58,7 +59,31 @@ function usePosts() {
     const results = await axios.get(`http://localhost:4000/professional/jobs/`);
     const jobData = results.data.data;
     setGetJobData([...jobData]);
-    console.log(getJobData);
+    setIsLoading(false);
+  };
+
+  const getJobById = async (jobId) => {
+    const results = await axios.get(
+      `http://localhost:4000/professional/jobs/${jobId}`
+    );
+    const jobData = results.data.data;
+    setGetJobByIdData(jobData);
+    setIsLoading(false);
+  };
+
+  const getSearch = async (keywords, category, minPrice, maxPrice, type) => {
+    let key = keywords || "";
+    let cat = category || "";
+    let min = minPrice || "";
+    let max = maxPrice || "";
+    let type1 = type || "";
+
+    const results = await axios.get(
+      `http://localhost:4000/professional/searchjobs?maxPrice=${max}&minPrice=${min}&category=${cat}&keywords=${key}&type=${type1}`
+    );
+
+    setGetJobData(results.data.data);
+    setIsLoading(false);
   };
 
   return {
@@ -70,18 +95,32 @@ function usePosts() {
     selectPost,
     getJobs,
     getJobData,
+    isLoading,
+    getJobById,
+    getJobByIdData,
+    getSearch,
   };
 
-  // const getFollow = async (professionalId) => {
-  //   const results = await axios.get(
-  //     `http://localhost:4000/professional/follow/${professionalId}`
-  //   );
+  //   const getFollow = async (professionalId) => {
+  //     const results = await axios.get(
+  //       `http://localhost:4000/professional/follow/${professionalId}`
+  //     );
 
-  //   setFollow(results.data.data);
+  //     setFollow(results.data.data);
 
-  //   setNumberOffollow(results.data.data.length);
-  //   console.log(numberOfJobs)
-  // };
-  // return { createPost, getPost, data, numberOfJobs, closedPost, selectPost,follow,getFollow,numberOfJobs};
+  //     setNumberOffollow(results.data.data.length);
+  //     console.log(numberOfJobs);
+  //   };
+  //   return {
+  //     createPost,
+  //     getPost,
+  //     data,
+  //     numberOfJobs,
+  //     closedPost,
+  //     selectPost,
+  //     follow,
+  //     getFollow,
+  //     numberOfJobs,
+  //   };
 }
 export default usePosts;

@@ -11,6 +11,7 @@ import PauseCircleOutlineOutlinedIcon from "@mui/icons-material/PauseCircleOutli
 import MarkEmailReadOutlinedIcon from "@mui/icons-material/MarkEmailReadOutlined";
 import MarkChatReadOutlinedIcon from "@mui/icons-material/MarkChatReadOutlined";
 import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
+import GpsFixedOutlinedIcon from "@mui/icons-material/GpsFixedOutlined";
 import { styled } from "@mui/material";
 
 export const StackFlex = styled(Stack)(() => ({
@@ -246,5 +247,37 @@ export const DeclinedOn = (props) => {
         {date}
       </Typography>
     </StackFlex>
+  );
+};
+
+export const Following = (props) => {
+  return (
+    <Stack
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+      }}
+    >
+      <Stack
+        color="#FFFFFF"
+        sx={{
+          backgroundColor: "#F48FB1",
+          width: "40px",
+          height: "40px",
+          borderRadius: "50px",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <GpsFixedOutlinedIcon />
+      </Stack>
+      <Typography variant="button" color="secondary" marginLeft="4px">
+        Following
+      </Typography>
+    </Stack>
   );
 };

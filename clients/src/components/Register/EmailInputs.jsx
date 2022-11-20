@@ -8,8 +8,6 @@ const EmailInput = (props) => {
 
   const { user, value, onChange } = props;
 
-  console.log(isProfessionalExist);
-
   const [isValid, setIsValid] = useState(false);
 
   const validateInput = () => {
@@ -21,7 +19,6 @@ const EmailInput = (props) => {
   useEffect(() => {
     validateInput();
   }, [value]);
-  console.log(isProfessionalExist);
 
   return (
     <>
@@ -55,7 +52,7 @@ const EmailInput = (props) => {
               display="flex"
               flex={1}
             >
-              {isProfessionalExist && `** This email is available`}
+              {isProfessionalExist && `** This email is unavailable`}
             </Typography>
           )}
           {user === "recruiter" && (

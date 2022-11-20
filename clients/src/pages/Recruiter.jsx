@@ -9,7 +9,7 @@ import {
   IconBoxStyled,
   SidebarButtonStyled,
   GithubProfileStyled,
-} from "./styles.jsx";
+} from "../components/Professional/styles.jsx";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useState } from "react";
 import { Createpost } from "./Createjobpost.jsx";

@@ -1,67 +1,31 @@
-import React, { useState } from "react";
-import { Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useAuth } from "../contexts/professionalAuth";
+import React, { useState, useEffect } from "react";
+import { Typography, List, ListItem, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {
+  TextButtonStyled,
+  IconBoxStyled,
+  SidebarButtonStyled,
+  GithubProfileStyled,
+} from "./styles.jsx";
+import { Favorite, GitHub } from "@mui/icons-material";
 
-const { logout } = useAuth();
-
-const TextButtonStyled = styled(ListItemText)(() => ({
-  fontFamily: "var(--inter-font)",
-  fontWeight: "400",
-  fontSize: "16px",
-  color: "#616161",
-  marginLeft: "10px",
-  "&.Mui-selected": {
-    color: "#373737",
-  },
-}));
-const IconBoxStyled = styled(Box)(() => ({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-  width: "22px",
-  height: "22px",
-}));
-const SidebarButtonStyled = styled(ListItemButton)(() => ({
-  "&.Mui-selected": {
-    backgroundColor: "#F5F5F6",
-  },
-}));
-const GithubProfileStyled = styled(ListItemButton)(() => ({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "flex-start",
-  alignItems: "center",
-  padding: "2px 0 2px 0",
-  width: "100%",
-}));
-
-const Sidebar = () => {
-  // State for the sidebar
-  const [initIndex, setInitindex] = useState("");
-  let index = initIndex;
+const ProfessionalSidebar = (props) => {
+  const index = Number(props.selectedIndex);
+  const navigate = useNavigate();
   const [selectedIndex, setSelectedIndex] = useState(index);
 
-  const handleListItemClick = (event, index) => {
-    setInitindex(index);
+  const handleListItemClick = (path, index) => {
+    setSelectedIndex(index);
+    navigate(path);
   };
+  useEffect(() => {}, [index]);
 
   return (
-    <>
-      {/*------------------------------------- Start Sidebar -------------------------------------*/}
+    <Box position="fixed">
       <Box
         className="sidebar-container"
         sx={{
           width: "240px",
-          height: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -71,7 +35,7 @@ const Sidebar = () => {
         }}
       >
         {/*------------------------------ Start Top Sidebar ------------------------------*/}
-        <Box className="sidebar-top" sx={{ width: "100%" }}>
+        <Box className="sidebar-top" sx={{ width: "100%", height: "100%" }}>
           <Box
             className="getthatjoblogo-box"
             sx={{
@@ -80,64 +44,74 @@ const Sidebar = () => {
               cursor: "pointer",
             }}
           >
-            <img src="pic/gtj-logo-1.svg" alt="getthatjoblogo" />
+            <img
+              src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954135/gtj-logo_gitfpb.png"
+              alt="getthatjoblogo"
+            />
           </Box>
           <Box>
             <List>
               <SidebarButtonStyled
-                href="/findjobs"
                 selected={selectedIndex === 0}
-                onClick={(event) => handleListItemClick(event, 0)}
+                onClick={() => handleListItemClick("/findjobs", 0)}
               >
                 <IconBoxStyled>
-                  <img src="pic/find.svg" alt="find that job" />
+                  <img
+                    src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954230/Group_1_dgmybk.svg"
+                    alt="find that job"
+                  />
                 </IconBoxStyled>
                 <TextButtonStyled sx={{}}>Find that Job</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                href="#your-applications"
                 selected={selectedIndex === 1}
-                onClick={(event) => handleListItemClick(event, 1)}
+                onClick={() => handleListItemClick("/applications", 1)}
               >
                 <IconBoxStyled>
-                  <img src="pic/doc.svg" alt="your applications" />
+                  <img
+                    src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_3_cdsowr.svg"
+                    alt="your applications"
+                  />
                 </IconBoxStyled>
                 <TextButtonStyled>Your applications</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                href="#following"
                 selected={selectedIndex === 2}
-                onClick={(event) => handleListItemClick(event, 2)}
+                onClick={() => handleListItemClick("/following", 2)}
               >
                 <IconBoxStyled>
-                  <img src="pic/gps.svg" alt="following" />
+                  <img
+                    src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_4_erymra.svg"
+                    alt="following"
+                  />
                 </IconBoxStyled>
                 <TextButtonStyled>Following</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
                 component="a"
-                href="#profile"
                 selected={selectedIndex === 3}
-                onClick={(event) => {
-                  handleListItemClick(event, 3);
-                }}
+                onClick={() => handleListItemClick("/profile", 3)}
               >
                 <IconBoxStyled>
-                  <img src="pic/personal.svg" alt="profile" />
+                  <img
+                    src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_3_cdsowr.svg"
+                    alt="profile"
+                  />
                 </IconBoxStyled>
                 <TextButtonStyled>Profile</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled component="a" href="/">
                 <IconBoxStyled>
-                  <img src="pic/LogoutIcon.svg" alt="log out" />
+                  <img
+                    src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_5_qxgp4r.svg"
+                    alt="log out"
+                  />
                 </IconBoxStyled>
-                <TextButtonStyled
-                  onClick={() => { logout(); }}>
-                  Log out</TextButtonStyled>
+                <TextButtonStyled>Log out</TextButtonStyled>
               </SidebarButtonStyled>
             </List>
           </Box>
@@ -153,6 +127,9 @@ const Sidebar = () => {
             flexDirection: "column",
             alignItems: "flex-start",
             width: "100%",
+            height: "100%",
+            maxHeight: "300px",
+            marginBottom: "32px",
           }}
         >
           <Typography
@@ -177,7 +154,7 @@ const Sidebar = () => {
             <Typography variant="caption" color={"secondary"}>
               Build with
             </Typography>
-            <FavoriteIcon
+            <Favorite
               sx={{ fontSize: 12, margin: "0 5px 0 5px" }}
               color={"error"}
             />
@@ -187,7 +164,7 @@ const Sidebar = () => {
           </ListItem>
 
           <GithubProfileStyled href="https://github.com/Hohokz" target="_blank">
-            <GitHubIcon
+            <GitHub
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
             <Typography
@@ -202,7 +179,7 @@ const Sidebar = () => {
             href="https://github.com/MilesNR"
             target="_blank"
           >
-            <GitHubIcon
+            <GitHub
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
             <Typography
@@ -217,7 +194,7 @@ const Sidebar = () => {
             href="https://github.com/thanakornboonlar"
             target="_blank"
           >
-            <GitHubIcon
+            <GitHub
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
             <Typography
@@ -232,7 +209,7 @@ const Sidebar = () => {
             href="https://github.com/varissara-wo"
             target="_blank"
           >
-            <GitHubIcon
+            <GitHub
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
             <Typography
@@ -247,7 +224,7 @@ const Sidebar = () => {
             href="https://github.com/cholanuchkorn123"
             target="_blank"
           >
-            <GitHubIcon
+            <GitHub
               sx={{ width: "14px", height: "14px", margin: "0 0 0 16px" }}
             />
             <Typography
@@ -270,12 +247,16 @@ const Sidebar = () => {
               <Box
                 className="getthatjoblogo-box"
                 sx={{
+                  display: "flex",
                   margin: "0 0 0 16px",
                   width: "14px",
                   height: "14px",
                 }}
               >
-                <img src="pic/react.svg" alt="getthatjoblogo" />
+                <img
+                  src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954466/Group_6_fk3ugd.svg"
+                  alt="getthatjoblogo"
+                />
               </Box>
 
               <Typography
@@ -290,9 +271,8 @@ const Sidebar = () => {
         </Box>
         {/*------------------------------ End Footer Sidebar ------------------------------*/}
       </Box>
-      {/*------------------------------------- End Sidebar -------------------------------------*/}
-    </>
+    </Box>
   );
 };
 
-export default Sidebar;
+export default ProfessionalSidebar;

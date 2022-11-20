@@ -14,7 +14,7 @@ recruiterRouter.get("/", async (req, res) => {
     return res.status(200).json({
       data: recruiterUsers.rows,
     });
-  } catch { }
+  } catch {}
 });
 
 //Check email
@@ -79,11 +79,9 @@ recruiterRouter.post("/", LogoUpload, async (req, res) => {
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
-
   } catch (err) {
     ("error");
   }
-
 });
 
 //Update profile
@@ -125,7 +123,9 @@ recruiterRouter.put("/:id", async (req, res) => {
 //Delete account
 recruiterRouter.delete("/:id", async (req, res) => {
   const userId = req.params.id;
-  await pool.query(`delete from recruiter where recruiter_id=$1`, [userId]);
+  await pool.query(`delete from recruiter_users where recruiter_id=$1`, [
+    userId,
+  ]);
   return res.json({
     message: `User ${userId} has been deleted.`,
   });

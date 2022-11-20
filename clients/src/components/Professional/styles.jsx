@@ -29,15 +29,13 @@ export const Textinput = styled(Autocomplete)(({ theme }) => ({
   "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
     width: "280px",
     height: "40px",
+    backgroundColor: "#FFFFFF",
   },
   "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
     border: "2px solid #F48FB1",
   },
   height: "60px",
   color: "primary focused",
-  "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
-    backgroundColor: "#FFFFFF",
-  },
 }));
 export const Textseacrh = styled(TextField)(({ theme }) => ({
   "& .css-1v0e5r1-MuiInputBase-root-MuiOutlinedInput-root": {
@@ -69,8 +67,6 @@ export const Textseacrh2 = styled(TextField)(({ theme }) => ({
   height: "60px",
   color: "primary focused",
 }));
-const options = ["Technology", "science", "Accounting", "engineering"];
-const options1 = ["Fulltime", "Partime", "Internship"];
 
 export const TextButtonStyled = styled(ListItemText)(() => ({
   fontFamily: "var(--inter-font)",
@@ -119,15 +115,14 @@ export const Categoryinput = styled(Autocomplete)(({ theme }) => ({
   "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
     width: "300px",
     height: "45px",
+    backgroundColor: "#FFFFFF",
   },
   "& .css-1d3z3hw-MuiOutlinedInput-notchedOutline": {
     border: "2px solid #F48FB1",
   },
   height: "60px",
   color: "primary focused",
-  "& .css-uyzgbr-MuiInputBase-root-MuiOutlinedInput-root": {
-    backgroundColor: "#FFFFFF",
-  },
+
   "& .css-130go8a-MuiAutocomplete-root .MuiOutlinedInput-root.MuiInputBase-sizeSmall0":
     {
       paddingTop: "0px",

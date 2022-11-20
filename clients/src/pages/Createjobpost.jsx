@@ -10,7 +10,10 @@ import { Buttonwidth } from "../components/Register/Styles.jsx";
 
 import MultilineInputJobPost from "../components/Recruiter/MultilineInputJobPost.jsx";
 import OnelineInputJobPost from "../components/Recruiter/OnelineInputJobPost.jsx";
-import { Textseacrh1, Categoryinput } from "./styles.jsx";
+import {
+  Textseacrh1,
+  Categoryinput,
+} from "../components/Professional/styles.jsx";
 
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";

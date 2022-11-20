@@ -44,7 +44,10 @@ const ProfessionalSidebar = (props) => {
               cursor: "pointer",
             }}
           >
-            <img src="pic/gtj-logo-1.svg" alt="getthatjoblogo" />
+            <img
+              src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954135/gtj-logo_gitfpb.png"
+              alt="getthatjoblogo"
+            />
           </Box>
           <Box>
             <List>
@@ -53,47 +56,60 @@ const ProfessionalSidebar = (props) => {
                 onClick={() => handleListItemClick("/findjobs", 0)}
               >
                 <IconBoxStyled>
-                  <img src="images/find.svg" alt="find that job" />
+                  <img
+                    src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954230/Group_1_dgmybk.svg"
+                    alt="find that job"
+                  />
                 </IconBoxStyled>
                 <TextButtonStyled sx={{}}>Find that Job</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
                 selected={selectedIndex === 1}
-                onClick={() => handleListItemClick("/application", 1)}
+                onClick={() => handleListItemClick("/applications", 1)}
               >
                 <IconBoxStyled>
-                  <img src="pic/doc.svg" alt="your applications" />
+                  <img
+                    src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_3_cdsowr.svg"
+                    alt="your applications"
+                  />
                 </IconBoxStyled>
                 <TextButtonStyled>Your applications</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
-                href="#following"
                 selected={selectedIndex === 2}
-                onClick={(event) => handleListItemClick(event, 2)}
+                onClick={() => handleListItemClick("/following", 2)}
               >
                 <IconBoxStyled>
-                  <img src="pic/gps.svg" alt="following" />
+                  <img
+                    src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_4_erymra.svg"
+                    alt="following"
+                  />
                 </IconBoxStyled>
                 <TextButtonStyled>Following</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled
                 component="a"
-                href="#profile"
                 selected={selectedIndex === 3}
-                onClick={(event) => handleListItemClick(event, 3)}
+                onClick={() => handleListItemClick("/profile", 3)}
               >
                 <IconBoxStyled>
-                  <img src="pic/personal.svg" alt="profile" />
+                  <img
+                    src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_3_cdsowr.svg"
+                    alt="profile"
+                  />
                 </IconBoxStyled>
                 <TextButtonStyled>Profile</TextButtonStyled>
               </SidebarButtonStyled>
 
               <SidebarButtonStyled component="a" href="/">
                 <IconBoxStyled>
-                  <img src="pic/LogoutIcon.svg" alt="log out" />
+                  <img
+                    src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_5_qxgp4r.svg"
+                    alt="log out"
+                  />
                 </IconBoxStyled>
                 <TextButtonStyled>Log out</TextButtonStyled>
               </SidebarButtonStyled>
@@ -231,12 +247,16 @@ const ProfessionalSidebar = (props) => {
               <Box
                 className="getthatjoblogo-box"
                 sx={{
+                  display: "flex",
                   margin: "0 0 0 16px",
                   width: "14px",
                   height: "14px",
                 }}
               >
-                <img src="pic/react.svg" alt="getthatjoblogo" />
+                <img
+                  src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954466/Group_6_fk3ugd.svg"
+                  alt="getthatjoblogo"
+                />
               </Box>
 
               <Typography

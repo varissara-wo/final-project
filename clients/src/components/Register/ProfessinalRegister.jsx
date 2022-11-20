@@ -43,8 +43,11 @@ import {
 import EmailInput from "./EmailInputs.jsx";
 import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
+import { useEffect } from "react";
+import { useAuth } from "../../contexts/professionalAuth.jsx";
 
 const ProfessionalRegister = () => {
+  const { login } = useAuth();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -83,6 +86,10 @@ const ProfessionalRegister = () => {
     registerProfessional,
   } = useRegis();
 
+  useEffect(() => {
+    isProfessionalEmailExist(userData.email);
+  }, [isProfessionalEmailExist, userData.email]);
+
   const handleNext = async () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
@@ -91,7 +98,6 @@ const ProfessionalRegister = () => {
     }
 
     if (activeStep === 0) {
-      await isProfessionalEmailExist(userData.email);
       const checkPassword = validatePassword(userData.password);
       const checkEmail = validateEmail(userData.email);
       const checkConfirmPassword = validateConfirmPassword(
@@ -125,7 +131,9 @@ const ProfessionalRegister = () => {
 
     if (activeStep === 2) {
       const checkExperience = validateExperience(userData.experience);
+      console.log(checkExperience);
       const checkEducation = validateEducation(userData.education);
+      console.log(checkEducation);
 
       if (checkExperience || userData.experience === "") {
         if (checkEducation || userData.education === "") {
@@ -137,7 +145,11 @@ const ProfessionalRegister = () => {
           for (let key in data) {
             formData.append(key, data[key]);
           }
-          registerProfessional(formData);
+          await registerProfessional(formData);
+          login({
+            email: userData.email,
+            password: userData.password,
+          });
         }
       }
     }

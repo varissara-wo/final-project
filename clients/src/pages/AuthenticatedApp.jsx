@@ -5,6 +5,9 @@ import Login from "./Login.jsx";
 import Register from "./Register.jsx";
 import Applications from "./Professional/Applications.jsx";
 import JobDetail from "./Professional/JobDetail.jsx";
+import ApplicationForm from "./Professional/ApplicationForm.jsx";
+import ProfessionalProfile from "./Professional/ProfessionalProfile.jsx";
+import Following from "./Professional/Following.jsx";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme.js";
 import { Recruiter } from "./Recruiter.jsx";
@@ -15,10 +18,17 @@ function AuthenticationApp() {
       <Routes>
         <Route path="/" element={<HomePage />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        {/* ------------------------professional part------------------ */}
         <Route path="/findjobs" element={<FindJobs />}></Route>
         <Route path="/findjobs/:jobid" element={<JobDetail />}></Route>
-        <Route path="/application" element={<Applications />}></Route>
-        {/* -------------------------mock recruiter createpost------------------ */}
+        <Route path="/applications" element={<Applications />}></Route>
+        <Route
+          path="/applications/:jobid"
+          element={<ApplicationForm />}
+        ></Route>
+        <Route path="/following" element={<Following />}></Route>
+        <Route path="/profile" element={<ProfessionalProfile />}></Route>-
+        {/* ------------------------mock recruiter createpost------------------ */}
         <Route path="/recruiter" element={<Recruiter />}></Route>
         {/* -------------------------mock recruiter createpost------------------ */}
         <Route path="/auth" element={<Register />}></Route>

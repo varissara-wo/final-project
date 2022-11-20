@@ -2,17 +2,19 @@ import React, { useEffect } from "react";
 import ProfessionalSidebar from "../../components/Professional/ProfessionalSidebar.jsx";
 import { useParams } from "react-router-dom";
 import usePosts from "../../hooks/usePost";
-import Box from "@mui/material/Box";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import { JobDetails } from "../../components/Professional/JobDetail";
 
 const JobDetail = () => {
   const params = useParams();
   const jobId = params.jobid;
-  const { getJobById, getJobByIdData } = usePosts();
+  const { getJobById, getJobByIdData, isLoading } = usePosts();
 
   useEffect(() => {
-    getJobById(jobId);
-  }, []);
+    setTimeout(() => {
+      getJobById(jobId);
+    }, 800);
+  }, [isLoading]);
 
   const {
     about_company,
@@ -41,23 +43,41 @@ const JobDetail = () => {
       }}
     >
       <ProfessionalSidebar selectedIndex="0" />
-
-      <JobDetails
-        jobiD={jobId}
-        aboutCompany={about_company}
-        aboutJob={about_job_position}
-        companyName={company_name}
-        createdTime={created_at}
-        jobId={job_id}
-        requirement={job_requirement}
-        optionalRequirement={option_requirement}
-        jobTitle={job_title}
-        companyLogo={logo_url}
-        maxSalary={max_salary}
-        minSalary={min_salary}
-        category={name}
-        jobType={type}
-      />
+      {isLoading === true && (
+        <Stack
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="center"
+          sx={{
+            backgroundColor: "#F5F5F6",
+            width: "100%",
+            height: "100%",
+            minHeight: "100vh",
+            minWidth: "100vh",
+            marginLeft: "240px",
+          }}
+        >
+          <CircularProgress disableShrink />
+        </Stack>
+      )}
+      {isLoading === false && (
+        <JobDetails
+          jobiD={jobId}
+          aboutCompany={about_company}
+          aboutJob={about_job_position}
+          companyName={company_name}
+          createdTime={created_at}
+          jobId={job_id}
+          requirement={job_requirement}
+          optionalRequirement={option_requirement}
+          jobTitle={job_title}
+          companyLogo={logo_url}
+          maxSalary={max_salary}
+          minSalary={min_salary}
+          category={name}
+          jobType={type}
+        />
+      )}
     </Box>
   );
 };

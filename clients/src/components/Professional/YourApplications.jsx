@@ -33,11 +33,13 @@ import {
   DeclinedOn,
 } from "../Status";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
-
+import { useAuth } from "../../contexts/professionalAuth";
 export function YourApplications() {
   const [numberOfApplicationsFound, setNumberOfApplicationsFound] = useState(4);
   const [expanded, setExpanded] = useState(false);
+  const { state } = useAuth();
 
+  console.log(state);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -79,9 +81,11 @@ export function YourApplications() {
       sx={{
         backgroundColor: "#F5F5F6",
         width: "100%",
-        height: "100vh",
+        height: "100%",
+        minHeight: "100vh",
         minWidth: "100vh",
         marginLeft: "240px",
+        paddingBottom: "50px",
       }}
     >
       <Box
@@ -94,7 +98,10 @@ export function YourApplications() {
         }}
       >
         {/*------------------------------ Head------------------------------*/}
-        <Typography variant="h4" sx={{ marginBottom: "20px" }}>
+        <Typography
+          variant="h4"
+          sx={{ marginTop: "24px", marginBottom: "16px", fontWeight: "400" }}
+        >
           Job Postngs
         </Typography>
         {/*------------------------------ Start Filter Jobs ------------------------------*/}
@@ -131,7 +138,15 @@ export function YourApplications() {
           </RadioGroup>
         </FormControl>
 
-        <Typography variant="h5" sx={{ marginBottom: "8px" }}>
+        <Typography
+          variant="h5"
+          sx={{
+            marginTop: "18px",
+            marginBottom: "8px",
+            fontWeight: "500",
+            color: "#373737",
+          }}
+        >
           {numberOfApplicationsFound} applications found
         </Typography>
         <div>

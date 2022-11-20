@@ -246,6 +246,7 @@ export function Findjobssearch() {
         {isLoading === true && (
           <Stack
             width="90%"
+            height="50vh"
             flexDirection="row"
             justifyContent="center"
             alignItems="center"
@@ -276,6 +277,7 @@ export function Findjobssearch() {
                   minSalary={item.min_salary}
                   maxSalary={item.max_salary}
                   jobTitle={item.job_title}
+                  jobId={item.job_id}
                 />
               );
             })}

@@ -6,7 +6,7 @@ import { Stack } from "@mui/system";
 import { ApplyNowButton } from "./ButtonStyles";
 import { Following } from "../Status";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
-
+import getPublishedDate from "../../utils/getPublishedDate";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 
@@ -44,6 +44,7 @@ export function JobDetails(props) {
   } = props;
 
   const icon = bigIconCategory(category);
+  const date = getPublishedDate(createdTime);
 
   return (
     <Box
@@ -123,7 +124,7 @@ export function JobDetails(props) {
               <Following />
             </Stack>
           </Stack>
-          <ApplyNowButton />
+          <ApplyNowButton jobId={jobId} />
         </Stack>
         {/*------------------------------ Job Title ------------------------------*/}
         <Stack
@@ -153,14 +154,14 @@ export function JobDetails(props) {
             <AccessTimeOutlinedIcon
               sx={{
                 fontSize: 12.5,
-                marginBottom: "12px",
+                marginBottom: "3px",
                 marginRight: "5px",
                 color: "#616161",
                 display: "flex",
               }}
             />
             <Typography variant="overline" sx={{ display: "flex" }}>
-              Posted 2 days ago
+              Posted {date} days ago
             </Typography>
           </Stack>
 
@@ -277,7 +278,7 @@ export function JobDetails(props) {
         </Stack>
         {/*------------------------------ Job Apply Now ------------------------------*/}
         <Stack direction={"row"} justifyContent="center" width={"90%"}>
-          <ApplyNowButton />
+          <ApplyNowButton jobId={jobId} />
         </Stack>
       </Box>
     </Box>

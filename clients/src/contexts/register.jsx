@@ -13,8 +13,8 @@ function RegisProvider(props) {
     const result = await axios.get(
       `http://localhost:4000/professional/users/exists/${email}`
     );
-    console.log(`http://localhost:4000/professional/users/exists/${email}`);
-    setProfessionalExist(result.data.isEmailExist);
+    const data = result.data.isEmailExist;
+    setProfessionalExist(data);
   };
 
   const isRecruiterEmailExist = async (email) => {

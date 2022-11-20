@@ -37,7 +37,7 @@ export const validateExperience = (context) => {
 };
 
 export const validateEducation = (context) => {
-  const educationRegex = /^\w{100,2000}$/;
+  const educationRegex = /.{100,2000}/;
   const isEducationValid = educationRegex.test(context);
   return isEducationValid;
 };

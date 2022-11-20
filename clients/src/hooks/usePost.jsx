@@ -68,6 +68,7 @@ function usePosts() {
     );
     const jobData = results.data.data;
     setGetJobByIdData(jobData);
+    setIsLoading(false);
   };
 
   const getSearch = async (keywords, category, minPrice, maxPrice, type) => {

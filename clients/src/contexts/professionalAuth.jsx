@@ -18,31 +18,29 @@ function AuthProvider(props) {
       "http://localhost:4000/login_professional",
       data
     );
-    console.log(data)
+    console.log(data);
     const token = result.data.token;
     localStorage.setItem("token", token);
     const userDataFromToken = jwtDecode(token);
-    console.log(userDataFromToken)
+    console.log(userDataFromToken);
     setState({ ...state, user: userDataFromToken });
+
     navigate("/findjobs");
   };
 
   const logout = () => {
-    localStorage.removeItem("token")
-    setState({ ...state, user: null })
+    localStorage.removeItem("token");
+    setState({ ...state, user: null });
   };
 
   const isAuthenticated = Boolean(localStorage.getItem("token"));
 
   return (
-    <AuthContext.Provider
-      value={{ state, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{ state, login, logout, isAuthenticated }}>
       {props.children}
     </AuthContext.Provider>
   );
 }
-
-
 
 const useAuth = () => React.useContext(AuthContext);
 

@@ -18,12 +18,13 @@ function AuthProvider(props) {
       "http://localhost:4000/login_professional",
       data
     );
-    console.log(data);
+
     const token = result.data.token;
     localStorage.setItem("token", token);
     const userDataFromToken = jwtDecode(token);
-    console.log(userDataFromToken);
     setState({ ...state, user: userDataFromToken });
+
+    console.log(userDataFromToken)
 
     navigate("/findjobs");
   };

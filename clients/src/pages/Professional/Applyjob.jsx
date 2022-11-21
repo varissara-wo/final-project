@@ -1,22 +1,21 @@
 import React, { useEffect } from "react";
-import ProfessionalSidebar from "../../components/Professional/ProfessionalSidebar";
-
-import Applyjob from "../../components/Professional/ApplyJob.jsx";
-import usePosts from "../../hooks/usePost";
+import ProfessionalSidebar from "../../components/Professional/ProfessionalSidebar.jsx";
 import { useParams } from "react-router-dom";
+import usePosts from "../../hooks/usePost";
 import { Box, CircularProgress, Stack } from "@mui/material";
-const ApplicationForm = () => {
+import Applyjobs from "../../components/Professional/ApplyJob.jsx";
+
+const Applyjob = () => {
   const params = useParams();
   const jobId = params.jobid;
-  const { getJobById, getJobByIdData, isLoading, getUser, userdata } =
-    usePosts();
-  const userid = 20;
+  const { getJobById, getJobByIdData, isLoading } = usePosts();
+
   useEffect(() => {
     setTimeout(() => {
       getJobById(jobId);
-      getUser(userid);
     }, 800);
   }, [isLoading]);
+
   const {
     about_company,
     about_job_position,
@@ -43,8 +42,7 @@ const ApplicationForm = () => {
         alignItems: "flex-start",
       }}
     >
-      <ProfessionalSidebar selectedIndex="1" />
-
+      <ProfessionalSidebar selectedIndex="0" />
       {isLoading === true && (
         <Stack
           flexDirection="row"
@@ -63,9 +61,8 @@ const ApplicationForm = () => {
         </Stack>
       )}
       {isLoading === false && (
-        <Applyjob
+        <Applyjobs
           jobiD={jobId}
-          profess={userdata}
           aboutCompany={about_company}
           aboutJob={about_job_position}
           companyName={company_name}
@@ -79,11 +76,10 @@ const ApplicationForm = () => {
           minSalary={min_salary}
           category={name}
           jobType={type}
-          userid={userid}
         />
       )}
     </Box>
   );
 };
 
-export default ApplicationForm;
+export default Applyjob;

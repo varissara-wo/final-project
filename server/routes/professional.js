@@ -142,19 +142,28 @@ professionalRouter.delete("/:id", async (req, res) => {
     message: `User ${userId} has been deleted.`,
   });
 });
-//followjobs
+// followjobs;
 professionalRouter.get("/follow/:id", async (req, res) => {
   try {
     const professId = req.params.id;
     const followjobs = await pool.query(
-      `select* from follow_jobs inner join jobs on jobs.job_id = follow_jobs.job_id  
+      `select * from follow_jobs inner join jobs on jobs.job_id = follow_jobs.job_id
       inner join categories  on  categories.categories_id =  jobs.categories_id
-      inner join recruiter_users on  recruiter_users.recruiter_id =  jobs.recruiter_id 
+      inner join recruiter_users on  recruiter_users.recruiter_id =  jobs.recruiter_id
       where professional_id =$1`,
       [professId]
     );
+    const data = followjobs.rows;
+    console.log(data);
+
+    if (data.length > 0) {
+      data.map((data) => {
+        data.logo_url = JSON.parse(data.logo_url).url;
+      });
+    }
+
     return res.status(200).json({
-      data: followjobs.rows,
+      data: data,
     });
   } catch (err) {
     console.log(err);
@@ -463,17 +472,112 @@ professionalRouter.get("/searchjobs", async (req, res) => {
     where recruit_status = 'open'`;
   }
   const results = await pool.query(query, values);
+  const follow = await pool.query(
+    `select job_id from follow_jobs where professional_id = $1`,
+    [20]
+  );
   const data = results.rows;
+  const followData = follow.rows;
+  const followJob = [];
 
   if (data.length > 0) {
     data.map((data) => {
       data.logo_url = JSON.parse(data.logo_url).url;
     });
+
+    followData.map((data) => {
+      followJob.push(data.job_id);
+    });
   }
 
   return res.status(200).json({
     data: data,
+    follow: followJob,
   });
 });
+professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
+  const statuscv = req.body.statuscv;
+  const jobId = req.params.id;
 
+  try {
+    if (statuscv === "true") {
+      const file = req.files.cv[0];
+      const responseCvUpload = await cvUpload(file);
+      const cvUrl = responseCvUpload;
+      const jobapply = {
+        job_id: jobId,
+        professionalId: req.body.professionalId,
+        status: "Waiting",
+        detial: req.body.interest,
+        experiece: req.body.experiece,
+        newcv: cvUrl,
+        statuscv: req.body.statuscv,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      await pool.query(
+        `insert into job_applications 
+        (job_id,professional_id,application_status,experience,interested_detail,new_cv_url,created_at,updated_at,is_upload_cv) 
+      values($1,$2,$3,$4,$5,$6,$7,$8,&9)`,
+        [
+          jobapply.job_id,
+          jobapply.professionalId,
+          jobapply.status,
+          jobapply.experiece,
+          jobapply.detial,
+          jobapply.newcv,
+          jobapply.created_at,
+          jobapply.updated_at,
+          jobapply.statuscv,
+        ]
+      );
+    } else if (statuscv == "false") {
+      const jobapply = {
+        job_id: jobId,
+        professionalId: req.body.professionalId,
+        status: "Waiting",
+        experiece: req.body.experiece,
+        detial: req.body.interest,
+
+        statuscv: req.body.statuscv,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      await pool.query(
+        `insert into job_applications (job_id,professional_id,application_status,experience,interested_detail,created_at,updated_at,is_upload_cv) 
+        values($1,$2,$3,$4,$5,$6,$7,$8)`,
+        [
+          jobapply.job_id,
+          jobapply.professionalId,
+          jobapply.status,
+          jobapply.experiece,
+          jobapply.detial,
+          jobapply.created_at,
+          jobapply.updated_at,
+          jobapply.statuscv,
+        ]
+      );
+    }
+
+    return res.status(201).json({
+      message: "Job has been apply sucessfully",
+    });
+  } catch (err) {}
+  console.log(err);
+});
+professionalRouter.get("/profile/:id", async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const professionalUsers = await pool.query(
+      `select * from professional_users where professional_id = $1`,
+      [userId]
+    );
+
+    return res.status(200).json({
+      data: professionalUsers.rows[0],
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
 export default professionalRouter;

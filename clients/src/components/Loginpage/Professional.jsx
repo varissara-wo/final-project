@@ -18,37 +18,7 @@ const Professional = () => {
   const [passwordMessage, setPasswordMessage] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
 
-  //validate form input
-  // const validatePassword = (password) => {
-  //     let isPass = false;
-  //     const passwordMessage =
-  //         "** Password should have at least one numeric digit, one special character, one uppercase and one lowercase letter";
-  //     const passwordRegex =
-  //         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,20}$/;
-  //     const isPasswordValid = passwordRegex.test(password);
-  //     if (isPasswordValid) {
-  //         setPasswordMessage("");
-  //         isPass = true;
-  //     } else {
-  //         setPasswordMessage(passwordMessage);
-  //     }
-  //     return isPass;
-  // };
-
-  // const validateEmail = (email) => {
-  //     const emailMessage = "** Email is not valid";
-  //     let isPass = false;
-  //     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  //     const isEmailValid = emailRegex.test(email);
-  //     if (isEmailValid) {
-  //         setEmailMessage("");
-  //         isPass = true;
-  //     } else {
-  //         setEmailMessage(emailMessage);
-  //     }
-  //     return isPass;
-  // };
-
+  
   const { login } = useAuth();
 
   const handleSubmit = (event) => {
@@ -59,30 +29,6 @@ const Professional = () => {
     // event.preventDefalt();
   };
 
-  // const [activeStep, setActiveStep] = React.useState(0);
-  // const [skipped, setSkipped] = React.useState(new Set());
-
-  // const isStepSkipped = (step) => {
-  //     return skipped.has(step);
-  // };
-
-  // const handleNext = () => {
-  //     let newSkipped = skipped;
-  //     if (isStepSkipped(activeStep)) {
-  //         newSkipped = new Set(newSkipped.values());
-  //         newSkipped.delete(activeStep);
-  //     }
-
-  //     if (activeStep === 0) {
-  //         // const checkPassword = validatePassword(account.password);
-  //         // const checkEmail = validateEmail(account.email);
-
-  //         if (checkEmail & checkPassword) {
-  //             setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  //             setSkipped(newSkipped);
-  //         }
-  //     }
-  // };
 
   const [showPassword, setShowPassword] = useState(false);
 

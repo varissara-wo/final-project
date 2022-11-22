@@ -32,16 +32,21 @@ loginProfessionalRouter.post("/", async (req, res) => {
       });
     }
 
+    const isProfessionalId = await pool.query(
+      `select professional_id from professional_users where email = $1`,
+      [isProfessionalUser.rows[0].email]
+    );
+
     const isProfessionalName = await pool.query(
       `select name from professional_users where email = $1`,
       [isProfessionalUser.rows[0].email]
     );
 
-    console.log(isProfessionalName.rows[0]);
+    console.log(isProfessionalId.rows[0].professional_id)
 
     const token = jwt.sign(
       {
-        id: isProfessionalUser.rows[0].email,
+        id: isProfessionalId.rows[0].professional_id,
         name: isProfessionalName.rows[0].name,
       },
       process.env.SECRET_KEY,

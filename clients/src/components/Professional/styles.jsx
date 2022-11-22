@@ -143,3 +143,27 @@ export const Informationbox = styled(TextField)(({ theme }) => ({
     height: "80px",
   },
 }));
+
+export const DownloadCvButton = styled(Button)(() => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  color: "#616161",
+  border: "2px solid #F48FB1",
+  borderRadius: "16px",
+}));
+
+export const DeclineApplicaciontButton = styled(Button)(() => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  color: "#FFFFFF",
+  border: "2px solid #BF5F82",
+  borderRadius: "16px",
+  backgroundColor: "#BF5F82",
+  "& .css-17nwul7-MuiButtonBase-root-MuiButton-root:hover": {
+    backgroundColor: "#F48FB1",
+  },
+}));

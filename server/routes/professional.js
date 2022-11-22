@@ -476,4 +476,14 @@ professionalRouter.get("/searchjobs", async (req, res) => {
   });
 });
 
+//Get jobs applications
+// professionalRouter.get("/applications", async (req, res) => {
+//   try {
+//     const results = await pool.query(``, []);
+//   } catch (error) {}
+//   return res.status(200).json({
+//     data: data,
+//   });
+// });
+
 export default professionalRouter;

@@ -86,6 +86,13 @@ function usePosts() {
     setIsLoading(false);
   };
 
+  //Get jobs applications
+  // const getJobApplications = async (professionalId) => {
+  //   const results = await axios.get(`http://localhost:4000/`);
+  //   console.log(results);
+  //   setIsLoading(false);
+  // };
+
   return {
     createPost,
     getPost,

@@ -15,25 +15,17 @@ import {
 import styled from "@emotion/styled";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Stack } from "@mui/system";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import { DownloadCvButton, DeclineApplicaciontButton } from "./styles";
+
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import VillaOutlinedIcon from "@mui/icons-material/VillaOutlined";
-import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import {
-  OpenOn,
-  TotalCandidates,
-  CandidatesOnTrack,
-  SentAgo,
-  SentOn,
-  WaitingForReview,
-  ReviewInProgress,
-  ReviewFinished,
-  DeclinedOn,
-} from "../Status";
+import { SentAgo, WaitingForReview } from "../Status";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import { useAuth } from "../../contexts/professionalAuth";
+
 export function YourApplications() {
   const [numberOfApplicationsFound, setNumberOfApplicationsFound] = useState(4);
   const [expanded, setExpanded] = useState(false);
@@ -61,18 +53,6 @@ export function YourApplications() {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-    },
-  }));
-
-  const CloseButton = styled(Button)(() => ({
-    fontFamily: "var( --inter-font)",
-    fontWeight: "500",
-    fontSize: "14px",
-    borderRadius: "16px",
-    padding: "8px 16px",
-    width: "115px",
-    "& .MuiSvgIcon-root": {
-      fontSize: 28,
     },
   }));
 
@@ -313,6 +293,19 @@ export function YourApplications() {
                 faucibus.
               </Typography>
             </AccordionDetails>
+
+            <DownloadCvButton variant="button">
+              <FileDownloadOutlinedIcon color="secondary" />
+              <Typography variant="button" color={"secondary"}>
+                Download cv
+              </Typography>
+            </DownloadCvButton>
+            <DeclineApplicaciontButton variant="button" color="error.main">
+              <HighlightOffOutlinedIcon />
+              <Typography variant="button" color={"primary.contrastText"}>
+                decline applicaciont
+              </Typography>
+            </DeclineApplicaciontButton>
           </Accordion>
           {/*------------------------------ End information------------------------------*/}
         </div>

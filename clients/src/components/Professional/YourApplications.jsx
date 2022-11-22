@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import {
   Accordion,
@@ -6,6 +6,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   Radio,
@@ -25,13 +26,24 @@ import VillaOutlinedIcon from "@mui/icons-material/VillaOutlined";
 import { SentAgo, WaitingForReview } from "../Status";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import { useAuth } from "../../contexts/professionalAuth";
+import usePosts from "../../hooks/usePost";
 
 export function YourApplications() {
   const [numberOfApplicationsFound, setNumberOfApplicationsFound] = useState(4);
   const [expanded, setExpanded] = useState(false);
   const { state } = useAuth();
+  const { getJobApplications, jobApplicationsData, isLoading } = usePosts();
 
-  console.log(state);
+  //console.log(jobApplicationsData);
+
+  useEffect(() => {
+    setTimeout(() => {
+      getJobApplications(user_email);
+    }, 800);
+  }, [isLoading, state]);
+
+  // console.log(state);
+  const user_email = state.user.id;
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -131,6 +143,24 @@ export function YourApplications() {
         </Typography>
         <div>
           {/*------------------------------ Start information------------------------------*/}
+          {/* {isLoading === true && (
+            <Stack
+              flexDirection="row"
+              justifyContent="center"
+              alignItems="center"
+              sx={{
+                backgroundColor: "#F5F5F6",
+                width: "100%",
+                height: "100%",
+                minHeight: "100vh",
+                minWidth: "100vh",
+                marginLeft: "240px",
+              }}
+            >
+              <CircularProgress disableShrink />
+            </Stack>
+          )} */}
+          {/* {isLoading === false &&} */}
           <Accordion
             expanded={expanded === "panel1"}
             onChange={handleChange("panel1")}
@@ -303,7 +333,6 @@ export function YourApplications() {
               }}
             >
               <DownloadCvButton
-                variant="button"
                 startIcon={<FileDownloadOutlinedIcon color="secondary" />}
               >
                 <Typography variant="button" color={"secondary"}>
@@ -316,7 +345,7 @@ export function YourApplications() {
                 startIcon={<HighlightOffOutlinedIcon />}
                 sx={{ marginLeft: "16px" }}
               >
-                <Typography variant="button">decline applicaciont</Typography>
+                <Typography variant="button">decline applicacion</Typography>
               </DeclineApplicaciontButton>
             </Stack>
           </Accordion>

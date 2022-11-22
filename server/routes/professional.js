@@ -477,13 +477,31 @@ professionalRouter.get("/searchjobs", async (req, res) => {
 });
 
 //Get jobs applications
-// professionalRouter.get("/applications", async (req, res) => {
-//   try {
-//     const results = await pool.query(``, []);
-//   } catch (error) {}
-//   return res.status(200).json({
-//     data: data,
-//   });
-// });
+professionalRouter.get("/applications", async (req, res) => {
+  console.log(req.query.user_email);
+  const user_email = req.query.user_email;
+  try {
+    const results = await pool.query(
+      `SELECT *
+      FROM job_applications
+      LEFT JOIN jobs
+      ON job_applications.job_id = jobs.job_id
+      LEFT JOIN recruiter_users
+      ON jobs.recruiter_id = recruiter_users.recruiter_id
+      LEFT JOIN professional_users
+      ON job_applications.professional_id = professional_users.professional_id
+      WHERE professional_users.email = $1`,
+      [user_email]
+    );
+    const data = [];
+    for (const row of results.rows) {
+      row.logo_url = JSON.parse(row.logo_url).url;
+      data.push(row);
+    }
+    return res.status(200).json({
+      data: data,
+    });
+  } catch (error) {}
+});
 
 export default professionalRouter;

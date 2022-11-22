@@ -126,6 +126,7 @@ professionalRouter.put("/:id", async (req, res) => {
         userId,
       ]
     );
+
     return res.json({
       message: `User ${userId} has been updated.`,
     });
@@ -142,6 +143,7 @@ professionalRouter.delete("/:id", async (req, res) => {
     message: `User ${userId} has been deleted.`,
   });
 });
+
 //followjobs
 professionalRouter.get("/follow/:id", async (req, res) => {
   try {

@@ -5,26 +5,23 @@ import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 
 import TextField from "@mui/material/TextField";
-import usePosts from "../hooks/usePost.jsx";
-import { Buttonwidth } from "../components/Register/Styles.jsx";
+import usePosts from "../../hooks/usePost.jsx";
+import { Buttonwidth } from "../Register/Styles.jsx";
 
-import MultilineInputJobPost from "../components/Recruiter/MultilineInputJobPost.jsx";
-import OnelineInputJobPost from "../components/Recruiter/OnelineInputJobPost.jsx";
-import {
-  Textseacrh1,
-  Categoryinput,
-} from "../components/Professional/styles.jsx";
+import MultilineInputJobPost from "./MultilineInputJobPost.jsx";
+import OnelineInputJobPost from "./OnelineInputJobPost.jsx";
+import { Textseacrh1, Categoryinput } from "../Professional/styles.jsx";
 
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import InputAdornment from "@mui/material/InputAdornment";
 
-export function Createpost() {
+export function Createjobpost() {
   const { createPost } = usePosts();
-  console.log(createPost);
   const [inputValue, setInputValue] = React.useState("");
   const [inputValue1, setInputValue1] = React.useState("");
   const [info, setInfo] = useState({
+    recruiterId: "",
     category: "",
     title: "",
     type: "",
@@ -44,7 +41,6 @@ export function Createpost() {
     "Sales",
   ];
   const handleSubmit = (event) => {
-    console.log(info);
     event.preventDefault();
     createPost({
       ...info,
@@ -89,9 +85,9 @@ export function Createpost() {
       sx={{
         backgroundColor: "#F5F5F6",
         width: "100%",
+        height: "100vh",
+        minWidth: "100vh",
         marginLeft: "240px",
-        height: "100%",
-        minHeight: "100vh",
       }}
     >
       <Box
@@ -100,13 +96,13 @@ export function Createpost() {
           flexDirection: "column",
           alignItems: "flex-start",
           marginLeft: "100px",
-          marginTop: "10px",
+          marginTop: "30px",
         }}
       >
         {/*------------------------------ Head------------------------------*/}
         <Typography
           variant="h4"
-          sx={{ marginTop: "24px", marginBottom: "24px", fontWeight: "400" }}
+          sx={{ marginTop: "24px", marginBottom: "16px", fontWeight: "400" }}
         >
           Create new job posting
         </Typography>
@@ -256,9 +252,7 @@ export function Createpost() {
                     </InputAdornment>
                   ),
                 }}
-              >
-                {" "}
-              </Textseacrh1>
+              ></Textseacrh1>
               <HorizontalRuleIcon
                 sx={{ marginTop: "8px", marginLeft: "20px" }}
               />

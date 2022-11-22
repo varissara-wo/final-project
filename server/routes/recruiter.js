@@ -180,14 +180,29 @@ recruiterRouter.post("/createpost", async (req, res) => {
 });
 recruiterRouter.get("/jobs/:id", async (req, res) => {
   const recruiter_id = req.params.id;
-
+  const type = req.query.type || "";
+  let query = "";
+  let values = [];
   try {
-    const recruiterjobs = await pool.query(
-      `select * from jobs   inner join categories on jobs.categories_id =  categories.categories_id where recruiter_id = $1`,
-      [recruiter_id]
-    );
+    if (type.toLowerCase() == "closed") {
+      query = `select * from jobs   inner join categories on jobs.categories_id =
+     categories.categories_id where recruiter_id = $1 and  recruit_status = 'closed'`;
+
+      values = [recruiter_id];
+    } else if (type.toLowerCase() == "ontrack") {
+      query = `select * from jobs   inner join categories on jobs.categories_id = 
+      categories.categories_id where recruiter_id = $1 and on_track_candidates >= 1`;
+      values = [recruiter_id];
+    } else {
+      query = `select * from jobs   inner join categories on jobs.categories_id = 
+      categories.categories_id where recruiter_id = $1 `;
+      values = [recruiter_id];
+    }
+    console.log(query, values);
+    const results = await pool.query(query, values);
+    const data = results.rows;
     return res.status(200).json({
-      data: recruiterjobs.rows,
+      data: data,
     });
   } catch (err) {
     throw err;
@@ -227,4 +242,5 @@ recruiterRouter.put("/jobs/:id", async (req, res) => {
     throw err;
   }
 });
+
 export default recruiterRouter;

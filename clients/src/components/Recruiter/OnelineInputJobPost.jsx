@@ -2,7 +2,7 @@ import React from "react";
 import { OnelineTextField, InputLabelStyle } from "../Register/Styles.jsx";
 
 const OnelineInputJobPost = (props) => {
-  const { label, name, onChange, value, placeholder } = props;
+  const { label, name, onChange, value, placeholder, mb, mt } = props;
   return (
     <>
       <InputLabelStyle style={{ fontSize: "10px", fontWeight: "500" }}>
@@ -18,7 +18,10 @@ const OnelineInputJobPost = (props) => {
         type="text"
         placeholder={placeholder}
         onChange={onChange}
-        style={{ width: "360px ", marginBottom: "4px" }}
+        style={{
+          width: "360px ",
+          marginBottom: "4px",
+        }}
       />
     </>
   );

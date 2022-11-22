@@ -293,19 +293,32 @@ export function YourApplications() {
                 faucibus.
               </Typography>
             </AccordionDetails>
-
-            <DownloadCvButton variant="button">
-              <FileDownloadOutlinedIcon color="secondary" />
-              <Typography variant="button" color={"secondary"}>
-                Download cv
-              </Typography>
-            </DownloadCvButton>
-            <DeclineApplicaciontButton variant="button" color="error.main">
-              <HighlightOffOutlinedIcon />
-              <Typography variant="button" color={"primary.contrastText"}>
-                decline applicaciont
-              </Typography>
-            </DeclineApplicaciontButton>
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "0 16px 16px 16px",
+              }}
+            >
+              <DownloadCvButton
+                variant="button"
+                startIcon={<FileDownloadOutlinedIcon color="secondary" />}
+              >
+                <Typography variant="button" color={"secondary"}>
+                  Download cv
+                </Typography>
+              </DownloadCvButton>
+              <DeclineApplicaciontButton
+                variant="contained"
+                color="error"
+                startIcon={<HighlightOffOutlinedIcon />}
+                sx={{ marginLeft: "16px" }}
+              >
+                <Typography variant="button">decline applicaciont</Typography>
+              </DeclineApplicaciontButton>
+            </Stack>
           </Accordion>
           {/*------------------------------ End information------------------------------*/}
         </div>

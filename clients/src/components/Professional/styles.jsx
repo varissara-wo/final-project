@@ -159,11 +159,6 @@ export const DeclineApplicaciontButton = styled(Button)(() => ({
   flexDirection: "row",
   justifyContent: "center",
   alignItems: "center",
-  color: "#FFFFFF",
   border: "2px solid #BF5F82",
   borderRadius: "16px",
-  backgroundColor: "#BF5F82",
-  "& .css-17nwul7-MuiButtonBase-root-MuiButton-root:hover": {
-    backgroundColor: "#F48FB1",
-  },
 }));

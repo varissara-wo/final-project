@@ -14,6 +14,7 @@ const Profile = (props) => {
       <Box
         sx={{
           display: "flex",
+          justifyContent: "center"
         }}
       >
         <img src={img} alt={name} />

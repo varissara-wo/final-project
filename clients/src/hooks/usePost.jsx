@@ -12,7 +12,7 @@ function usePosts() {
   const [getJobByIdData, setGetJobByIdData] = useState({});
   const [numberOfJobs, setNumberOfJobs] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [userdata, setUserdata] = useState([]);
   const navigate = useNavigate();
 
   const createPost = async (data) => {
@@ -67,6 +67,35 @@ function usePosts() {
     setIsLoading(false);
   };
 
+  const getFollow = async (professionalId) => {
+    const results = await axios.get(
+      `http://localhost:4000/professional/follow/${professionalId}`
+    );
+
+    setFollow(results.data.data);
+    setIsLoading(false);
+  };
+
+  const getUser = async (professionalId) => {
+    const results = await axios.get(
+      `http://localhost:4000/professional/profile/${professionalId}`
+    );
+    setUserdata(results.data.data);
+  };
+  // const getuser = async (professionalId) => {
+  //   const results = await axios.get(
+  //     `http://localhost:4000/professional/follow/${professionalId}`
+  //   );
+
+  //   setFollow(results.data.data);
+
+  //   setNumberOffollow(results.data.data.length);
+
+  // };
+  const Apply = async (jobId, data) => {
+    await axios.post(`http://localhost:4000/professional/apply/${jobId}`, data);
+    navigate("/applications");
+  };
   return {
     createPost,
     getPost,
@@ -80,6 +109,11 @@ function usePosts() {
     getJobById,
     getJobByIdData,
     getSearch,
+    getFollow,
+    follow,
+    userdata,
+    getUser,
+    Apply,
   };
 
   //   const getFollow = async (professionalId) => {

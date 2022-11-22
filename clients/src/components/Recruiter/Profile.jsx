@@ -2,10 +2,10 @@ import { useState } from "react";
 import React from "react";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
-import usePosts from "../hooks/usePost.jsx";
-import MultilineInputJobPost from "../components/Recruiter/MultilineInputJobPost.jsx";
-import OnelineInputJobPost from "../components/Recruiter/OnelineInputJobPost.jsx";
-import { Buttonwidth, UploadButton } from "../components/Register/Styles.jsx";
+import usePosts from "../../hooks/usePost.jsx";
+import MultilineInputJobPost from "./MultilineInputJobPost.jsx";
+import OnelineInputJobPost from "./OnelineInputJobPost.jsx";
+import { Buttonwidth, UploadButton } from "../Register/Styles.jsx";
 import { FileUploadOutlined } from "@mui/icons-material";
 
 export default function Profile() {
@@ -60,9 +60,9 @@ export default function Profile() {
       sx={{
         backgroundColor: "#F5F5F6",
         width: "100%",
+        height: "100vh",
+        minWidth: "100vh",
         marginLeft: "240px",
-        height: "100%",
-        minHeight: "100vh",
       }}
     >
       <Box
@@ -71,12 +71,12 @@ export default function Profile() {
           flexDirection: "column",
           alignItems: "flex-start",
           marginLeft: "100px",
-          marginTop: "10px",
+          marginTop: "30px",
         }}
       >
         <Typography
           variant="h4"
-          sx={{ marginBottom: "10px", fontWeight: "400" }}
+          sx={{ marginTop: "24px", marginBottom: "16px", fontWeight: "400" }}
         >
           Profile
         </Typography>
@@ -148,6 +148,7 @@ export default function Profile() {
               {...input}
               value={info[input.name]}
               onChange={handlerInputChange}
+              // mt="8px"
             />
           );
         })}

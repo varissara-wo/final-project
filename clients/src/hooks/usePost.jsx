@@ -14,45 +14,26 @@ function usePosts() {
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
+
   const createPost = async (data) => {
-    console.log(data);
     await axios.post(`http://localhost:4000/recruiter/createpost`, data);
-    navigate("/");
+    navigate("/recruiter/jobpost");
   };
   const getPost = async (recruiterId) => {
     const results = await axios.get(
       `http://localhost:4000/recruiter/jobs/${recruiterId}`
     );
-
     setData(results.data.data);
-    console.log(data);
     setNumberOfJobs(results.data.data.length);
   };
   const closedPost = async (jobId) => {
-    console.log(jobId);
     await axios.put(`http://localhost:4000/recruiter/jobs/${jobId}`, []);
-    console.log("finish");
   };
   const selectPost = async (recruiterId, type) => {
-    console.log(recruiterId, type);
     const results = await axios.get(
-      `http://localhost:4000/recruiter/jobs/${recruiterId}`
+      `http://localhost:4000/recruiter/jobs/${recruiterId}?type=${type}`
     );
-
-    const jobData = results.data.data;
-    console.log(results.data.data);
-
-    if (type === "all") {
-      setData(jobData);
-    } else if (type === "onTrack") {
-      const onTrack = jobData.filter((post) => post.on_track_candidates > 0);
-      setData(onTrack);
-    } else if (type === "closed") {
-      const closeJob = jobData.filter(
-        (post) => post.recruit_status === "closed"
-      );
-      setData(closeJob);
-    }
+    setData(results.data.data);
   };
 
   const getJobs = async () => {

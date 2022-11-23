@@ -89,12 +89,12 @@ function usePosts() {
   };
 
   //Get jobs applications
-  const getJobApplications = async (user_email) => {
+  const getJobApplications = async (user_email, applicationStatus) => {
     const results = await axios.get(
-      `http://localhost:4000/professional?user_email=${user_email}`
+      `http://localhost:4000/professional/applications?user_email=${user_email}&status=${applicationStatus}`
     );
-    console.log(results.data);
-    // setJobApplicationsData(results);
+    console.log(results.data.data);
+    // setJobApplicationsData(results.data.data);
     setIsLoading(false);
   };
 

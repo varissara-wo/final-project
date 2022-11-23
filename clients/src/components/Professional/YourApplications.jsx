@@ -34,19 +34,28 @@ export function YourApplications() {
   const { state } = useAuth();
   const { getJobApplications, jobApplicationsData, isLoading } = usePosts();
 
-  //console.log(jobApplicationsData);
-
-  useEffect(() => {
-    setTimeout(() => {
-      getJobApplications(user_email);
-    }, 800);
-  }, [isLoading, state]);
+  // console.log(jobApplicationsData);
 
   // console.log(state);
   const user_email = state.user.id;
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  //Handle filter applications
+  const [selectedFilterApplicationStatus, setSelectedFilterApplicationStatus] =
+    useState("All");
+  const handleFilterApplications = (event) => {
+    console.log(event.target.value);
+    setSelectedFilterApplicationStatus(event.target.value);
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      getJobApplications(user_email, selectedFilterApplicationStatus);
+    }, 800);
+  }, [selectedFilterApplicationStatus]);
 
   const CheckBoxTextStyled = styled(FormControlLabel)(() => ({
     color: "#616161",
@@ -106,26 +115,35 @@ export function YourApplications() {
             aria-labelledby="demo-row-radio-buttons-group-label"
             name="row-radio-buttons-group"
           >
-            <CheckBoxTextStyled value="All" control={<Radio />} label="All" />
+            <CheckBoxTextStyled
+              value="All"
+              control={<Radio />}
+              label="All"
+              onChange={handleFilterApplications}
+            />
             <CheckBoxTextStyled
               value="Waiting"
               control={<Radio />}
               label="Waiting"
+              onChange={handleFilterApplications}
             />
             <CheckBoxTextStyled
-              value="In progress"
+              value="Reviewing"
               control={<Radio />}
               label="In progress"
+              onChange={handleFilterApplications}
             />
             <CheckBoxTextStyled
               value="Finished"
               control={<Radio />}
               label="Finished"
+              onChange={handleFilterApplications}
             />
             <CheckBoxTextStyled
               value="Declined"
               control={<Radio />}
               label="Declined"
+              onChange={handleFilterApplications}
             />
           </RadioGroup>
         </FormControl>

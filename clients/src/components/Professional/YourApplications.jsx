@@ -5,7 +5,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
   CircularProgress,
   FormControl,
   FormControlLabel,
@@ -22,12 +21,12 @@ import { DownloadCvButton, DeclineApplicaciontButton } from "./styles";
 
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
-import VillaOutlinedIcon from "@mui/icons-material/VillaOutlined";
 import { SentAgo, WaitingForReview } from "../Status";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import { useAuth } from "../../contexts/professionalAuth";
 import usePosts from "../../hooks/usePost";
 import { CategoryIcon } from "../CategoryIcon";
+import { SentStatus } from "../SentStatus";
 
 export function YourApplications() {
   const [expanded, setExpanded] = useState(false);
@@ -62,6 +61,14 @@ export function YourApplications() {
     },
     "& .MuiSvgIcon-root": {
       fontSize: 20,
+    },
+  }));
+
+  const AccordionStyled = styled(Accordion)(() => ({
+    "&.MuiAccordion-root": {
+      borderRadius: "8px",
+      border: "1px solid #E1E2E1",
+      boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)",
     },
   }));
 
@@ -179,7 +186,7 @@ export function YourApplications() {
             console.log(applications);
             const applicationId = applications.job_application_id;
             return (
-              <Accordion
+              <AccordionStyled
                 expanded={expanded === `panel${applicationId}`}
                 onChange={handleChange(`panel${applicationId}`)}
                 sx={{ marginBottom: "16px", width: "945px" }}
@@ -284,7 +291,8 @@ export function YourApplications() {
                     alignItems="center"
                     spacing={0}
                   >
-                    <SentAgo day="5" />
+                    {/* <SentAgo day="5" /> */}
+                    <SentStatus applyDate={applications.created_at} />
                     <WaitingForReview />
                   </Stack>
                 </AccordionSummaryStyled>
@@ -338,7 +346,7 @@ export function YourApplications() {
                     </Typography>
                   </DeclineApplicaciontButton>
                 </Stack>
-              </Accordion>
+              </AccordionStyled>
             );
           })}
 

@@ -21,12 +21,12 @@ import { DownloadCvButton, DeclineApplicaciontButton } from "./styles";
 
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
-import { SentAgo, WaitingForReview } from "../Status";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import { useAuth } from "../../contexts/professionalAuth";
 import usePosts from "../../hooks/usePost";
 import { CategoryIcon } from "../CategoryIcon";
 import { SentStatus } from "../SentStatus";
+import { ReviewStatus } from "../ReviewStatus";
 
 export function YourApplications() {
   const [expanded, setExpanded] = useState(false);
@@ -291,9 +291,12 @@ export function YourApplications() {
                     alignItems="center"
                     spacing={0}
                   >
-                    {/* <SentAgo day="5" /> */}
                     <SentStatus applyDate={applications.created_at} />
-                    <WaitingForReview />
+                    <ReviewStatus status={applications.application_status} />
+                    <ReviewStatus
+                      status={"Declined"}
+                      declinedDate={applications.created_at}
+                    />
                   </Stack>
                 </AccordionSummaryStyled>
                 <AccordionDetails sx={{ paddingBottom: "0", paddingTop: "0" }}>

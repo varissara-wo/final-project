@@ -13,7 +13,7 @@ function usePosts() {
   const [numberOfJobs, setNumberOfJobs] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [jobApplicationsData, setJobApplicationsData] = useState({});
+  const [jobApplicationsData, setJobApplicationsData] = useState([]);
 
   const navigate = useNavigate();
   const createPost = async (data) => {
@@ -93,8 +93,7 @@ function usePosts() {
     const results = await axios.get(
       `http://localhost:4000/professional/applications?user_email=${user_email}&status=${applicationStatus}`
     );
-    console.log(results.data.data);
-    // setJobApplicationsData(results.data.data);
+    setJobApplicationsData(results.data.data);
     setIsLoading(false);
   };
 

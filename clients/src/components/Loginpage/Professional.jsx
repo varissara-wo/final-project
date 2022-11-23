@@ -6,7 +6,7 @@ import { NextButton, OnelineTextField, InputLabelStyle } from "./Styles.jsx";
 
 import { FileUploadOutlined, ArrowForwardIos } from "@mui/icons-material";
 
-import { useAuth } from "../../contexts/professionalAuth.jsx";
+import { useAuth } from "../../contexts/authentication.jsx";
 
 const Professional = () => {
   const [account, setAccount] = useState({
@@ -18,17 +18,14 @@ const Professional = () => {
   const [passwordMessage, setPasswordMessage] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
 
-  
-  const { login } = useAuth();
+  const { professionalLogin } = useAuth();
 
   const handleSubmit = (event) => {
-    login({
+    professionalLogin({
       email: account.email,
       password: account.password,
     });
-    // event.preventDefalt();
   };
-
 
   const [showPassword, setShowPassword] = useState(false);
 

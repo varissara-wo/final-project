@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { ImageListItem, Box, Typography, Button } from "@mui/material";
 import { MonetizationOn, CalendarMonth, GpsFixed } from "@mui/icons-material/";
 import { iconCategory, calSalary } from "../../utils/utilsFunction.js";
 import { useNavigate } from "react-router-dom";
+import usePosts from "../../hooks/usePost.jsx";
+import { useEffect } from "react";
 
 const JobWrapper = (props) => {
   const {
@@ -15,6 +17,8 @@ const JobWrapper = (props) => {
     maxSalary,
     jobTitle,
     jobId,
+    isFollow,
+    handlerFollow,
   } = props;
 
   const categoryIcon = iconCategory(category);
@@ -33,7 +37,8 @@ const JobWrapper = (props) => {
           borderRadius: "8px",
           boxShadow: "0px 2px 2px #00000033",
           key: { key },
-          margin: "10px",
+          margin: "14px",
+          paddingBottom: "14px",
         }}
       >
         <Box
@@ -142,27 +147,35 @@ const JobWrapper = (props) => {
           sx={{
             display: "flex",
             flexDirection: "row",
-            alignItems: "flex-start",
-            marginTop: "5px",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
           }}
         >
-          <Box></Box>
-          <Box>
-            <Button>
-              <GpsFixed
-                sx={{
-                  color: "#616161",
-                  marginRight: "10px",
-                  marginLeft: "10px",
-                }}
-                color="info"
-              />
-              <Typography variant="button" sx={{ color: "#616161" }}>
-                Follow
-              </Typography>
-            </Button>
-          </Box>
-          <Box sx={{ marginLeft: "40px" }}>
+          <Button
+            onClick={() => {
+              handlerFollow(jobId);
+            }}
+          >
+            <GpsFixed
+              sx={{
+                color: isFollow ? "#fff" : "#616161",
+                marginRight: "10px",
+                padding: "9px",
+                backgroundColor: isFollow ? "#F48FB1" : "",
+                borderRadius: isFollow ? "50px" : "",
+              }}
+              color="info"
+            />
+            <Typography
+              variant="button"
+              sx={{ color: "#616161", display: "flex" }}
+            >
+              Follow
+            </Typography>
+          </Button>
+
+          <Box sx={{ marginLeft: "10px" }}>
             <Button
               variant="outlined"
               sx={{ borderRadius: "13px" }}

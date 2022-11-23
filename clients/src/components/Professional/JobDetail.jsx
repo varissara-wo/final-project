@@ -9,8 +9,8 @@ import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import getPublishedDate from "../../utils/getPublishedDate";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
-
 import { bigIconCategory } from "../../utils/utilsFunction";
+import { useNavigate } from "react-router-dom";
 
 const DisplayStyle = styled(Stack)(() => ({
   border: "1px solid #BF5F82",
@@ -45,6 +45,10 @@ export function JobDetails(props) {
 
   const icon = bigIconCategory(category);
   const date = getPublishedDate(createdTime);
+  const navigate = useNavigate();
+  const handlerBack = () => {
+    navigate("/findjobs");
+  };
 
   return (
     <Box
@@ -70,8 +74,8 @@ export function JobDetails(props) {
         {/*------------------------------ Back ------------------------------*/}
         <Button
           variant="button"
-          href="/findjobs"
           sx={{ padding: "0px", marginBottom: "19px" }}
+          onClick={handlerBack}
         >
           <ArrowBackIosNewOutlinedIcon fontSize="small" color="secondary" />
           <Typography
@@ -258,7 +262,7 @@ export function JobDetails(props) {
               fontWeight="400"
               marginTop="8px"
             >
-              - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              {requirement}
             </Typography>
           </Stack>
           <Stack marginBottom="16px">

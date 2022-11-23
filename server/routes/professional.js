@@ -171,6 +171,40 @@ professionalRouter.get("/follow/:id", async (req, res) => {
   }
 });
 
+professionalRouter.post("/follow/application", async (req, res) => {
+  const follow = {
+    job_id: req.body.jobId,
+    professional_id: req.body.professionalId,
+  };
+
+  try {
+    const isFollow = await pool.query(
+      `select * from follow_jobs where job_id = $1 and professional_id = $2`,
+      [follow.job_id, follow.professional_id]
+    );
+
+    if (isFollow.rows.length === 0) {
+      await pool.query(
+        `insert into follow_jobs (job_id,professional_id) values($1,$2)`,
+        [follow.job_id, follow.professional_id]
+      );
+      return res.json({
+        message: "Follow  job application sucessfully",
+      });
+    } else {
+      await pool.query(
+        `delete from follow_jobs where job_id = $1 and professional_id = $2`,
+        [follow.job_id, follow.professional_id]
+      );
+      return res.json({
+        message: "Unfollow  job application sucessfully",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 //get jobs
 professionalRouter.get("/jobs", async (req, res) => {
   try {
@@ -248,13 +282,13 @@ professionalRouter.get("/jobs/:jobId", async (req, res) => {
 });
 
 //query search
-professionalRouter.get("/searchjobs", async (req, res) => {
+professionalRouter.get("/searchjobs/:userId", async (req, res) => {
   const keywords = req.query.keywords || "";
   const category = req.query.category || "";
   const maxPrice = Number(req.query.maxPrice) || 0;
   const minPrice = Number(req.query.minPrice) || 0;
   const type = req.query.type || "";
-  console.log(maxPrice);
+  const userId = req.params.userId;
   const queryForm = `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
  jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
  recruiter_users.logo_url from jobs 
@@ -475,7 +509,7 @@ professionalRouter.get("/searchjobs", async (req, res) => {
   const results = await pool.query(query, values);
   const follow = await pool.query(
     `select job_id from follow_jobs where professional_id = $1`,
-    [20]
+    [userId]
   );
   const data = results.rows;
   const followData = follow.rows;
@@ -499,9 +533,19 @@ professionalRouter.get("/searchjobs", async (req, res) => {
 professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
   const statuscv = req.body.statuscv;
   const jobId = req.params.id;
+  const professId = req.body.professionalId;
 
   try {
-    if (statuscv === "true") {
+    const applyornot = await pool.query(
+      `select * from job_applications  where professional_id = $1 and job_id =$2`,
+      [professId, jobId]
+    );
+
+    if (applyornot.rows.length !== 0) {
+      return res.status(201).json({
+        message: "you already apply ",
+      });
+    } else if (statuscv === "true") {
       const file = req.files.cv[0];
       const responseCvUpload = await cvUpload(file);
       const cvUrl = responseCvUpload;
@@ -537,7 +581,7 @@ professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
         job_id: jobId,
         professionalId: req.body.professionalId,
         status: "Waiting",
-        experiece: req.body.experiece,
+        experience: req.body.experience,
         detial: req.body.interest,
 
         statuscv: req.body.statuscv,
@@ -551,7 +595,7 @@ professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
           jobapply.job_id,
           jobapply.professionalId,
           jobapply.status,
-          jobapply.experiece,
+          jobapply.experience,
           jobapply.detial,
           jobapply.created_at,
           jobapply.updated_at,
@@ -564,7 +608,6 @@ professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
       message: "Job has been apply sucessfully",
     });
   } catch (err) {}
-  console.log(err);
 });
 professionalRouter.get("/profile/:id", async (req, res) => {
   const userId = req.params.id;

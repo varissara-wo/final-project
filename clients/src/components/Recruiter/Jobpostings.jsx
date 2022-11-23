@@ -55,7 +55,7 @@ export function Jobpostings() {
 
   const calSalary = (num) => {
     let a = num / 1000;
-    return a;
+    return Math.floor(a);
   };
 
   const date = (d) => {

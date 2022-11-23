@@ -44,10 +44,10 @@ import EmailInput from "./EmailInputs.jsx";
 import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
 import { useEffect } from "react";
-import { useAuth } from "../../contexts/professionalAuth.jsx";
+import { useAuth } from "../../contexts/authentication.jsx";
 
 const ProfessionalRegister = () => {
-  const { login } = useAuth();
+  const { professionalLogin } = useAuth();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -146,7 +146,7 @@ const ProfessionalRegister = () => {
             formData.append(key, data[key]);
           }
           await registerProfessional(formData);
-          login({
+          professionalLogin({
             email: userData.email,
             password: userData.password,
           });

@@ -33,13 +33,12 @@ import {
   DeclinedOn,
 } from "../Status";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
-import { useAuth } from "../../contexts/professionalAuth";
+import { useAuth } from "../../contexts/authentication";
 export function YourApplications() {
   const [numberOfApplicationsFound, setNumberOfApplicationsFound] = useState(4);
   const [expanded, setExpanded] = useState(false);
   const { state } = useAuth();
 
-  console.log(state);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };

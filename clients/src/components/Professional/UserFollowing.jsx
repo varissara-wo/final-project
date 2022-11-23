@@ -5,11 +5,12 @@ import FollowJobWrapper from "./FollowJobWrapper";
 
 const UserFollowing = () => {
   const { isLoading, getFollow, follow } = usePosts();
+
   useEffect(() => {
     getFollow(20);
-    console.log(follow)
   }, [isLoading]);
 
+  
   return (
     <Box
       sx={{
@@ -38,7 +39,7 @@ const UserFollowing = () => {
           Following
         </Typography>
         <Typography variant="h6" sx={{ marginBottom: "20px" }}>
-          You are following 8 jobs
+          You are following {follow.length} jobs
         </Typography>
         {isLoading === true && (
           <Stack

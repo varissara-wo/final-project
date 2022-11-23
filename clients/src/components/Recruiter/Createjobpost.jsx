@@ -283,7 +283,7 @@ export function Createjobpost() {
           </Typography>
           {/*------------------------------ Start information------------------------------*/}
           <Typography variant="h5" mb="8px" style={{ fontWeight: "400" }}>
-            Addtional information{" "}
+            Addtional information
           </Typography>
         </Box>
 

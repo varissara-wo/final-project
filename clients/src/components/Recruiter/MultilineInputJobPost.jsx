@@ -2,7 +2,7 @@ import React from "react";
 import { MultilineTextField, InputLabelStyle } from "../Register/Styles.jsx";
 
 const MultilineInputJobPost = (props) => {
-  const { label, name, onChange, value, placeholder } = props;
+  const { label, name, onChange, value, placeholder, helperText } = props;
 
   return (
     <>
@@ -22,6 +22,7 @@ const MultilineInputJobPost = (props) => {
         inputProps={{ style: { padding: "8px" } }}
         multiline
         rows={3}
+        helperText={"" || helperText}
       />
     </>
   );

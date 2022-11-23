@@ -1,8 +1,12 @@
 import { Textinput, Textseacrh, Textseacrh1 } from "./styles.jsx";
 import { useState, useEffect } from "react";
 import React from "react";
-
-import { Search, MonetizationOn, HorizontalRule } from "@mui/icons-material";
+import {
+  Search,
+  MonetizationOn,
+  HorizontalRule,
+  Maximize,
+} from "@mui/icons-material";
 import {
   Typography,
   CircularProgress,
@@ -13,31 +17,60 @@ import {
 } from "@mui/material";
 import JobWrapper from "./JobWrapper.jsx";
 import usePosts from "../../hooks/usePost.jsx";
+import { useAuth } from "../../contexts/authentication.jsx";
 
 export function Findjobssearch() {
-  const [value, setValue] = React.useState();
-  const [inputValue, setInputValue] = React.useState("");
-  const [value1, setValue1] = React.useState();
-  const [inputValue1, setInputValue1] = React.useState("");
-  const [search, setSearch] = useState("");
-
-  //categeory
+  const [categoryValue, setCategoryValue] = React.useState();
+  const [categoryInputValue, setCategoryInputValue] = React.useState("");
+  const [typeValue, setTypeValue] = React.useState();
+  const [typeInputValue, setTypeInputValue] = React.useState("");
+  const [keyword, setKeyword] = useState("");
   const options = ["Manufacturing", "Legal", "Education", "Goverment", "Sales"];
-  //type
   const options1 = ["Fulltime", "Partime"];
   const [salary, setSalary] = useState({});
-  const { getSearch, getJobData, isLoading } = usePosts();
-  //function รับค่าsearch
-  const inputchange = (event) => {
-    setSearch(event.target.value);
-    console.log(search);
+  const {
+    getSearch,
+    getJobData,
+    isLoading,
+    followJob,
+    setIsLoading,
+    followJobApplication,
+  } = usePosts();
+  const { state, getUserData, isUserLoading } = useAuth();
+
+  const handlerSearchSalary = (e, type) => {
+    setSalary({ ...salary, [type]: e.target.value });
+    setIsLoading(true);
+  };
+  const handlerSearchKeyword = (e) => {
+    setKeyword(e.target.value);
+    setIsLoading(true);
+  };
+
+  const handlerFollow = (jobId) => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      followJobApplication(jobId, state.user["id"]);
+    }, 800);
+    return () => clearTimeout(timer);
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      getSearch(search, value, salary.min, salary.max, value1);
+    const timer = setTimeout(() => {
+      getUserData();
+      getSearch(
+        keyword,
+        categoryValue,
+        salary.min,
+        salary.max,
+        typeValue,
+        state.user["id"]
+      );
     }, 800);
-  }, [search, value, salary, value1, isLoading]);
+    return () => clearTimeout(timer);
+  }, [isLoading, setIsLoading, isUserLoading]);
+
+  console.log(isUserLoading);
 
   return (
     <Box
@@ -82,7 +115,7 @@ export function Findjobssearch() {
             color="primary"
             focused
             sx={{ width: "420px", height: "36px", marginBottom: "8px" }}
-            onChange={inputchange}
+            onChange={handlerSearchKeyword}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -104,15 +137,16 @@ export function Findjobssearch() {
             <Typography variant="overline">Category</Typography>
             <Textinput
               size="small"
-              value={value}
+              value={categoryValue}
               color="primary"
               focused
               onChange={(event, newValue) => {
-                setValue(newValue);
+                setCategoryValue(newValue);
+                setIsLoading(true);
               }}
-              inputValue={inputValue}
+              inputValue={categoryInputValue}
               onInputChange={(event, newInputValue) => {
-                setInputValue(newInputValue);
+                setCategoryInputValue(newInputValue);
               }}
               id="controllable-states-demo"
               options={options}
@@ -141,15 +175,15 @@ export function Findjobssearch() {
             </Typography>
             <Textinput
               size="small"
-              value={value1}
+              value={typeValue}
               color="primary"
               focused
               onChange={(event, newValue) => {
-                setValue1(newValue);
+                setTypeValue(newValue);
               }}
-              inputValue={inputValue1}
+              inputValue={typeInputValue}
               onInputChange={(event, newInputValue) => {
-                setInputValue1(newInputValue);
+                setTypeInputValue(newInputValue);
               }}
               id="controllable-states-demo"
               options={options1}
@@ -203,7 +237,9 @@ export function Findjobssearch() {
                 type="number"
                 color="primary"
                 focused
-                onChange={(e) => setSalary({ ...salary, min: e.target.value })}
+                onChange={(e) => {
+                  handlerSearchSalary(e, "min");
+                }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -220,7 +256,9 @@ export function Findjobssearch() {
                 placeholder="max"
                 color="primary"
                 focused
-                onChange={(e) => setSalary({ ...salary, max: e.target.value })}
+                onChange={(e) => {
+                  handlerSearchSalary(e, "max");
+                }}
                 type="number"
                 sx={{ marginLeft: "5px" }}
                 InputProps={{
@@ -267,6 +305,13 @@ export function Findjobssearch() {
         >
           {isLoading === false &&
             getJobData.map((item, index) => {
+              let isFollow;
+              if (followJob.includes(item.job_id)) {
+                isFollow = true;
+              } else {
+                isFollow = false;
+              }
+
               return (
                 <JobWrapper
                   key={index}
@@ -278,6 +323,8 @@ export function Findjobssearch() {
                   maxSalary={item.max_salary}
                   jobTitle={item.job_title}
                   jobId={item.job_id}
+                  isFollow={isFollow}
+                  handlerFollow={handlerFollow}
                 />
               );
             })}

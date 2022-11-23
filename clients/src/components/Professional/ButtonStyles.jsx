@@ -8,7 +8,6 @@ export const ApplyNowButton = (props) => {
   const { jobId } = props;
 
   const handlerApply = (jobId) => {
-    console.log(jobId);
     navigate(`/applications/${jobId}`);
   };
 

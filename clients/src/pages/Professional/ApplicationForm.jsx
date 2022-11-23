@@ -8,30 +8,8 @@ import { Box, CircularProgress, Stack } from "@mui/material";
 const ApplicationForm = () => {
   const params = useParams();
   const jobId = params.jobid;
-  const { getJobById, getJobByIdData, isLoading, getUser, userdata } =
-    usePosts();
-  const userid = 20;
-  useEffect(() => {
-    setTimeout(() => {
-      getJobById(jobId);
-      getUser(userid);
-    }, 800);
-  }, [isLoading]);
-  const {
-    about_company,
-    about_job_position,
-    company_name,
-    created_at,
-    job_id,
-    job_requirement,
-    job_title,
-    logo_url,
-    max_salary,
-    min_salary,
-    name,
-    option_requirement,
-    type,
-  } = getJobByIdData;
+
+  useEffect(() => {}, []);
 
   return (
     <Box
@@ -45,43 +23,7 @@ const ApplicationForm = () => {
     >
       <ProfessionalSidebar selectedIndex="1" />
 
-      {isLoading === true && (
-        <Stack
-          flexDirection="row"
-          justifyContent="center"
-          alignItems="center"
-          sx={{
-            backgroundColor: "#F5F5F6",
-            width: "100%",
-            height: "100%",
-            minHeight: "100vh",
-            minWidth: "100vh",
-            marginLeft: "240px",
-          }}
-        >
-          <CircularProgress disableShrink />
-        </Stack>
-      )}
-      {isLoading === false && (
-        <Applyjob
-          jobiD={jobId}
-          profess={userdata}
-          aboutCompany={about_company}
-          aboutJob={about_job_position}
-          companyName={company_name}
-          createdTime={created_at}
-          jobId={job_id}
-          requirement={job_requirement}
-          optionalRequirement={option_requirement}
-          jobTitle={job_title}
-          companyLogo={logo_url}
-          maxSalary={max_salary}
-          minSalary={min_salary}
-          category={name}
-          jobType={type}
-          userid={userid}
-        />
-      )}
+      <Applyjob jobId={jobId} />
     </Box>
   );
 };

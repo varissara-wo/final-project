@@ -7,23 +7,41 @@ const AuthContext = React.createContext();
 
 function AuthProvider(props) {
   const navigate = useNavigate();
+  const [isUserLoading, setIsUserLoading] = useState(true);
   const [state, setState] = useState({
     loading: null,
     error: null,
     user: null,
   });
 
-  const login = async (data) => {
+  const getUserData = async () => {
+    const token = localStorage.getItem("token");
+    const userDataFromToken = jwtDecode(token);
+    setState({ ...state, user: userDataFromToken });
+    setIsUserLoading(false);
+  };
+
+  const recruiterLogin = async (data) => {
     const result = await axios.post(
-      "http://localhost:4000/login_professional",
+      "http://localhost:4000/login_recuiter",
       data
     );
-
     const token = result.data.token;
     localStorage.setItem("token", token);
     const userDataFromToken = jwtDecode(token);
     setState({ ...state, user: userDataFromToken });
+    navigate("/recruiter/jobpost");
+  };
 
+  const professionalLogin = async (data) => {
+    const result = await axios.post(
+      "http://localhost:4000/login_professional",
+      data
+    );
+    const token = result.data.token;
+    localStorage.setItem("token", token);
+    const userDataFromToken = jwtDecode(token);
+    setState({ ...state, user: userDataFromToken });
     navigate("/findjobs");
   };
 
@@ -33,11 +51,18 @@ function AuthProvider(props) {
   };
 
   const isAuthenticated = Boolean(localStorage.getItem("token"));
-  const user = "professional";
 
   return (
     <AuthContext.Provider
-      value={{ state, login, logout, isAuthenticated, user }}
+      value={{
+        state,
+        recruiterLogin,
+        professionalLogin,
+        logout,
+        isAuthenticated,
+        getUserData,
+        isUserLoading,
+      }}
     >
       {props.children}
     </AuthContext.Provider>

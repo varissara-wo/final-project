@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Typography, List, ListItem, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../../contexts/authentication";
 import {
   TextButtonStyled,
   IconBoxStyled,
@@ -11,6 +11,7 @@ import {
 import { Favorite, GitHub } from "@mui/icons-material";
 
 const RecruiterSidebar = (props) => {
+  const { logout } = useAuth();
   const index = Number(props.selectedIndex);
   const navigate = useNavigate();
   const [selectedIndex, setSelectedIndex] = useState(index);
@@ -97,7 +98,12 @@ const RecruiterSidebar = (props) => {
                 <TextButtonStyled>Profile</TextButtonStyled>
               </SidebarButtonStyled>
               {/*------------------------------ End porfile ------------------------------*/}
-              <SidebarButtonStyled component="a" href="/">
+              <SidebarButtonStyled
+                component="a"
+                onClick={() => {
+                  logout();
+                }}
+              >
                 <IconBoxStyled>
                   <img
                     src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_5_qxgp4r.svg"

@@ -242,5 +242,37 @@ recruiterRouter.put("/jobs/:id", async (req, res) => {
     throw err;
   }
 });
+recruiterRouter.put("/update/:id", async (req, res) => {
+  const jobs_id = req.params.id;
+  const updatejob = {};
 
+  try {
+    await pool.query(
+      `UPDATE jobs SET closed_at=$1, recruit_status=$2 where job_id=$3
+       `,
+      [updatejob.closed_at, updatejob.recruit_status, jobs_id]
+    );
+    return res.json({
+      message: ` ${jobs_id} has been closed.`,
+    });
+  } catch (err) {
+    throw err;
+  }
+});
+recruiterRouter.get("/profile/:id", async (req, res) => {
+  const recruiter = req.params.id;
+  try {
+    const recruiterUsers = await pool.query(
+      `select * from recruiter_users  where recruiter_id =$1`,
+      [recruiter]
+    );
+    const data = recruiterUsers.rows;
+
+    data[0].logo_url = JSON.parse(data[0].logo_url).url;
+
+    return res.status(200).json({
+      data: data[0],
+    });
+  } catch {}
+});
 export default recruiterRouter;

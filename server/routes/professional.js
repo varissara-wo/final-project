@@ -481,7 +481,7 @@ professionalRouter.get("/applications", async (req, res) => {
   const user_email = req.query.user_email || "";
   const applicationStatus = req.query.status || "";
   const queryForm = `SELECT job_applications.job_application_id, job_applications.interested_detail, job_applications.application_status, job_applications.new_cv_url, job_applications.created_at, job_applications.updated_at, job_applications.is_upload_cv, jobs.job_id, jobs.job_title, jobs.type, jobs.min_salary, jobs.max_salary, jobs.created_at, jobs.closed_at, 
-  recruiter_users.company_name, recruiter_users.logo_url, professional_users.experience, professional_users.cv_url, professional_users.updated_at
+  recruiter_users.company_name, recruiter_users.logo_url, professional_users.experience, professional_users.cv_url, professional_users.updated_at, categories.name
   FROM job_applications
   LEFT JOIN jobs
   ON job_applications.job_id = jobs.job_id

@@ -15,7 +15,7 @@ import styled from "@emotion/styled";
 
 export const SentStatus = (props) => {
   const { applyDate } = props;
-  const apply_date = new Date(applyDate);
+  let apply_date = new Date(applyDate);
   const today = new Date();
   const time = today.getTime() - apply_date.getTime(); // unit is milliseconds(ms)
 
@@ -32,7 +32,6 @@ export const SentStatus = (props) => {
 
   //ถ้าน้อยกว่า 60 min ภายใน 1 hr
   if (time < 3600000) {
-    console.log("ภายใน 60 min");
     return (
       <OuterStackFlex
         spacing={0}
@@ -53,7 +52,6 @@ export const SentStatus = (props) => {
   }
   //ถ้ามากกว่า 60 min และ น้อยกว่า 24 hr หรือ ภายใน 24 hr
   if (time >= 3600000 && time < 86400000) {
-    console.log("ภายใน 24 hr");
     return (
       <OuterStackFlex
         spacing={0}
@@ -74,7 +72,6 @@ export const SentStatus = (props) => {
   }
   //ถ้ามากกว่า 24 hr หรือ มากกว่า 1 day และ น้อยกว่า 30 days
   if (time >= 86400000 && time < 2628000000) {
-    console.log("ภายใน 30 days");
     return (
       <OuterStackFlex
         spacing={0}
@@ -102,7 +99,6 @@ export const SentStatus = (props) => {
   }
   //ถ้ามากกว่า  30 days
   if (time >= 2628000000) {
-    console.log("มากกว่า  30 days");
     return (
       <OuterStackFlex
         spacing={0}

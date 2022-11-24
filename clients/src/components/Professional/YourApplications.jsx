@@ -27,6 +27,8 @@ import usePosts from "../../hooks/usePost";
 import { CategoryIcon } from "../CategoryIcon";
 import { SentStatus } from "../SentStatus";
 import { ReviewStatus } from "../ReviewStatus";
+import { PostedStatus } from "../PostedStatus";
+import { Link } from "react-router-dom";
 
 export function YourApplications() {
   const [expanded, setExpanded] = useState(false);
@@ -174,8 +176,6 @@ export function YourApplications() {
               backgroundColor: "#F5F5F6",
               width: "100%",
               height: "100%",
-              // minHeight: "100vh",
-              // minWidth: "100vh",
             }}
           >
             <CircularProgress disableShrink />
@@ -277,10 +277,10 @@ export function YourApplications() {
                         />
                         {applications.min_salary / 1000}k-
                         {applications.max_salary / 1000}k
-                        <AccessTimeOutlinedIcon
-                          sx={{ marginRight: "6px", marginLeft: "10px" }}
+                        <PostedStatus
+                          postDate={applications.jobs_created_at}
+                          letter={"lowercase"}
                         />
-                        Posted 2 days ago
                       </Stack>
                     </Typography>
                   </Stack>
@@ -291,17 +291,17 @@ export function YourApplications() {
                     alignItems="center"
                     spacing={0}
                   >
-                    <SentStatus applyDate={applications.created_at} />
-                    <ReviewStatus status={applications.application_status} />
+                    <SentStatus applyDate={applications.applied_at} />
                     <ReviewStatus
-                      status={"Declined"}
+                      status={applications.application_status}
                       declinedDate={applications.created_at}
                     />
                   </Stack>
                 </AccordionSummaryStyled>
                 <AccordionDetails sx={{ paddingBottom: "0", paddingTop: "0" }}>
                   <Typography variant="overline" color="secondary">
-                    Last Updated on {applications.updated_at.slice(0, 10)}
+                    Last Updated on{" "}
+                    {applications.application_updated_at.slice(0, 10)}
                   </Typography>
                 </AccordionDetails>
                 <AccordionDetails>
@@ -333,11 +333,14 @@ export function YourApplications() {
                 >
                   <DownloadCvButton
                     startIcon={<FileDownloadOutlinedIcon color="secondary" />}
+                    href={applications.cv_url}
+                    download={applications.professional_name}
+                    target="_blank"
+                    rel="noopener"
                   >
-                    <Typography variant="button" color={"secondary"}>
-                      Download cv
-                    </Typography>
+                    Download CV
                   </DownloadCvButton>
+
                   <DeclineApplicaciontButton
                     variant="contained"
                     color="error"

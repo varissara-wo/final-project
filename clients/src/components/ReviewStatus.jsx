@@ -26,22 +26,11 @@ export const ReviewStatus = (props) => {
     alignItems: "center",
   }));
 
-  //   console.log(declinedDate);
-
-  //   const declined_date = `${declinedDate.getDate()}/${declinedDate.getMonth()}/${declinedDate.getFullYear()}`;
   let declined_date = new Date(declinedDate);
   const declined_day = declined_date.getDate();
-  const declined_month = declined_date.getMonth();
+  const declined_month = declined_date.getMonth() + 1;
   const declined_year = declined_date.getFullYear();
   declined_date = `${declined_day}/${declined_month}/${declined_year}`;
-  //   console.log(declined_date);
-  //   console.log(declined_day);
-  //   console.log(declined_month);
-  //   console.log(declined_year);
-
-  //   let new_declined_date = new Date(declinedDate);
-  //   new_declined_date.moment().format("D-MM-YYYY");
-  //   console.log(new_declined_date);
 
   if (status === "Waiting") {
     return (
@@ -102,7 +91,7 @@ export const ReviewStatus = (props) => {
           Declined on
         </Typography>
         <Typography variant="caption" color="primary">
-          {"date"}
+          {declined_date}
         </Typography>
       </OuterStackFlex>
     );

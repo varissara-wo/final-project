@@ -17,6 +17,7 @@ import {
   Radio,
   RadioGroup,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import styled from "@emotion/styled";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -32,25 +33,38 @@ import { useEffect } from "react";
 import { iconCategory } from "../../utils/utilsFunction";
 import { FormatAlignCenter, TypeSpecimen } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useAuth } from "../../contexts/authentication";
 
 export function Jobpostings() {
   const [expanded, setExpanded] = useState(false);
-  const { data, getPost, numberOfJobs, closedPost, selectPost } = usePosts();
+  const {
+    data,
+    getPost,
+    numberOfJobs,
+    closedPost,
+    selectPost,
+    isLoading,
+    setIsLoading,
+  } = usePosts();
   const [recruiterId, setRecruiterId] = useState("");
+  const { state, getUserData, userLoading } = useAuth();
   const [type, setType] = useState("all");
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
   useEffect(() => {
-    selectPost(8, type);
-  }, [type]);
+    const timer = setTimeout(() => {
+      getUserData();
+      selectPost(state.user["id"], type);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [isLoading, setIsLoading, userLoading]);
 
-  console.log(data);
   const handlechoose = (chooseType) => {
-    console.log(chooseType);
     setType(chooseType);
-    // await selectPost(recruiterId, type);
+    setIsLoading(true);
   };
 
   const calSalary = (num) => {
@@ -68,13 +82,6 @@ export function Jobpostings() {
       arr.push(d[i]);
     }
   };
-  {
-    /*------------------------------------------------debouce---------------------------------------------------------*/
-  }
-
-  {
-    /*------------------------------------------------debouce---------------------------------------------------------*/
-  }
 
   const CheckBoxTextStyled = styled(FormControlLabel)(() => ({
     color: "#616161",
@@ -86,13 +93,7 @@ export function Jobpostings() {
       fontSize: 20,
     },
   }));
-  {
-    /*------------------------------------------------รอvalue จาก context---------------------------------------------------------*/
-  }
 
-  {
-    /*------------------------------------------------รอvalue จาก context---------------------------------------------------------*/
-  }
   const AccordionSummaryStyled = styled(AccordionSummary)(() => ({
     "& .css-o4b71y-MuiAccordionSummary-content": {
       display: "flex",
@@ -119,9 +120,11 @@ export function Jobpostings() {
       sx={{
         backgroundColor: "#F5F5F6",
         width: "100%",
-        height: "100vh",
+        height: "100%",
+        minHeight: "100vh",
         minWidth: "100vh",
         marginLeft: "240px",
+        paddingBottom: "50px",
       }}
     >
       <Box
@@ -174,150 +177,176 @@ export function Jobpostings() {
         <Typography variant="h5" sx={{ marginBottom: "8px" }}>
           {data.length} jobs postings found
         </Typography>
-        <div>
-          {/*------------------------------ Start information------------------------------*/}
-          {data.map((content, index) => {
-            return (
-              <>
-                <Accordion
-                  expanded={expanded === `panal${index}`}
-                  onChange={handleChange(`panal${index}`)}
-                  sx={{ marginBottom: "16px", width: "945px" }}
-                >
-                  <AccordionSummaryStyled
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1bh-content"
-                    id="panel1bh-header"
+        {isLoading === true && (
+          <Stack
+            width="90%"
+            height="50vh"
+            flexDirection="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <CircularProgress disableShrink />
+          </Stack>
+        )}
+        {isLoading === false && (
+          <div>
+            {/*------------------------------ Start information------------------------------*/}
+            {data.map((content, index) => {
+              return (
+                <>
+                  <Accordion
+                    expanded={expanded === `panal${index}`}
+                    onChange={handleChange(`panal${index}`)}
+                    sx={{ marginBottom: "16px", width: "945px" }}
                   >
-                    <Stack
-                      direction="column"
-                      justifyContent="center"
-                      alignItems="flex-start"
-                      width="315px"
-                      spacing={0}
+                    <AccordionSummaryStyled
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1bh-content"
+                      id="panel1bh-header"
                     >
-                      <Typography variant="h6">{content.job_title}</Typography>
-                      <Typography variant="caption" color="info.main" sx={{}}>
-                        <Stack
-                          direction="row"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          spacing={0}
-                          sx={{
-                            "& .MuiSvgIcon-root": {
-                              fontSize: 20,
-                            },
-                          }}
-                        >
-                          {iconCategory(content.name)}
-
-                          {content.name}
-
-                          <DateRangeOutlinedIcon
-                            sx={{ marginRight: "6px", marginLeft: "10px" }}
-                          />
-                          {content.type}
-                          <MonetizationOnOutlinedIcon
-                            sx={{ marginRight: "6px", marginLeft: "10px" }}
-                          />
-                          {`${calSalary(content.min_salary)}k-${calSalary(
-                            content.max_salary
-                          )}k`}
-                        </Stack>
-                      </Typography>
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      justifyContent="center"
-                      alignItems="center"
-                      spacing={0}
-                      sx={{
-                        "& .MuiSvgIcon-root": {
-                          fontSize: 20,
-                        },
-                      }}
-                    >
-                      <OpenOn date={date(content.created_at)} />
-
-                      <TotalCandidates candidates={content.total_candidates} />
-                      <CandidatesOnTrack
-                        candidates={content.on_track_candidates}
-                      />
-                    </Stack>
-
-                    <Stack
-                      direction="row"
-                      justifyContent="center"
-                      alignItems="center"
-                      spacing={0}
-                    >
-                      <CloseButton
-                        variant="button"
-                        color="secondary.main"
-                        startIcon={
-                          <SearchIcon
-                            sx={{ width: "35px", height: "35px" }}
-                            color="info"
-                          />
-                        }
+                      <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="flex-start"
+                        width="315px"
+                        spacing={0}
                       >
-                        SHOW
-                      </CloseButton>
-                      {content.recruit_status.toLowerCase() == "closed" && (
-                        <CloseButton
-                          variant="contained"
-                          color="error"
-                          startIcon={<HighlightOffIcon />}
-                          onClick={() => closedPost(content.job_id)}
-                          disabled
-                        >
-                          CLOSE
-                        </CloseButton>
-                      )}
-                      {content.recruit_status.toLowerCase() !== "closed" && (
-                        <CloseButton
-                          variant="contained"
-                          color="error"
-                          startIcon={<HighlightOffIcon />}
-                          onClick={() => closedPost(content.job_id)}
-                        >
-                          CLOSE
-                        </CloseButton>
-                      )}
-                    </Stack>
-                  </AccordionSummaryStyled>
+                        <Typography variant="h6">
+                          {content.job_title}
+                        </Typography>
+                        <Typography variant="caption" color="info.main" sx={{}}>
+                          <Stack
+                            direction="row"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                            spacing={0}
+                            sx={{
+                              "& .MuiSvgIcon-root": {
+                                fontSize: 20,
+                              },
+                            }}
+                          >
+                            {iconCategory(content.name)}
 
-                  <AccordionDetails>
-                    <Typography variant="subtitle1" color="error.main">
-                      About the job positions
-                    </Typography>
-                    <Typography variant="body2">
-                      {content.about_job_position}
-                    </Typography>
-                  </AccordionDetails>
-                  <AccordionDetails>
-                    <Typography variant="subtitle1" color="error.main">
-                      Mandatory Requirements
-                    </Typography>
-                    <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
-                      {content.job_requirement}
-                    </Typography>
-                  </AccordionDetails>
-                  <AccordionDetails>
-                    <Typography variant="subtitle1" color="error.main">
-                      Optional Requirements
-                    </Typography>
-                    <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
-                      {content.option_requirement}
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
-              </>
-            );
-          })}
+                            {content.name}
 
-          {/*------------------------------ End information------------------------------*/}
-        </div>
+                            <DateRangeOutlinedIcon
+                              sx={{ marginRight: "6px", marginLeft: "10px" }}
+                            />
+                            {content.type}
+                            <MonetizationOnOutlinedIcon
+                              sx={{ marginRight: "6px", marginLeft: "10px" }}
+                            />
+                            {`${calSalary(content.min_salary)}k-${calSalary(
+                              content.max_salary
+                            )}k`}
+                          </Stack>
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={0}
+                        sx={{
+                          "& .MuiSvgIcon-root": {
+                            fontSize: 20,
+                          },
+                        }}
+                      >
+                        <OpenOn date={date(content.created_at)} />
+
+                        <TotalCandidates
+                          candidates={content.total_candidates}
+                        />
+                        <CandidatesOnTrack
+                          candidates={content.on_track_candidates}
+                        />
+                      </Stack>
+
+                      <Stack
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={0}
+                      >
+                        <CloseButton
+                          variant="button"
+                          color="secondary.main"
+                          startIcon={
+                            <SearchIcon
+                              sx={{ width: "35px", height: "35px" }}
+                              color="info"
+                            />
+                          }
+                        >
+                          SHOW
+                        </CloseButton>
+                        {content.recruit_status.toLowerCase() === "closed" && (
+                          <CloseButton
+                            variant="contained"
+                            color="error"
+                            startIcon={<HighlightOffIcon />}
+                            onClick={() => closedPost(content.job_id)}
+                            disabled
+                          >
+                            CLOSE
+                          </CloseButton>
+                        )}
+                        {content.recruit_status.toLowerCase() !== "closed" && (
+                          <CloseButton
+                            variant="contained"
+                            color="error"
+                            startIcon={<HighlightOffIcon />}
+                            onClick={() => {
+                              closedPost(content.job_id);
+                              setIsLoading(true);
+                            }}
+                          >
+                            CLOSE
+                          </CloseButton>
+                        )}
+                      </Stack>
+                    </AccordionSummaryStyled>
+
+                    <AccordionDetails>
+                      <Typography variant="subtitle1" color="error.main">
+                        About the job positions
+                      </Typography>
+                      <Typography variant="body2">
+                        {content.about_job_position}
+                      </Typography>
+                    </AccordionDetails>
+                    <AccordionDetails>
+                      <Typography variant="subtitle1" color="error.main">
+                        Mandatory Requirements
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ whiteSpace: "pre-wrap" }}
+                      >
+                        {content.job_requirement}
+                      </Typography>
+                    </AccordionDetails>
+                    <AccordionDetails>
+                      <Typography variant="subtitle1" color="error.main">
+                        Optional Requirements
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ whiteSpace: "pre-wrap" }}
+                      >
+                        {content.option_requirement}
+                      </Typography>
+                    </AccordionDetails>
+                  </Accordion>
+                </>
+              );
+            })}
+
+            {/*------------------------------ End information------------------------------*/}
+          </div>
+        )}
       </Box>
     </Box>
   );

@@ -36,6 +36,7 @@ function usePosts() {
       `http://localhost:4000/recruiter/jobs/${recruiterId}?type=${type}`
     );
     setData(results.data.data);
+    setIsLoading(false);
   };
 
   const getJobs = async () => {
@@ -78,9 +79,11 @@ function usePosts() {
     setIsLoading(false);
   };
   const getUserprofile = async (recruiterId) => {
+    console.log(recruiterId);
     const results = await axios.get(
       `http://localhost:4000/recruiter/profile/${recruiterId}`
     );
+    console.log(results);
     setProfile(results.data.data);
     setIsLoading(false);
   };
@@ -116,6 +119,15 @@ function usePosts() {
     await axios.post(`http://localhost:4000/professional/apply/${jobId}`, data);
     navigate("/applications");
   };
+  const UpdateProifleRecruiter = async (recruiterId, data) => {
+    console.log(recruiterId, data);
+    await axios.put(
+      `http://localhost:4000/recruiter/profile/${recruiterId}`,
+      data
+    );
+
+    navigate("/recruiter/profile");
+  };
   return {
     createPost,
     getPost,
@@ -139,6 +151,7 @@ function usePosts() {
     follow,
     setIsLoading,
     followJobApplication,
+    UpdateProifleRecruiter,
   };
 }
 export default usePosts;

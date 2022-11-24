@@ -6,7 +6,7 @@ export const protect = async (req, res, next) => {
     if (!token || !token.startsWith('Bearer ')) {
         return res.status(401).json({
             message: "Token has invalid format"
-        })
+         })
     }
 
 

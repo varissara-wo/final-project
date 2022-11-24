@@ -7,52 +7,59 @@ import MultilineInputJobPost from "./MultilineInputJobPost.jsx";
 import OnelineInputJobPost from "./OnelineInputJobPost.jsx";
 import { Buttonwidth, UploadButton } from "../Register/Styles.jsx";
 import { FileUploadOutlined } from "@mui/icons-material";
-
+import { useAuth } from "../../contexts/authentication.jsx";
 export default function Profile() {
   const innitialFileData = "No file chosen";
   const [fileStatus, setFileStatus] = useState(innitialFileData);
-  const { createPost, getUserprofile, profile, isLoading } = usePosts();
-  console.log(profile.email);
+  const {
+    createPost,
+    getUserprofile,
+    profile,
+    isLoading,
+    UpdateProifleRecruiter,
+  } = usePosts();
+  console.log(profile);
   const [info, setInfo] = useState({
+    logo_url: "",
     email: "",
-    name: "",
-    website: "",
-    about: "",
+    company_name: "",
+    company_website: "",
+    about_company: "",
   });
-
+  const { getUserData, state } = useAuth();
+  console.log(state, profile);
   useEffect(() => {
     setTimeout(() => {
-      getUserprofile(7);
+      getUserprofile(9);
+      getUserData();
       setInfo({
-        email: profile.email,
-        name: profile.company_name,
-        website: profile.company_website,
-        about: profile.about_company,
+        logo_url: state.user.profile.logo_url,
+        email: state.user.profile.email,
+        company_name: state.user.profile.company_name,
+        company_website: state.user.profile.company_website,
+        about_company: state.user.profile.about_company,
       });
     }, 800);
   }, [isLoading]);
 
   console.log(info);
-
+  console.log(state);
   console.log(profile);
   const additionalInputs = [
     {
       name: "email",
-
       label: "COMPANY EMAIL",
       value: info.email,
     },
     {
-      name: "name",
-
+      name: "company_name",
       label: "COMPANY NAME",
-      value: info.name,
+      value: info.company_name,
     },
     {
-      name: "website",
-
+      name: "company_website",
       label: "COMPANY WEBSITE",
-      value: info.website,
+      value: info.company_website,
     },
   ];
 
@@ -60,9 +67,8 @@ export default function Profile() {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
   const handleSubmit = (event) => {
-    console.log(info);
     event.preventDefault();
-    createPost({
+    UpdateProifleRecruiter(9, {
       ...info,
     });
   };
@@ -189,17 +195,15 @@ export default function Profile() {
                 <OnelineInputJobPost
                   key={index}
                   {...input}
-                  // value={info[input.name]}
-
                   onChange={handlerInputChange}
                 />
               );
             })}
             <MultilineInputJobPost
-              name="about"
+              name="about_company"
               onChange={handlerInputChange}
               label="ABOUT THE COMPANY"
-              value={info.about}
+              value={info.about_company}
             />
             <Buttonwidth
               variant="contained"

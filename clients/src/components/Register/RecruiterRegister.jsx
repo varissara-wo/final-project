@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRegis } from "../../contexts/register.jsx";
 
 import { Stack, Typography, Box, Step, StepLabel } from "@mui/material";
@@ -50,6 +50,9 @@ const RecruiterRegister = () => {
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
+  useEffect(() => {
+    isRecruiterEmailExist(userData.email);
+  }, [isRecruiterEmailExist, userData.email]);
 
   const handleNext = async () => {
     let newSkipped = skipped;

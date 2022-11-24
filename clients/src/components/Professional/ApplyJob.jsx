@@ -63,7 +63,6 @@ function Applyjob(props) {
     }, 800);
   }, [isLoading]);
 
-  console.log(state);
   const {
     company_name,
     created_at,

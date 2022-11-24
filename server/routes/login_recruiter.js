@@ -32,15 +32,21 @@ loginRecuiterRouter.post("/", async (req, res) => {
       });
     }
 
-    const isRecuiterName = await pool.query(
-      `select company_name from recruiter_users  where email = $1`,
+    const userId = await pool.query(
+      `select recruiter_id from recruiter_users  where email = $1`,
+      [isRecuiterUser.rows[0].email]
+    );
+
+    const profile = await pool.query(
+      `select * from recruiter_users  where email = $1`,
       [isRecuiterUser.rows[0].email]
     );
 
     const token = jwt.sign(
       {
-        id: isRecuiterUser.rows[0].email,
-        name: isRecuiterName.rows[0].name,
+        id: userId.rows[0].recruiter_id,
+        profile: profile.rows[0],
+        userType: "recruiter",
       },
       process.env.SECRET_KEY,
       {

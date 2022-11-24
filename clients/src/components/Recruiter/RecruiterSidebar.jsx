@@ -20,6 +20,11 @@ const RecruiterSidebar = (props) => {
     setSelectedIndex(index);
     navigate(path);
   };
+
+  const handlerLogout = async () => {
+    await logout();
+    navigate("/");
+  };
   useEffect(() => {}, [index]);
   return (
     <Box position="fixed">
@@ -98,12 +103,7 @@ const RecruiterSidebar = (props) => {
                 <TextButtonStyled>Profile</TextButtonStyled>
               </SidebarButtonStyled>
               {/*------------------------------ End porfile ------------------------------*/}
-              <SidebarButtonStyled
-                component="a"
-                onClick={() => {
-                  logout();
-                }}
-              >
+              <SidebarButtonStyled component="a" onClick={handlerLogout}>
                 <IconBoxStyled>
                   <img
                     src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_5_qxgp4r.svg"

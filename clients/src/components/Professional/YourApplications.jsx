@@ -33,7 +33,12 @@ import { Link } from "react-router-dom";
 export function YourApplications() {
   const [expanded, setExpanded] = useState(false);
   const { state } = useAuth();
-  const { getJobApplications, jobApplicationsData, isLoading } = usePosts();
+  const {
+    getJobApplications,
+    jobApplicationsData,
+    isLoading,
+    declineApplication,
+  } = usePosts();
 
   // console.log(state);
   const user_email = state.user.id;
@@ -47,6 +52,12 @@ export function YourApplications() {
     useState("All");
   const handleFilterApplications = (event) => {
     setSelectedFilterApplicationStatus(event.target.value);
+    setExpanded(false);
+  };
+
+  //Handle Decline Applications
+  const handleDeclineApplications = (applicationId) => {
+    declineApplication(applicationId);
   };
 
   useEffect(() => {
@@ -183,8 +194,9 @@ export function YourApplications() {
         )}
         {isLoading === false &&
           jobApplicationsData.map((applications) => {
-            console.log(applications);
             const applicationId = applications.job_application_id;
+            const application_status = applications.application_status;
+
             return (
               <AccordionStyled
                 expanded={expanded === `panel${applicationId}`}
@@ -294,7 +306,7 @@ export function YourApplications() {
                     <SentStatus applyDate={applications.applied_at} />
                     <ReviewStatus
                       status={applications.application_status}
-                      declinedDate={applications.created_at}
+                      declinedDate={applications.declined_at}
                     />
                   </Stack>
                 </AccordionSummaryStyled>
@@ -341,16 +353,41 @@ export function YourApplications() {
                     Download CV
                   </DownloadCvButton>
 
-                  <DeclineApplicaciontButton
-                    variant="contained"
-                    color="error"
-                    startIcon={<HighlightOffOutlinedIcon />}
-                    sx={{ marginLeft: "16px" }}
-                  >
-                    <Typography variant="button">
-                      decline applicacion
-                    </Typography>
-                  </DeclineApplicaciontButton>
+                  {application_status === "Declined" && (
+                    <DeclineApplicaciontButton
+                      variant="contained"
+                      color="error"
+                      startIcon={<HighlightOffOutlinedIcon />}
+                      sx={{ marginLeft: "16px" }}
+                      onClick={() => {
+                        handleDeclineApplications(
+                          applications.job_application_id
+                        );
+                      }}
+                      disabled
+                    >
+                      <Typography variant="button">
+                        decline applicacion
+                      </Typography>
+                    </DeclineApplicaciontButton>
+                  )}
+                  {application_status !== "Declined" && (
+                    <DeclineApplicaciontButton
+                      variant="contained"
+                      color="error"
+                      startIcon={<HighlightOffOutlinedIcon />}
+                      sx={{ marginLeft: "16px" }}
+                      onClick={() => {
+                        handleDeclineApplications(
+                          applications.job_application_id
+                        );
+                      }}
+                    >
+                      <Typography variant="button">
+                        decline applicacion
+                      </Typography>
+                    </DeclineApplicaciontButton>
+                  )}
                 </Stack>
               </AccordionStyled>
             );

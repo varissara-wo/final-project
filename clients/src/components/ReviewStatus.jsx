@@ -45,7 +45,7 @@ export const ReviewStatus = (props) => {
         <Typography
           variant="caption"
           color="primary"
-          sx={{ maxWidth: "80px", textAlign: "center" }}
+          sx={{ width: "80px", textAlign: "center" }}
         >
           Waiting for review
         </Typography>
@@ -59,7 +59,7 @@ export const ReviewStatus = (props) => {
         <Typography
           variant="caption"
           color="primary"
-          sx={{ maxWidth: "80px", textAlign: "center" }}
+          sx={{ width: "80px", textAlign: "center" }}
         >
           Review in progress
         </Typography>
@@ -72,7 +72,11 @@ export const ReviewStatus = (props) => {
         <Stack>
           <MarkChatReadOutlinedIcon color="primary" />
         </Stack>
-        <Typography variant="caption" color="primary">
+        <Typography
+          variant="caption"
+          color="primary"
+          sx={{ width: "80px", textAlign: "center" }}
+        >
           Review
         </Typography>
         <Typography variant="caption" color="primary">
@@ -85,12 +89,16 @@ export const ReviewStatus = (props) => {
     return (
       <OuterStackFlex sx={{ marginLeft: "10px", marginRight: "10px" }}>
         <Stack>
-          <HighlightOffIcon color="primary" />
+          <HighlightOffIcon color="error" />
         </Stack>
-        <Typography variant="caption" color="primary">
+        <Typography
+          variant="caption"
+          color="error"
+          sx={{ width: "80px", textAlign: "center" }}
+        >
           Declined on
         </Typography>
-        <Typography variant="caption" color="primary">
+        <Typography variant="caption" color="error">
           {declined_date}
         </Typography>
       </OuterStackFlex>

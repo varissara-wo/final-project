@@ -97,6 +97,14 @@ function usePosts() {
     setIsLoading(false);
   };
 
+  //Decline Application
+  const declineApplication = async (applicationId) => {
+    console.log(applicationId);
+    await axios.put(
+      `http://localhost:4000/professional/applications/${applicationId}`
+    );
+  };
+
   return {
     createPost,
     getPost,
@@ -112,6 +120,7 @@ function usePosts() {
     getSearch,
     getJobApplications,
     jobApplicationsData,
+    declineApplication,
   };
 
   //   const getFollow = async (professionalId) => {

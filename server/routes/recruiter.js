@@ -139,7 +139,7 @@ recruiterRouter.post("/createpost", async (req, res) => {
       [req.body.category]
     );
     const post = {
-      recruiter_id: 2,
+      recruiter_id: req.body.recruiterId,
       categories_id: categories_id.rows[0].categories_id,
       job_title: req.body.title,
       type: req.body.type,
@@ -148,6 +148,9 @@ recruiterRouter.post("/createpost", async (req, res) => {
       about_job_position: req.body.about,
       job_requirement: req.body.requirement,
       option_requirement: req.body.optional,
+      total_candidates: 0,
+      on_track_candidates: 0,
+      recruit_status: "open",
       created_at: new Date(),
       updated_at: new Date(),
     };
@@ -155,8 +158,10 @@ recruiterRouter.post("/createpost", async (req, res) => {
     console.log(post);
 
     await pool.query(
-      `insert into jobs  ( recruiter_id,categories_id,job_title, type,min_salary, max_salary,about_job_position, job_requirement,option_requirement, created_at,updated_at) 
-                values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
+      `insert into jobs  ( recruiter_id,categories_id,job_title, type,min_salary, 
+        max_salary,about_job_position, job_requirement,option_requirement, 
+        total_candidates, on_track_candidates,recruit_status, created_at,updated_at) 
+                values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
       [
         post.recruiter_id,
         post.categories_id,
@@ -167,6 +172,9 @@ recruiterRouter.post("/createpost", async (req, res) => {
         post.about_job_position,
         post.job_requirement,
         post.option_requirement,
+        post.total_candidates,
+        post.on_track_candidates,
+        post.recruit_status,
         post.created_at,
         post.updated_at,
       ]
@@ -273,6 +281,48 @@ recruiterRouter.get("/profile/:id", async (req, res) => {
     return res.status(200).json({
       data: data[0],
     });
-  } catch {}
+  } catch (err) {
+    console.log(err);
+  }
+});
+recruiterRouter.put("/profile/:id", async (req, res) => {
+  const recruiter = req.params.id;
+  const userUpdate = {
+    logo_url: req.body.logo_url,
+    company_name: req.body.company_name,
+    email: req.body.email,
+    company_website: req.body.company_website,
+    about_company: req.body.about_company,
+  };
+  const emailUse = await pool.query(
+    `select * from recruiter_users where email = $1 and recruiter_id != $2`,
+    [userUpdate.email, recruiter]
+  );
+
+  try {
+    if (emailUse.rows.length !== 0) {
+      return res.json({
+        message: "email is alreadyuse",
+      });
+    } else {
+      await pool.query(
+        `UPDATE  recruiter_users set logo_url=$1 ,company_name=$2,email=$3,company_website=$4,about_company=$5 where recruiter_id =$6`,
+        [
+          userUpdate.logo_url,
+          userUpdate.company_name,
+          userUpdate.email,
+          userUpdate.company_website,
+          userUpdate.about_company,
+          recruiter,
+        ]
+      );
+
+      return res.status(200).json({
+        message: ` ${recruiter} has been update.`,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
 });
 export default recruiterRouter;

@@ -315,7 +315,7 @@ const RecruiterRegister = () => {
                 left="10px"
                 hidden
                 width="300px"
-                accept=".png,.jpeg,.img"
+                accept=".png,.jpeg"
                 multiple
                 type="file"
                 name="logo"

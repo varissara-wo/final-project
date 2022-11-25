@@ -52,6 +52,7 @@ export function YourApplications() {
   const handleFilterApplications = (event) => {
     setSelectedFilterApplicationStatus(event.target.value);
     setExpanded(false);
+    setIsLoading(true);
   };
 
   //Handle Decline Applications

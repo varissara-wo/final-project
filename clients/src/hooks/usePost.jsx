@@ -13,6 +13,7 @@ function usePosts() {
   const [numberOfJobs, setNumberOfJobs] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [followJob, setFollowJob] = useState([]);
+  const [jobApplicationsData, setJobApplicationsData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -128,6 +129,24 @@ function usePosts() {
 
     navigate("/recruiter/profile");
   };
+
+  //Get jobs applications
+  const getJobApplications = async (user_email, applicationStatus) => {
+    const results = await axios.get(
+      `http://localhost:4000/professional/applications?user_email=${user_email}&status=${applicationStatus}`
+    );
+    setJobApplicationsData(results.data.data);
+    setIsLoading(false);
+  };
+
+  //Decline Application
+  const declineApplication = async (applicationId) => {
+    console.log(applicationId);
+    await axios.put(
+      `http://localhost:4000/professional/applications/${applicationId}`
+    );
+  };
+
   return {
     createPost,
     getPost,
@@ -152,6 +171,9 @@ function usePosts() {
     setIsLoading,
     followJobApplication,
     UpdateProifleRecruiter,
+    getJobApplications,
+    jobApplicationsData,
+    declineApplication,
   };
 }
 export default usePosts;

@@ -149,7 +149,7 @@ export const DownloadCvButton = styled(Button)(() => ({
   justifyContent: "center",
   alignItems: "center",
   color: "#616161",
-  border: "2px solid #F48FB1",
+  border: "1px solid #F48FB1",
   borderRadius: "16px",
 }));
 
@@ -158,6 +158,6 @@ export const DeclineApplicaciontButton = styled(Button)(() => ({
   flexDirection: "row",
   justifyContent: "center",
   alignItems: "center",
-  border: "2px solid #BF5F82",
+  //border: "2px solid #BF5F82",
   borderRadius: "16px",
 }));

@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { pool } from "../utils/db.js";
 import multer from "multer";
 import { logoUpload } from "../utils/upload.js";
-
+import { cvUpload } from "../utils/upload.js";
 const recruiterRouter = Router();
 
 //Get user profile
@@ -285,10 +285,14 @@ recruiterRouter.get("/profile/:id", async (req, res) => {
     console.log(err);
   }
 });
-recruiterRouter.put("/profile/:id", async (req, res) => {
+recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
   const recruiter = req.params.id;
+  const file = req.files.logo_url;
+  console.log(file);
+  const responseLogoUpload = await logoUpload(file);
+  const logoUrl = responseLogoUpload;
   const userUpdate = {
-    logo_url: req.body.logo_url,
+    logo_url: logoUrl,
     company_name: req.body.company_name,
     email: req.body.email,
     company_website: req.body.company_website,

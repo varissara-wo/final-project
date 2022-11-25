@@ -19,8 +19,9 @@ export default function Profile() {
     UpdateProifleRecruiter,
   } = usePosts();
   console.log(profile);
+
   const [info, setInfo] = useState({
-    logo_url: "",
+    logo_url: {},
     email: "",
     company_name: "",
     company_website: "",
@@ -28,6 +29,8 @@ export default function Profile() {
   });
   const { getUserData, state } = useAuth();
   console.log(state, profile);
+  const formData = new FormData();
+  const [img, setImg] = useState(profile.logo_url);
   useEffect(() => {
     setTimeout(() => {
       getUserprofile(9);
@@ -39,6 +42,7 @@ export default function Profile() {
         company_website: state.user.profile.company_website,
         about_company: state.user.profile.about_company,
       });
+      setImg(profile.logo_url);
     }, 800);
   }, [isLoading]);
 
@@ -62,7 +66,7 @@ export default function Profile() {
       value: info.company_website,
     },
   ];
-
+  console.log(info.logo_url);
   const handlerInputChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
@@ -72,14 +76,27 @@ export default function Profile() {
       ...info,
     });
   };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    const type = file.type.split("/");
+    console.log(type[1]);
     //Validate the file is PDF
-    if (file.type !== "application/png") {
+    if (type[1] !== "png" && type[1] !== "jpeg") {
       return setFileStatus("Not a Png file");
     }
-  };
 
+    setImg(URL.createObjectURL(file));
+    const data = {
+      ...info,
+    };
+    for (let key in data) {
+      formData.append(key, data[key]);
+    }
+    setInfo(formData);
+    console.log({ info });
+  };
+  console.log({ ...info });
   return (
     <Box
       sx={{
@@ -144,7 +161,7 @@ export default function Profile() {
                   boxShadow: "5",
                 }}
               >
-                <img src={profile.logo_url} alt="getthatjoblogo" />
+                <img src={img} alt="getthatjoblogo" />
               </Box>
               <Box
                 sx={{
@@ -171,10 +188,10 @@ export default function Profile() {
                     left="10px"
                     hidden
                     width="300px"
-                    accept=".PNG"
+                    accept=".png,.jpeg"
                     multiple
                     type="file"
-                    name="cv"
+                    name="logo"
                     onChange={handleFileChange}
                   />
                 </UploadButton>

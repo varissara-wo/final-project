@@ -87,14 +87,6 @@ export function YourApplications() {
     },
   }));
 
-  const AccordionStyled = styled(Accordion)(() => ({
-    "&.MuiAccordion-root": {
-      borderRadius: "8px",
-      border: "1px solid #E1E2E1",
-      boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)",
-    },
-  }));
-
   const AccordionSummaryStyled = styled(AccordionSummary)(() => ({
     "& .css-o4b71y-MuiAccordionSummary-content": {
       display: "flex",
@@ -202,71 +194,66 @@ export function YourApplications() {
             <CircularProgress disableShrink />
           </Stack>
         )}
-        {isLoading === false &&
-          jobApplicationsData.map((applications) => {
-            const applicationId = applications.job_application_id;
-            const application_status = applications.application_status;
+        {isLoading === false && (
+          <div>
+            {jobApplicationsData.map((applications, index) => {
+              const applicationId = applications.job_application_id;
+              const application_status = applications.application_status;
 
-            return (
-              <AccordionStyled
-                expanded={expanded === `panel${applicationId}`}
-                onChange={handleChange(`panel${applicationId}`)}
-                sx={{ marginBottom: "16px", width: "945px" }}
-              >
-                <AccordionSummaryStyled
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls={`panel${applicationId}bh-content`}
-                  id={`panel${applicationId}bh-header`}
-                >
-                  <Stack
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="flex-start"
-                    spacing={0}
-                  >
-                    <Stack
-                      direction="row"
-                      justifyContent="flex-start"
-                      alignItems="center"
-                      spacing={0}
-                      sx={{
-                        "& .MuiSvgIcon-root": {
-                          fontSize: 20,
-                        },
-                      }}
-                    >
-                      <Stack sx={{ width: "60px", height: "60px" }}>
-                        <img
-                          alt="logo"
-                          src={applications.logo_url}
-                          width="100%"
-                          height="100%"
-                        />
-                      </Stack>
-                      <Stack sx={{ marginLeft: "18px" }}>
-                        <Typography variant="h6" sx={{}}>
-                          {applications.job_title}
-                        </Typography>
-                        <Typography variant="subtitle2" color="secondary">
-                          {applications.company_name}
-                        </Typography>
-                      </Stack>
-                    </Stack>
-                  </Stack>
-                  <Stack
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                    spacing={0}
+              return (
+                <>
+                  <Accordion
+                    expanded={expanded === `panel${index}`}
+                    onChange={handleChange(`panel${index}`)}
                     sx={{
-                      "& .MuiSvgIcon-root": {
-                        fontSize: 20,
-                      },
+                      width: "945px",
+                      borderRadius: "8px",
+                      boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)",
+                      marginBottom: "16px",
                     }}
                   >
-                    <Typography variant="caption" color="info.main" sx={{}}>
+                    <AccordionSummaryStyled
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1bh-content"
+                      id="panel1bh-header"
+                    >
                       <Stack
                         direction="row"
+                        justifyContent="center"
+                        alignItems="flex-start"
+                        spacing={0}
+                      >
+                        <Stack
+                          direction="row"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          spacing={0}
+                          sx={{
+                            "& .MuiSvgIcon-root": {
+                              fontSize: 20,
+                            },
+                          }}
+                        >
+                          <Stack sx={{ width: "60px", height: "60px" }}>
+                            <img
+                              alt="logo"
+                              src={applications.logo_url}
+                              width="100%"
+                              height="100%"
+                            />
+                          </Stack>
+                          <Stack sx={{ marginLeft: "18px" }}>
+                            <Typography variant="h6" sx={{}}>
+                              {applications.job_title}
+                            </Typography>
+                            <Typography variant="subtitle2" color="secondary">
+                              {applications.company_name}
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                      </Stack>
+                      <Stack
+                        direction="column"
                         justifyContent="flex-start"
                         alignItems="center"
                         spacing={0}
@@ -276,134 +263,157 @@ export function YourApplications() {
                           },
                         }}
                       >
-                        <CategoryIcon categoryName={applications.name} />
-                        {applications.name}
-                        <DateRangeOutlinedIcon
-                          sx={{ marginRight: "6px", marginLeft: "10px" }}
-                        />
-                        {applications.type}
+                        <Typography variant="caption" color="info.main" sx={{}}>
+                          <Stack
+                            direction="row"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                            spacing={0}
+                            sx={{
+                              "& .MuiSvgIcon-root": {
+                                fontSize: 20,
+                              },
+                            }}
+                          >
+                            <CategoryIcon categoryName={applications.name} />
+                            {applications.name}
+                            <DateRangeOutlinedIcon
+                              sx={{ marginRight: "6px", marginLeft: "10px" }}
+                            />
+                            {applications.type}
+                          </Stack>
+                          <Stack
+                            direction="row"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                            spacing={0}
+                            sx={{
+                              "& .MuiSvgIcon-root": {
+                                fontSize: 20,
+                              },
+                            }}
+                          >
+                            <MonetizationOnOutlinedIcon
+                              sx={{ marginRight: "6px" }}
+                            />
+                            {Math.floor(applications.min_salary / 1000).toFixed(
+                              1
+                            )}
+                            k -{" "}
+                            {Math.floor(applications.max_salary / 1000).toFixed(
+                              1
+                            )}
+                            k
+                            <PostedStatus
+                              postDate={applications.jobs_created_at}
+                              letter={"lowercase"}
+                            />
+                          </Stack>
+                        </Typography>
                       </Stack>
+
                       <Stack
                         direction="row"
-                        justifyContent="flex-start"
+                        justifyContent="center"
                         alignItems="center"
                         spacing={0}
-                        sx={{
-                          "& .MuiSvgIcon-root": {
-                            fontSize: 20,
-                          },
-                        }}
                       >
-                        <MonetizationOnOutlinedIcon
-                          sx={{ marginRight: "6px" }}
-                        />
-                        {Math.floor(applications.min_salary / 1000).toFixed(1)}k
-                        -{" "}
-                        {Math.floor(applications.max_salary / 1000).toFixed(1)}
-                        k
-                        <PostedStatus
-                          postDate={applications.jobs_created_at}
-                          letter={"lowercase"}
+                        <SentStatus applyDate={applications.applied_at} />
+                        <ReviewStatus
+                          status={applications.application_status}
+                          declinedDate={applications.declined_at}
                         />
                       </Stack>
-                    </Typography>
-                  </Stack>
-
-                  <Stack
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={0}
-                  >
-                    <SentStatus applyDate={applications.applied_at} />
-                    <ReviewStatus
-                      status={applications.application_status}
-                      declinedDate={applications.declined_at}
-                    />
-                  </Stack>
-                </AccordionSummaryStyled>
-                <AccordionDetails sx={{ paddingBottom: "0", paddingTop: "0" }}>
-                  <Typography variant="overline" color="secondary">
-                    Last Updated on{" "}
-                    {applications.application_updated_at.slice(0, 10)}
-                  </Typography>
-                </AccordionDetails>
-                <AccordionDetails>
-                  <Typography variant="subtitle1" color="error.main">
-                    Professional experience
-                  </Typography>
-                  <Typography variant="body2">
-                    {applications.experience}
-                  </Typography>
-                </AccordionDetails>
-
-                <AccordionDetails>
-                  <Typography variant="subtitle1" color="error.main">
-                    Why are you interested in working at{" "}
-                    {applications.company_name}
-                  </Typography>
-                  <Typography variant="body2">
-                    {applications.interested_detail}
-                  </Typography>
-                </AccordionDetails>
-                <Stack
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: "0 16px 16px 16px",
-                  }}
-                >
-                  <DownloadCvButton
-                    startIcon={<FileDownloadOutlinedIcon color="secondary" />}
-                    href={applications.cv_url}
-                    download={applications.professional_name}
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    Download CV
-                  </DownloadCvButton>
-
-                  {application_status === "Declined" && (
-                    <DeclineApplicaciontButton
-                      variant="contained"
-                      color="error"
-                      startIcon={<HighlightOffOutlinedIcon />}
-                      sx={{ marginLeft: "16px" }}
-                      onClick={() => {
-                        handleDeclineApplications(
-                          applications.job_application_id
-                        );
-                      }}
-                      disabled
+                    </AccordionSummaryStyled>
+                    <AccordionDetails
+                      sx={{ paddingBottom: "0", paddingTop: "0" }}
                     >
-                      <Typography variant="button">
-                        decline applicacion
+                      <Typography variant="overline" color="secondary">
+                        Last Updated on{" "}
+                        {applications.application_updated_at.slice(0, 10)}
                       </Typography>
-                    </DeclineApplicaciontButton>
-                  )}
-                  {application_status !== "Declined" && (
-                    <DeclineApplicaciontButton
-                      variant="contained"
-                      color="error"
-                      startIcon={<HighlightOffOutlinedIcon />}
-                      sx={{ marginLeft: "16px" }}
-                      onClick={() => {
-                        handleDeclineApplications(
-                          applications.job_application_id
-                        );
+                    </AccordionDetails>
+                    <AccordionDetails>
+                      <Typography variant="subtitle1" color="error.main">
+                        Professional experience
+                      </Typography>
+                      <Typography variant="body2">
+                        {applications.experience}
+                      </Typography>
+                    </AccordionDetails>
+
+                    <AccordionDetails>
+                      <Typography variant="subtitle1" color="error.main">
+                        Why are you interested in working at{" "}
+                        {applications.company_name}
+                      </Typography>
+                      <Typography variant="body2">
+                        {applications.interested_detail}
+                      </Typography>
+                    </AccordionDetails>
+                    <Stack
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "0 16px 16px 16px",
                       }}
                     >
-                      <Typography variant="button">
-                        decline applicacion
-                      </Typography>
-                    </DeclineApplicaciontButton>
-                  )}
-                </Stack>
-              </AccordionStyled>
-            );
-          })}
+                      <DownloadCvButton
+                        startIcon={
+                          <FileDownloadOutlinedIcon color="secondary" />
+                        }
+                        href={applications.cv_url}
+                        download={applications.professional_name}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        Download CV
+                      </DownloadCvButton>
+
+                      {application_status === "Declined" && (
+                        <DeclineApplicaciontButton
+                          variant="contained"
+                          color="error"
+                          startIcon={<HighlightOffOutlinedIcon />}
+                          sx={{ marginLeft: "16px" }}
+                          onClick={() => {
+                            handleDeclineApplications(
+                              applications.job_application_id
+                            );
+                          }}
+                          disabled
+                        >
+                          <Typography variant="button">
+                            decline applicacion
+                          </Typography>
+                        </DeclineApplicaciontButton>
+                      )}
+                      {application_status !== "Declined" && (
+                        <DeclineApplicaciontButton
+                          variant="contained"
+                          color="error"
+                          startIcon={<HighlightOffOutlinedIcon />}
+                          sx={{ marginLeft: "16px" }}
+                          onClick={() => {
+                            handleDeclineApplications(
+                              applications.job_application_id
+                            );
+                          }}
+                        >
+                          <Typography variant="button">
+                            decline applicacion
+                          </Typography>
+                        </DeclineApplicaciontButton>
+                      )}
+                    </Stack>
+                  </Accordion>
+                </>
+              );
+            })}
+          </div>
+        )}
 
         {/*------------------------------ End information------------------------------*/}
       </Box>

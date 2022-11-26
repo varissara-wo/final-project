@@ -63,7 +63,7 @@ export function Jobpostings() {
   }, [isLoading, setIsLoading, userLoading]);
 
   const handlechoose = (chooseType) => {
-    setType(chooseType);
+    setType(chooseType.target.value);
     setIsLoading(true);
   };
 

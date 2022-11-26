@@ -157,19 +157,19 @@ export function Jobpostings() {
               value="all"
               control={<Radio />}
               label="All"
-              onClick={(e) => handlechoose(e.target.value)}
+              onChange={handlechoose}
             />
             <CheckBoxTextStyled
               value="onTrack"
               control={<Radio />}
               label="With candidates on track"
-              onClick={(e) => handlechoose(e.target.value)}
+              onChange={handlechoose}
             />
             <CheckBoxTextStyled
               value="closed"
               control={<Radio />}
               label="Closed"
-              onClick={(e) => handlechoose(e.target.value)}
+              onChange={handlechoose}
             />
           </RadioGroup>
         </FormControl>

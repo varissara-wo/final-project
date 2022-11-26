@@ -218,12 +218,15 @@ export function YourApplications() {
                       id="panel1bh-header"
                     >
                       <Stack
+                        display="flex"
                         direction="row"
-                        justifyContent="center"
-                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        alignItems="center"
                         spacing={0}
+                        minWidth="300px"
                       >
                         <Stack
+                          display="flex"
                           direction="row"
                           justifyContent="flex-start"
                           alignItems="center"

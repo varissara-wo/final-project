@@ -197,7 +197,12 @@ export function Jobpostings() {
                   <Accordion
                     expanded={expanded === `panal${index}`}
                     onChange={handleChange(`panal${index}`)}
-                    sx={{ marginBottom: "16px", width: "945px" }}
+                    sx={{
+                      width: "945px",
+                      borderRadius: "8px",
+                      boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)",
+                      marginBottom: "16px",
+                    }}
                   >
                     <AccordionSummaryStyled
                       expandIcon={<ExpandMoreIcon />}

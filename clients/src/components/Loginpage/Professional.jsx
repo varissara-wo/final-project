@@ -18,6 +18,8 @@ const Professional = () => {
   const [passwordMessage, setPasswordMessage] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const { professionalLogin } = useAuth();
 
   const handleSubmit = (event) => {
@@ -27,7 +29,7 @@ const Professional = () => {
     });
   };
 
-  const [showPassword, setShowPassword] = useState(false);
+
 
   return (
     <>
@@ -75,6 +77,7 @@ const Professional = () => {
                 placeholder="******"
                 focused
                 inputProps={{ style: { padding: 8 } }}
+                type={showPassword ? "text" : "password"}
               />
               <Typography
                 variant="body2"

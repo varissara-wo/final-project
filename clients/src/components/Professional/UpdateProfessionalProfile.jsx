@@ -10,22 +10,34 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { FileUploadOutlined } from "@mui/icons-material";
 import { Buttonwidth, UploadButton } from "../Register/Styles";
 import usePosts from "../../hooks/usePost.jsx";
+import { useEffect } from "react";
+import { useAuth } from "../../contexts/authentication.jsx";
 
 const UpdateProfessionalProfile = () => {
   const innitialFileData = "No file chosen";
   const [value, setValue] = React.useState(null);
   const [fileStatus, setFileStatus] = useState(innitialFileData);
-  const { createPost } = usePosts();
+  const { createPost, UpdateProifleProfessional } = usePosts();
+  const { state, getUserData } = useAuth();
+
   const handlerInputChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = (event) => {
     console.log(userData);
     event.preventDefault();
-    createPost({
+    UpdateProifleProfessional(state.user["id"], {
       ...userData,
     });
   };
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+
+  console.log(state)
+
   const [userData, setUserData] = useState({
     email: "",
     name: "",

@@ -122,11 +122,13 @@ function usePosts() {
   const UpdateProifleRecruiter = async (recruiterId, formData) => {
     console.log(recruiterId, data);
     await axios.put(
-      `http://localhost:4000/recruiter/profile/${recruiterId}`,formData, {
-        headers: { "Content-Type": "multipart/form-data" }}
-
+      `http://localhost:4000/recruiter/profile/${recruiterId}`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
     );
-
+    setIsLoading(false);
     navigate("/recruiter/profile");
   };
   return {

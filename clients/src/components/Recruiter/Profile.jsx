@@ -32,7 +32,7 @@ export default function Profile() {
   const formData = new FormData();
   const [img, setImg] = useState(profile.logo_url);
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       getUserprofile(9);
       getUserData();
       setInfo({
@@ -44,6 +44,7 @@ export default function Profile() {
       });
       setImg(profile.logo_url);
     }, 800);
+    return () => clearTimeout(timer);
   }, [isLoading]);
 
   console.log(info);
@@ -72,7 +73,7 @@ export default function Profile() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    UpdateProifleRecruiter(9, {
+    UpdateProifleRecruiter(state.user["id"], {
       ...info,
     });
   };
@@ -161,7 +162,7 @@ export default function Profile() {
                   boxShadow: "5",
                 }}
               >
-                <img src={img} alt="getthatjoblogo" />
+                {isLoading === false && <img src={img} alt="getthatjoblogo" />}
               </Box>
               <Box
                 sx={{

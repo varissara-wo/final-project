@@ -120,7 +120,7 @@ function usePosts() {
     navigate("/applications");
   };
   const UpdateProifleRecruiter = async (recruiterId, formData) => {
-    console.log(recruiterId, data);
+    console.log(recruiterId, formData);
     await axios.put(
       `http://localhost:4000/recruiter/profile/${recruiterId}`,
       formData,

@@ -4,6 +4,7 @@ import { pool } from "../utils/db.js";
 import multer from "multer";
 import { logoUpload } from "../utils/upload.js";
 import { cvUpload } from "../utils/upload.js";
+import { v2 as cloudinary } from "cloudinary";
 const recruiterRouter = Router();
 
 //Get user profile
@@ -287,10 +288,35 @@ recruiterRouter.get("/profile/:id", async (req, res) => {
 });
 recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
   const recruiter = req.params.id;
-  const file = req.files.logo_url;
-  console.log(file);
-  const responseLogoUpload = await logoUpload(file);
-  const logoUrl = responseLogoUpload;
+
+  // console.log(file);
+  console.log(req.body);
+
+  let logoUrl;
+
+  if (req.body.logo) {
+    logoUrl = req.body.logo;
+  } else {
+    console.log("hahhaha");
+    const file = req.files.logo[0];
+    console.log(file);
+    // const file = req.files.logo;
+    const idimg = await pool.query(
+      `select logo_url  from recruiter_users  where recruiter_id = $1`,
+      [recruiter]
+    );
+    const id = JSON.parse(idimg.rows[0].logo_url).publicId;
+    console.log("idimgjaaaaaaaaaaaaaaaaaa");
+    console.log(id);
+    try {
+      await cloudinary.uploader.destroy(id);
+      console.log("kookai");
+      const responseLogoUpload = await logoUpload(file);
+      logoUrl = responseLogoUpload;
+      console.log(logoUrl);
+    } catch (err) {}
+  }
+
   const userUpdate = {
     logo_url: logoUrl,
     company_name: req.body.company_name,

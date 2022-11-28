@@ -131,13 +131,16 @@ function usePosts() {
     setIsLoading(false);
     navigate("/recruiter/profile");
   };
-  const UpdateProifleProfessional = async (professionalId, data) => {
-    console.log(professionalId, data);
+  const UpdateProifleProfessional = async (professionalId, formData) => {
+    console.log(professionalId, formData);
     await axios.put(
       `http://localhost:4000/professional/${professionalId}`,
-      data
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
     );
-    console.log(professionalId, data);
+    console.log(professionalId, formData);
 
     navigate("/findjobs");
   };

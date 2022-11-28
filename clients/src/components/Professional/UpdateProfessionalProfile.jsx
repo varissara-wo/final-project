@@ -58,6 +58,7 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "",
       pattern: /\W+/,
       label: "NAME",
+      value: state.user.profile.name,
     },
     {
       name: "phone",
@@ -66,6 +67,7 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "** Phone number not valid",
       pattern: /^(\+66)(\d{9})$/gm,
       label: "PHONE",
+      value: state.user.profile.phone,
     },
   ];
   const input2 = [
@@ -76,6 +78,7 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "",
       pattern: /\W+/,
       label: "TITLE",
+      value: state.user.profile.job_title,
     },
   ];
   const input3 = [
@@ -86,6 +89,7 @@ const UpdateProfessionalProfile = () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat quam ut tempor maximus. Sed neque arcu, rhoncus elementum sodales a, tristique sed quam. Aliquam nibh velit, pharetra ac faucibus in, ornare eu tortor. Vestibulum lacus ligula, elementum sit amet purus ut, sagittis molestie ex. In hendrerit orci tellus. Integer pharetra porttitor nulla.",
       pattern: /\W+/,
       label: "PROFESSIONAL EXPERIENCE",
+      value: state.user.profile.experience,
     },
     {
       name: "education",
@@ -94,6 +98,7 @@ const UpdateProfessionalProfile = () => {
         "Pellentesque ut mauris neque. Maecenas posuere sit amet erat at placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti.",
       pattern: /^(\+66)(\d{9})$/gm,
       label: "EDUCATION",
+      value: state.user.profile.education,
     },
   ];
   const linkedin = {
@@ -104,7 +109,9 @@ const UpdateProfessionalProfile = () => {
     pattern:
       /((https?:\/\/)?((www|\w\w)\.)?linkedin\.com\/)((([\w]{2,3})?)|([^/]+\/(([\w|\d-&#?=])+\/?){1,}))$/gm,
     label: "LINKEDIN URL",
+    value: state.user.profile.linkedin,
   };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     //Validate the file is PDF
@@ -147,7 +154,7 @@ const UpdateProfessionalProfile = () => {
         >
           Personal Information
         </Typography>
-        <EmailInput user="professional" onChange={handlerInputChange} />
+        <EmailInput user="professional" value={state.user.profile.email} onChange={handlerInputChange} />
         {input.map((input, index) => {
           return (
             <OnelineInput
@@ -160,7 +167,7 @@ const UpdateProfessionalProfile = () => {
         <InputLabelStyle>BIRTHDAY</InputLabelStyle>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Datepic
-            value={value}
+            value={state.user.profile.birthday}
             color="primary"
             focused
             sx={{ width: "350px", Height: "36px", marginBottom: "16px" }}
@@ -176,7 +183,6 @@ const UpdateProfessionalProfile = () => {
         </LocalizationProvider>
         <OnelineInput
           {...linkedin}
-          value={userData.linkedin}
           onChange={handlerInputChange}
         />
         {/*------------------------------ Form Part 2 ------------------------------*/}

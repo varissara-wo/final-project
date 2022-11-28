@@ -131,6 +131,16 @@ function usePosts() {
     setIsLoading(false);
     navigate("/recruiter/profile");
   };
+  const UpdateProifleProfessional = async (professionalId, data) => {
+    console.log(professionalId, data);
+    await axios.put(
+      `http://localhost:4000/professional/${professionalId}`,
+      data
+    );
+    console.log(professionalId, data);
+
+    navigate("/findjobs");
+  };
   return {
     createPost,
     getPost,
@@ -155,6 +165,7 @@ function usePosts() {
     setIsLoading,
     followJobApplication,
     UpdateProifleRecruiter,
+    UpdateProifleProfessional,
   };
 }
 export default usePosts;

@@ -120,13 +120,16 @@ function usePosts() {
     await axios.post(`http://localhost:4000/professional/apply/${jobId}`, data);
     navigate("/applications");
   };
-  const UpdateProifleRecruiter = async (recruiterId, data) => {
-    console.log(recruiterId, data);
+  const UpdateProifleRecruiter = async (recruiterId, formData) => {
+    console.log(recruiterId, formData);
     await axios.put(
       `http://localhost:4000/recruiter/profile/${recruiterId}`,
-      data
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
     );
-
+    setIsLoading(false);
     navigate("/recruiter/profile");
   };
 

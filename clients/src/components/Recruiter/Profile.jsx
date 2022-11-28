@@ -16,35 +16,41 @@ export default function Profile() {
     getUserprofile,
     profile,
     isLoading,
+    setIsLoading,
     UpdateProifleRecruiter,
   } = usePosts();
   console.log(profile);
+
   const [info, setInfo] = useState({
-    logo_url: "",
+    logo: {},
     email: "",
     company_name: "",
     company_website: "",
     about_company: "",
   });
   const { getUserData, state } = useAuth();
-  console.log(state, profile);
+
+  const [img, setImg] = useState(profile.logo_url);
+  const [isFetch, setIsFetch] = useState(true);
+  console.log(state);
   useEffect(() => {
-    setTimeout(() => {
-      getUserprofile(9);
+    const timer = setTimeout(() => {
       getUserData();
+      getUserprofile(9);
       setInfo({
-        logo_url: state.user.profile.logo_url,
+        logo: state.user.profile.logo_url,
         email: state.user.profile.email,
         company_name: state.user.profile.company_name,
         company_website: state.user.profile.company_website,
         about_company: state.user.profile.about_company,
       });
-    }, 800);
+      setImg(profile.logo_url);
+      console.log(img);
+      setIsFetch(false);
+    }, 1000);
+    return () => clearTimeout(timer);
   }, [isLoading]);
 
-  console.log(info);
-  console.log(state);
-  console.log(profile);
   const additionalInputs = [
     {
       name: "email",
@@ -62,22 +68,35 @@ export default function Profile() {
       value: info.company_website,
     },
   ];
-
+  console.log(info.logo_url);
   const handlerInputChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
   const handleSubmit = (event) => {
+    const formData = new FormData();
     event.preventDefault();
-    UpdateProifleRecruiter(9, {
+    const data = {
       ...info,
-    });
+    };
+    for (let key in data) {
+      formData.append(key, data[key]);
+    }
+    UpdateProifleRecruiter(state.user["id"], formData);
   };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    const type = file.type.split("/");
+
     //Validate the file is PDF
-    if (file.type !== "application/png") {
+    if (type[1] !== "png" && type[1] !== "jpeg") {
       return setFileStatus("Not a Png file");
+    } else {
+      setFileStatus(file.name);
     }
+
+    setImg(URL.createObjectURL(file));
+    setInfo({ ...info, [event.target.name]: file });
   };
 
   return (
@@ -99,24 +118,25 @@ export default function Profile() {
           marginTop: "30px",
         }}
       >
-        {isLoading === true && (
-          <Stack
-            flexDirection="row"
-            justifyContent="center"
-            alignItems="center"
-            sx={{
-              backgroundColor: "#F5F5F6",
-              width: "90%",
-              height: "100%",
-              minHeight: "100vh",
-              minWidth: "100vh",
-              // marginLeft: "240px",
-            }}
-          >
-            <CircularProgress disableShrink />
-          </Stack>
-        )}
-        {isLoading === false && (
+        {isFetch === true ||
+          (img === undefined && (
+            <Stack
+              flexDirection="row"
+              justifyContent="center"
+              alignItems="center"
+              sx={{
+                backgroundColor: "#F5F5F6",
+                width: "90%",
+                height: "100%",
+                minHeight: "100vh",
+                minWidth: "100vh",
+                // marginLeft: "240px",
+              }}
+            >
+              <CircularProgress disableShrink />
+            </Stack>
+          ))}
+        {isFetch === false && img !== undefined && (
           <>
             <Typography
               variant="h4"
@@ -144,7 +164,7 @@ export default function Profile() {
                   boxShadow: "5",
                 }}
               >
-                <img src={profile.logo_url} alt="getthatjoblogo" />
+                <img src={img} alt="getthatjoblogo" />
               </Box>
               <Box
                 sx={{
@@ -171,10 +191,10 @@ export default function Profile() {
                     left="10px"
                     hidden
                     width="300px"
-                    accept=".PNG"
+                    accept=".png,.jpeg"
                     multiple
                     type="file"
-                    name="cv"
+                    name="logo"
                     onChange={handleFileChange}
                   />
                 </UploadButton>

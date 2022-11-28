@@ -13,6 +13,7 @@ function usePosts() {
   const [numberOfJobs, setNumberOfJobs] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [followJob, setFollowJob] = useState([]);
+  const [jobApplicationsData, setJobApplicationsData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -36,6 +37,7 @@ function usePosts() {
       `http://localhost:4000/recruiter/jobs/${recruiterId}?type=${type}`
     );
     setData(results.data.data);
+    setIsLoading(false);
   };
 
   const getJobs = async () => {
@@ -78,9 +80,11 @@ function usePosts() {
     setIsLoading(false);
   };
   const getUserprofile = async (recruiterId) => {
+    console.log(recruiterId);
     const results = await axios.get(
       `http://localhost:4000/recruiter/profile/${recruiterId}`
     );
+    console.log(results);
     setProfile(results.data.data);
     setIsLoading(false);
   };
@@ -116,6 +120,33 @@ function usePosts() {
     await axios.post(`http://localhost:4000/professional/apply/${jobId}`, data);
     navigate("/applications");
   };
+  const UpdateProifleRecruiter = async (recruiterId, data) => {
+    console.log(recruiterId, data);
+    await axios.put(
+      `http://localhost:4000/recruiter/profile/${recruiterId}`,
+      data
+    );
+
+    navigate("/recruiter/profile");
+  };
+
+  //Get jobs applications
+  const getJobApplications = async (user_email, applicationStatus) => {
+    const results = await axios.get(
+      `http://localhost:4000/professional/applications?user_email=${user_email}&status=${applicationStatus}`
+    );
+    setJobApplicationsData(results.data.data);
+    setIsLoading(false);
+  };
+
+  //Decline Application
+  const declineApplication = async (applicationId) => {
+    console.log(applicationId);
+    await axios.put(
+      `http://localhost:4000/professional/applications/${applicationId}`
+    );
+  };
+
   return {
     createPost,
     getPost,
@@ -139,6 +170,10 @@ function usePosts() {
     follow,
     setIsLoading,
     followJobApplication,
+    UpdateProifleRecruiter,
+    getJobApplications,
+    jobApplicationsData,
+    declineApplication,
   };
 }
 export default usePosts;

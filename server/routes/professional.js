@@ -624,4 +624,86 @@ professionalRouter.get("/profile/:id", async (req, res) => {
     console.log(err);
   }
 });
+
+//Get job applications
+professionalRouter.get("/applications", async (req, res) => {
+  const user_email = req.query.user_email || "";
+  const applicationStatus = req.query.status || "";
+  const queryForm = `SELECT job_applications.job_application_id, job_applications.interested_detail, job_applications.application_status, job_applications.new_cv_url, job_applications.created_at as applied_at, job_applications.updated_at as application_updated_at, job_applications.is_upload_cv, job_applications.declined_at, jobs.job_id, jobs.job_title, jobs.type, jobs.min_salary, jobs.max_salary, jobs.created_at as jobs_created_at, jobs.closed_at as job_closed_at, recruiter_users.company_name, recruiter_users.logo_url, professional_users.experience, professional_users.cv_url, professional_users.updated_at as professional_profile_updated_at, professional_users.name as professional_name, categories.name
+  FROM job_applications
+  LEFT JOIN jobs
+  ON job_applications.job_id = jobs.job_id
+  LEFT JOIN recruiter_users
+  ON jobs.recruiter_id = recruiter_users.recruiter_id
+  LEFT JOIN professional_users
+  ON job_applications.professional_id = professional_users.professional_id
+  LEFT JOIN categories
+  ON jobs.categories_id = categories.categories_id `;
+
+  let query = "";
+  let values = [];
+
+  try {
+    if (applicationStatus === "All") {
+      query =
+        queryForm +
+        `WHERE professional_users.email = $1 ORDER BY applied_at DESC`;
+      values = [user_email];
+    }
+    if (applicationStatus === "Waiting") {
+      query =
+        queryForm +
+        `WHERE professional_users.email = $1 AND application_status = $2 ORDER BY applied_at DESC`;
+      values = [user_email, applicationStatus];
+    }
+    if (applicationStatus === "Reviewing") {
+      query =
+        queryForm +
+        `WHERE professional_users.email = $1 AND application_status = $2 ORDER BY applied_at DESC`;
+      values = [user_email, applicationStatus];
+    }
+    if (applicationStatus === "Finished") {
+      query =
+        queryForm +
+        `WHERE professional_users.email = $1 AND application_status = $2 ORDER BY applied_at DESC`;
+      values = [user_email, applicationStatus];
+    }
+    if (applicationStatus === "Declined") {
+      query =
+        queryForm +
+        `WHERE professional_users.email = $1 AND application_status = $2 ORDER BY applied_at DESC`;
+      values = [user_email, applicationStatus];
+    }
+    const results = await pool.query(query, values);
+    const data = [];
+    for (const row of results.rows) {
+      row.logo_url = JSON.parse(row.logo_url).url;
+      row.cv_url = JSON.parse(row.cv_url).url;
+      if (row.is_upload_cv === "true") {
+        row.cv_url = JSON.parse(row.new_cv_url).url;
+      }
+      data.push(row);
+    }
+
+    return res.status(200).json({
+      data: data,
+    });
+  } catch (error) {}
+});
+
+//Declined application
+professionalRouter.put("/applications/:applicationId", async (req, res) => {
+  console.log(req.params.applicationId);
+  const applicationId = req.params.applicationId;
+  const application = "Declined";
+  const declined_at = new Date();
+  console.log(declined_at);
+  try {
+    await pool.query(
+      `UPDATE job_applications SET application_status = $1, declined_at= $2 WHERE job_application_id = $3`,
+      [application, declined_at, applicationId]
+    );
+  } catch (error) {}
+});
+
 export default professionalRouter;

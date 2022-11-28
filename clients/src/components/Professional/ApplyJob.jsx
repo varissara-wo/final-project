@@ -56,7 +56,6 @@ function Applyjob(props) {
 
   useEffect(() => {
     setTimeout(() => {
-      console.log("hi");
       getUserData();
       getJobById(jobId);
       setApply({ ...apply, experience: state.user["profile"]["experience"] });

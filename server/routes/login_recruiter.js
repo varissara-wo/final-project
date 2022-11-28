@@ -7,7 +7,29 @@ import { protect } from "../middlewares/protect.js";
 const loginRecuiterRouter = Router();
 
 // loginRecuiterRouter.use(protect);
+// const generateaccesstoken = (user)=>{
+//   {
+//     id: userId.rows[0].recruiter_id,
+//     profile: profile.rows[0],
+//     userType: "recruiter",
+//   },
+//   process.env.SECRET_KEY,
+//   {
+//     expiresIn: "900000",
+//   }
+// }
+// const generaterefreshaccesstoken = (user)=>{
 
+//     {
+//       id: userId.rows[0].recruiter_id,
+//       profile: profile.rows[0],
+//       userType: "recruiter",
+//     },
+//     process.env.SECRET_KEY,
+//     {
+//       expiresIn: "900000",
+//     }
+// }
 loginRecuiterRouter.post("/", async (req, res) => {
   try {
     const isRecuiterUser = await pool.query(
@@ -41,7 +63,8 @@ loginRecuiterRouter.post("/", async (req, res) => {
       `select * from recruiter_users  where email = $1`,
       [isRecuiterUser.rows[0].email]
     );
-
+    // generateaccesstoken(profile)
+    // generaterefreshaccesstoken(profile)
     const token = jwt.sign(
       {
         id: userId.rows[0].recruiter_id,
@@ -53,6 +76,24 @@ loginRecuiterRouter.post("/", async (req, res) => {
         expiresIn: "900000",
       }
     );
+    // const refreshtoken = jwt.sign(
+    //   {
+    //     id: userId.rows[0].recruiter_id,
+    //     profile: profile.rows[0],
+    //     userType: "recruiter",
+    //   },
+    //   process.env.SECRET_KEY,
+    //   {
+    //     expiresIn: "900000",
+    //   }
+    // )
+    //   const refreshToken = jwt.sign(user, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife})
+    //   const response = {
+    //     "status": "Logged in",
+    //     "token": token,
+    //     "refreshToken": refreshToken,
+    // // }
+    // tokenList[refreshToken] = response
 
     return res.json({
       message: "Login Succesfully",
@@ -63,5 +104,11 @@ loginRecuiterRouter.post("/", async (req, res) => {
     throw error;
   }
 });
-
+// let refreshtoken = []
+// loginRecuiterRouter.post("/refresh",(req,res)=>{
+//   const refreshtoken = req.body.token
+//   if(!refreshtoken){
+//     return res.status(401).json("not authen")
+//   }
+// })
 export default loginRecuiterRouter;

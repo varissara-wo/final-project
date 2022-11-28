@@ -30,6 +30,7 @@ const loginRecuiterRouter = Router();
 //       expiresIn: "900000",
 //     }
 // }
+
 loginRecuiterRouter.post("/", async (req, res) => {
   try {
     const isRecuiterUser = await pool.query(

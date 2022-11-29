@@ -42,12 +42,6 @@ const UpdateProfessionalProfile = () => {
     UpdateProifleProfessional(state.user["id"], formData);
   };
 
-  useEffect(() => {
-    getUserData()
-  }, [])
-
-  console.log(state)
-
   const [userData, setUserData] = useState({
     email: "",
     name: "",
@@ -60,6 +54,25 @@ const UpdateProfessionalProfile = () => {
     cv: {},
   });
 
+  useEffect(() => {
+    getUserData()
+    setUserData({
+      email: state.user.profile.email,
+      name: state.user.profile.name,
+      phone: state.user.profile.phone,
+      birthday: state.user.profile.birthday,
+      linkedin: state.user.profile.linkedin,
+      title: state.user.profile.job_title,
+      experience: state.user.profile.experience,
+      education: state.user.profile.education,
+      cv: state.user.profile.cv,
+    })
+  }, [])
+
+
+
+
+
   const input = [
     {
       name: "name",
@@ -68,7 +81,7 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "",
       pattern: /\W+/,
       label: "NAME",
-      value: state.user.profile.name,
+      value: userData.name,
     },
     {
       name: "phone",
@@ -77,7 +90,7 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "** Phone number not valid",
       pattern: /^(\+66)(\d{9})$/gm,
       label: "PHONE",
-      value: state.user.profile.phone,
+      value: userData.phone,
     },
   ];
   const input2 = [
@@ -88,7 +101,7 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "",
       pattern: /\W+/,
       label: "TITLE",
-      value: state.user.profile.job_title,
+      value: userData.title,
     },
   ];
   const input3 = [
@@ -99,7 +112,7 @@ const UpdateProfessionalProfile = () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat quam ut tempor maximus. Sed neque arcu, rhoncus elementum sodales a, tristique sed quam. Aliquam nibh velit, pharetra ac faucibus in, ornare eu tortor. Vestibulum lacus ligula, elementum sit amet purus ut, sagittis molestie ex. In hendrerit orci tellus. Integer pharetra porttitor nulla.",
       pattern: /\W+/,
       label: "PROFESSIONAL EXPERIENCE",
-      value: state.user.profile.experience,
+      value: userData.experience,
     },
     {
       name: "education",
@@ -108,7 +121,7 @@ const UpdateProfessionalProfile = () => {
         "Pellentesque ut mauris neque. Maecenas posuere sit amet erat at placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti.",
       pattern: /^(\+66)(\d{9})$/gm,
       label: "EDUCATION",
-      value: state.user.profile.education,
+      value: userData.education,
     },
   ];
   const linkedin = {
@@ -119,7 +132,7 @@ const UpdateProfessionalProfile = () => {
     pattern:
       /((https?:\/\/)?((www|\w\w)\.)?linkedin\.com\/)((([\w]{2,3})?)|([^/]+\/(([\w|\d-&#?=])+\/?){1,}))$/gm,
     label: "LINKEDIN URL",
-    value: state.user.profile.linkedin,
+    value: userData.linkedin,
   };
 
   const handleFileChange = (event) => {
@@ -137,6 +150,8 @@ const UpdateProfessionalProfile = () => {
     setUserData({ ...userData, [event.target.name]: file });
     console.log(userData)
   };
+
+  console.log(userData.title)
 
   return (
     <Box
@@ -173,7 +188,7 @@ const UpdateProfessionalProfile = () => {
         >
           Personal Information
         </Typography>
-        <EmailInput user="professional" value={state.user.profile.email} onChange={handlerInputChange} />
+        <EmailInput user="professional" value={userData.email} onChange={handlerInputChange} />
         {input.map((input, index) => {
           return (
             <OnelineInput
@@ -194,7 +209,8 @@ const UpdateProfessionalProfile = () => {
                 ...userData,
                 birthday: newValue.$d,
               });
-              setValue(newValue);
+              setValue(newValue)
+                ;
             }}
             renderInput={(params) => <TextField {...params} />}
           />
@@ -263,6 +279,9 @@ const UpdateProfessionalProfile = () => {
         </UploadButton>{" "}
         <Typography variant="overline" sx={{ color: "#8E8E8E" }}>
           Only PDF. Max size 5MB
+        </Typography>
+        <Typography variant="overline" sx={{ color: "#8E8E8E" }}>
+          {fileStatus}
         </Typography>
         <Buttonwidth
           variant="contained"

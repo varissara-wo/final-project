@@ -93,7 +93,7 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
       message: "New user has been created sucessfully",
     });
   } catch (err) { }
-} catch (err) { }
+
 });
 
 //Update user

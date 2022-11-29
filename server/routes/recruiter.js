@@ -34,7 +34,6 @@ recruiterRouter.get("/users/exists/:email", async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    console.log(err);
   }
 });
 
@@ -97,7 +96,7 @@ recruiterRouter.put("/:id", async (req, res) => {
     [updatedUser.email]
   );
 
-  console.log(userId);
+  // console.log(userId);
   if (alreadyUse.rows.length === 1) {
     return res.json({
       message: "This email is already available",
@@ -156,7 +155,7 @@ recruiterRouter.post("/createpost", async (req, res) => {
       updated_at: new Date(),
     };
 
-    console.log(post);
+    // console.log(post);
 
     await pool.query(
       `insert into jobs  ( recruiter_id,categories_id,job_title, type,min_salary, 
@@ -187,8 +186,8 @@ recruiterRouter.post("/createpost", async (req, res) => {
     console.log(er);
   }
 });
-recruiterRouter.get("/jobs/:id", async (req, res) => {
-  const recruiter_id = req.params.id;
+recruiterRouter.get("/jobs/:recruiterId", async (req, res) => {
+  const recruiter_id = req.params.recruiterId;
   const type = req.query.type || "";
   let query = "";
   let values = [];
@@ -207,7 +206,7 @@ recruiterRouter.get("/jobs/:id", async (req, res) => {
       categories.categories_id where recruiter_id = $1 `;
       values = [recruiter_id];
     }
-    console.log(query, values);
+    // console.log(query, values);
     const results = await pool.query(query, values);
     const data = results.rows;
     return res.status(200).json({
@@ -290,30 +289,30 @@ recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
   const recruiter = req.params.id;
 
   // console.log(file);
-  console.log(req.body);
+  // console.log(req.body);
 
   let logoUrl;
 
   if (req.body.logo) {
     logoUrl = req.body.logo;
   } else {
-    console.log("hahhaha");
+    // console.log("hahhaha");
     const file = req.files.logo[0];
-    console.log(file);
+    // console.log(file);
     // const file = req.files.logo;
     const idimg = await pool.query(
       `select logo_url  from recruiter_users  where recruiter_id = $1`,
       [recruiter]
     );
     const id = JSON.parse(idimg.rows[0].logo_url).publicId;
-    console.log("idimgjaaaaaaaaaaaaaaaaaa");
-    console.log(id);
+    // console.log("idimgjaaaaaaaaaaaaaaaaaa");
+    // console.log(id);
     try {
       await cloudinary.uploader.destroy(id);
-      console.log("kookai");
+      // console.log("kookai");
       const responseLogoUpload = await logoUpload(file);
       logoUrl = responseLogoUpload;
-      console.log(logoUrl);
+      // console.log(logoUrl);
     } catch (err) {}
   }
 
@@ -355,4 +354,17 @@ recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
     console.log(err);
   }
 });
+
+recruiterRouter.get("/post/:jobId", async (req, res) => {
+  const jobId = req.params.jobId;
+  const relults = await pool.query(
+    `SELECT * FROM jobs LEFT JOIN categories ON jobs.categories_id = categories.categories_id WHERE job_id = $1`,
+    [jobId]
+  );
+  const data = relults.rows[0];
+  return res.status(200).json({
+    data: data,
+  });
+});
+
 export default recruiterRouter;

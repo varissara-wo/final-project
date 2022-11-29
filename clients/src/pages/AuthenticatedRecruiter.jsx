@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme.js";
 import { JobPost } from "./Recruiter/JobPost.jsx";
-import { ShowJobPostings } from "../components/Recruiter/ShowJobPosting.jsx";
+import JobPostCondidates from "./Recruiter/JobPostCondidates.jsx";
 import CreateJob from "./Recruiter/CreateJob.jsx";
 import RecruiterProfile from "./Recruiter/RecruiterProfile.jsx";
 
@@ -15,8 +15,8 @@ const AuthenticatedRecruiter = () => {
         <Route path="recruiter/createjob" element={<CreateJob />}></Route>
         <Route path="recruiter/profile" element={<RecruiterProfile />}></Route>
         <Route
-          path="recruiter/jobpost/candidate"
-          element={<ShowJobPostings />}
+          path="recruiter/jobpost/candidate/:postId"
+          element={<JobPostCondidates />}
         ></Route>
       </Routes>
     </ThemeProvider>

@@ -1,6 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import React from "react";
 import usePosts from "../../hooks/usePost";
+import { useAuth } from "../../contexts/authentication";
 import {
   Accordion,
   AccordionDetails,
@@ -28,48 +29,70 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
+import JobPostWrapper from "./JobPostWrapper";
+import { useParams } from "react-router-dom";
 
 export function ShowJobPostings() {
+  const { getUserData, state, isUserLoading, setIsUserLoading } = useAuth();
+  const { closedPost, getPostById, getPostByIdData, isLoading, setIsLoading } =
+    usePosts();
+  const params = useParams();
   const [expanded, setExpanded] = useState(false);
-  const { data, getPost, numberOfJobs, closedPost, selectPost } = usePosts();
-  const [type, setType] = useState("all");
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+  //Handle filter applications
+  const [selectedFilterCandidateStatus, setSelectedFilterCandidateStatus] =
+    useState("All");
+  const handleFilterCandidates = (event) => {
+    setSelectedFilterCandidateStatus(event.target.value);
+    setExpanded(false);
+    setIsLoading(true);
+  };
+  const {
+    about_job_position,
+    closed_at,
+    created_at,
+    job_id,
+    job_requirement,
+    job_title,
+    max_salary,
+    min_salary,
+    on_track_candidates,
+    option_requirement,
+    recruit_status,
+    recruiter_id,
+    total_candidates,
+    type,
+    updated_at,
+    categories_id,
+    name,
+  } = getPostByIdData;
 
   useEffect(() => {
-    selectPost(8, type);
-  }, [type]);
+    getUserData();
+    const jobId = params.postId;
+    getPostById(jobId);
+  }, [selectedFilterCandidateStatus]);
 
-  console.log(data);
-  const handlechoose = (chooseType) => {
-    console.log(chooseType);
-    setType(chooseType);
-    // await selectPost(recruiterId, type);
-  };
+  // console.log(state);
+  console.log(getPostByIdData);
 
-  const calSalary = (num) => {
-    let a = num / 1000;
-    return Math.floor(a);
-  };
+  // const calSalary = (num) => {
+  //   let a = num / 1000;
+  //   return Math.floor(a);
+  // };
 
-  const date = (d) => {
-    d = d.toString();
-    const arr = [];
-    for (let i = 0; i < d.length; i++) {
-      if (d[i] == "T") {
-        return arr;
-      }
-      arr.push(d[i]);
-    }
-  };
-  {
-    /*------------------------------------------------debouce---------------------------------------------------------*/
-  }
-
-  {
-    /*------------------------------------------------debouce---------------------------------------------------------*/
-  }
+  // const date = (d) => {
+  //   d = d.toString();
+  //   const arr = [];
+  //   for (let i = 0; i < d.length; i++) {
+  //     if (d[i] == "T") {
+  //       return arr;
+  //     }
+  //     arr.push(d[i]);
+  //   }
+  // };
 
   const CheckBoxTextStyled = styled(FormControlLabel)(() => ({
     color: "#616161",
@@ -81,13 +104,7 @@ export function ShowJobPostings() {
       fontSize: 20,
     },
   }));
-  {
-    /*------------------------------------------------รอvalue จาก context---------------------------------------------------------*/
-  }
 
-  {
-    /*------------------------------------------------รอvalue จาก context---------------------------------------------------------*/
-  }
   const AccordionSummaryStyled = styled(AccordionSummary)(() => ({
     "& .css-o4b71y-MuiAccordionSummary-content": {
       display: "flex",
@@ -144,97 +161,130 @@ export function ShowJobPostings() {
     >
       <Box
         sx={{
-          backgroundColor: "#F5F5F6",
-          width: "100%",
-          height: "auto",
-          minWidth: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          marginLeft: "100px",
+          marginTop: "30px",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            marginLeft: "100px",
-            marginTop: "30px",
-          }}
+        {/*------------------------------ Head------------------------------*/}
+        <CloseButton
+          variant="button"
+          color="secondary.main"
+          startIcon={
+            <ArrowBackIosIcon
+              sx={{ width: "20px", height: "20px" }}
+              color="info"
+            />
+          }
+          href="/recruiter/jobpost"
         >
-          {/*------------------------------ Head------------------------------*/}
-          <CloseButton
-            variant="button"
-            color="secondary.main"
-            startIcon={
-              <ArrowBackIosIcon
-                sx={{ width: "20px", height: "20px" }}
-                color="info"
-              />
-            }
-          >
-            BACK
-          </CloseButton>
-          <Typography
-            variant="h4"
-            sx={{ marginTop: "24px", marginBottom: "16px", fontWeight: "400" }}
-          >
-            Show Job Posting
+          BACK
+        </CloseButton>
+        <Typography
+          variant="h4"
+          sx={{ marginTop: "24px", marginBottom: "16px", fontWeight: "400" }}
+        >
+          Show Job Posting
+        </Typography>
+        {/*------------------------------ Start information------------------------------*/}
+        {
+          <JobPostWrapper
+            jobTitle={job_title}
+            jobCategory={name}
+            jobType={type}
+            minSalary={min_salary}
+            maxSalary={max_salary}
+            openDate={created_at}
+            totalCandidates={total_candidates}
+            candidatesOnTrack={on_track_candidates}
+            closeDate={closed_at}
+            jobId={job_id}
+            recruiterStatus={recruit_status}
+            aboutJobPosition={about_job_position}
+            optionRequirement={option_requirement}
+            jobRequirement={job_requirement}
+            categoryId={categories_id}
+          />
+        }
+        {/*------------------------------ Start Filter Jobs ------------------------------*/}
+        <FormControl>
+          <Typography variant="overline" sx={{ height: "15px" }}>
+            FILTER YOUR CANDIDATES
           </Typography>
-          <div>
-            {/*------------------------------ Start information------------------------------*/}
-            {data.map((content, index) => {
-              return (
-                <>
-                  <Accordion
-                    expanded={expanded === `panal${index}`}
-                    onChange={handleChange(`panal${index}`)}
-                    sx={{ marginBottom: "16px", width: "945px" }}
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="row-radio-buttons-group"
+          >
+            <CheckBoxTextStyled
+              value="All"
+              control={<Radio />}
+              label="All"
+              onChange={handleFilterCandidates}
+            />
+            <CheckBoxTextStyled
+              value="Waiting"
+              control={<Radio />}
+              label="Waiting"
+              onChange={handleFilterCandidates}
+            />
+            <CheckBoxTextStyled
+              value="Reviewing"
+              control={<Radio />}
+              label="In progress"
+              onChange={handleFilterCandidates}
+            />
+            <CheckBoxTextStyled
+              value="Finished"
+              control={<Radio />}
+              label="Finished"
+              onChange={handleFilterCandidates}
+            />
+          </RadioGroup>
+        </FormControl>
+        {/*------------------------------ Start Candidates ------------------------------*/}
+
+        <Typography variant="h5" sx={{ marginBottom: "8px" }}>
+          {candidatesInputs.length} candidates found
+        </Typography>
+
+        {/*------------------------------ Start Candidates ------------------------------*/}
+
+        {candidatesInputs.map((content, index) => {
+          return (
+            <Accordion
+              expanded={expanded === `panal${index + 1}`}
+              onChange={handleChange(`panal${index + 1}`)}
+              sx={{ marginBottom: "16px", width: "945px" }}
+            >
+              <AccordionSummaryStyled
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+              >
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="flex-start"
+                  width="auto"
+                  spacing={0}
+                >
+                  {/*------------------------------ Column 1 ------------------------------*/}
+                  <Stack
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="flex-start"
+                    width="auto"
+                    marginRight="20px"
+                    spacing={0}
                   >
-                    <AccordionSummaryStyled
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1bh-content"
-                      id="panel1bh-header"
-                    >
-                      <Stack
-                        direction="column"
-                        justifyContent="center"
-                        alignItems="flex-start"
-                        width="315px"
-                        spacing={0}
-                      >
-                        <Typography variant="h6">
-                          {content.job_title}
-                        </Typography>
-                        <Typography variant="caption" color="info.main" sx={{}}>
-                          <Stack
-                            direction="row"
-                            justifyContent="flex-start"
-                            alignItems="center"
-                            spacing={0}
-                            sx={{
-                              "& .MuiSvgIcon-root": {
-                                fontSize: 20,
-                              },
-                            }}
-                          >
-                            {iconCategory(content.name)}
-
-                            {content.name}
-
-                            <DateRangeOutlinedIcon
-                              sx={{ marginRight: "6px", marginLeft: "10px" }}
-                            />
-                            {content.type}
-                            <MonetizationOnOutlinedIcon
-                              sx={{ marginRight: "6px", marginLeft: "10px" }}
-                            />
-                            {`${calSalary(content.min_salary)}k-${calSalary(
-                              content.max_salary
-                            )}k`}
-                          </Stack>
-                        </Typography>
-                      </Stack>
+                    <Typography variant="h6">{content.name}</Typography>
+                    <Typography variant="caption" color="info.main" sx={{}}>
                       <Stack
                         direction="row"
-                        justifyContent="center"
+                        justifyContent="flex-start"
                         alignItems="center"
                         spacing={0}
                         sx={{
@@ -243,293 +293,112 @@ export function ShowJobPostings() {
                           },
                         }}
                       >
-                        <OpenOn date={date(content.created_at)} />
-
-                        <TotalCandidates
-                          candidates={content.total_candidates}
+                        <LinkedInIcon
+                          sx={{ marginRight: "6px", marginLeft: "10px" }}
                         />
-                        <CandidatesOnTrack
-                          candidates={content.on_track_candidates}
-                        />
+                        {content.title}
                       </Stack>
-
+                    </Typography>
+                  </Stack>
+                  {/*------------------------------ Column 2 ------------------------------*/}
+                  <Stack
+                    direction="column"
+                    justifyContent="center"
+                    width="auto"
+                    spacing={0}
+                    margin="10px 20px 0 0"
+                  >
+                    <Typography variant="caption" color="info.main">
                       <Stack
                         direction="row"
-                        justifyContent="center"
+                        justifyContent="flex-start"
                         alignItems="center"
                         spacing={0}
                       >
-                        <CloseButton
-                          variant="button"
-                          color="secondary.main"
-                          startIcon={
-                            <SearchIcon
-                              sx={{ width: "35px", height: "35px" }}
-                              color="info"
-                            />
-                          }
-                        >
-                          SHOW
-                        </CloseButton>
-                        {content.recruit_status.toLowerCase() == "closed" && (
-                          <CloseButton
-                            variant="contained"
-                            color="error"
-                            startIcon={<HighlightOffIcon />}
-                            onClick={() => closedPost(content.job_id)}
-                            disabled
-                          >
-                            CLOSE
-                          </CloseButton>
-                        )}
-                        {content.recruit_status.toLowerCase() !== "closed" && (
-                          <CloseButton
-                            variant="contained"
-                            color="error"
-                            startIcon={<HighlightOffIcon />}
-                            onClick={() => closedPost(content.job_id)}
-                          >
-                            CLOSE
-                          </CloseButton>
-                        )}
+                        <MailOutlineIcon
+                          sx={{ marginRight: "6px", marginLeft: "10px" }}
+                        />
+                        {content.email}
                       </Stack>
-                    </AccordionSummaryStyled>
-
-                    <AccordionDetails>
-                      <Typography variant="subtitle1" color="error.main">
-                        About the job positions
-                      </Typography>
-                      <Typography variant="body2">
-                        {content.about_job_position}
-                      </Typography>
-                    </AccordionDetails>
-                    <AccordionDetails>
-                      <Typography variant="subtitle1" color="error.main">
-                        Mandatory Requirements
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ whiteSpace: "pre-wrap" }}
-                      >
-                        {content.job_requirement}
-                      </Typography>
-                    </AccordionDetails>
-                    <AccordionDetails>
-                      <Typography variant="subtitle1" color="error.main">
-                        Optional Requirements
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ whiteSpace: "pre-wrap" }}
-                      >
-                        {content.option_requirement}
-                      </Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                </>
-              );
-            })}
-            {/*------------------------------ Start Filter Jobs ------------------------------*/}
-            <FormControl>
-              <Typography variant="overline" sx={{ height: "15px" }}>
-                FILTER YOUR CANDIDATES
-              </Typography>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-              >
-                <CheckBoxTextStyled
-                  value="all"
-                  control={<Radio />}
-                  label="All"
-                  onClick={(e) => handlechoose(e.target.value)}
-                />
-                <CheckBoxTextStyled
-                  value="Waiting"
-                  control={<Radio />}
-                  label="Waiting"
-                  onClick={(e) => handlechoose(e.target.value)}
-                />
-                <CheckBoxTextStyled
-                  value="In progress"
-                  control={<Radio />}
-                  label="In progress"
-                  onClick={(e) => handlechoose(e.target.value)}
-                />
-                <CheckBoxTextStyled
-                  value="closed"
-                  control={<Radio />}
-                  label="Closed"
-                  onClick={(e) => handlechoose(e.target.value)}
-                />
-              </RadioGroup>
-            </FormControl>
-            {/*------------------------------ Start Candidates ------------------------------*/}
-
-            <Typography variant="h5" sx={{ marginBottom: "8px" }}>
-              {candidatesInputs.length} candidates found
-            </Typography>
-
-            {/*------------------------------ Start Candidates ------------------------------*/}
-
-            {candidatesInputs.map((content, index) => {
-              return (
-                <Accordion
-                  expanded={expanded === `panal${index + 1}`}
-                  onChange={handleChange(`panal${index + 1}`)}
-                  sx={{ marginBottom: "16px", width: "945px" }}
-                >
-                  <AccordionSummaryStyled
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1bh-content"
-                    id="panel1bh-header"
-                  >
-                    <Stack
-                      direction="row"
-                      justifyContent="center"
-                      alignItems="flex-start"
-                      width="auto"
-                      spacing={0}
-                    >
-                      {/*------------------------------ Column 1 ------------------------------*/}
                       <Stack
-                        direction="column"
-                        justifyContent="center"
-                        alignItems="flex-start"
-                        width="auto"
-                        marginRight="20px"
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="center"
                         spacing={0}
                       >
-                        <Typography variant="h6">{content.name}</Typography>
-                        <Typography variant="caption" color="info.main" sx={{}}>
-                          <Stack
-                            direction="row"
-                            justifyContent="flex-start"
-                            alignItems="center"
-                            spacing={0}
-                            sx={{
-                              "& .MuiSvgIcon-root": {
-                                fontSize: 20,
-                              },
-                            }}
-                          >
-                            <LinkedInIcon
-                              sx={{ marginRight: "6px", marginLeft: "10px" }}
-                            />
-                            {content.title}
-                          </Stack>
-                        </Typography>
+                        <LocalPhoneIcon
+                          sx={{ marginRight: "6px", marginLeft: "10px" }}
+                        />
+                        {content.phone}
                       </Stack>
-                      {/*------------------------------ Column 2 ------------------------------*/}
-                      <Stack
-                        direction="column"
-                        justifyContent="center"
-                        width="auto"
-                        spacing={0}
-                        margin="10px 20px 0 0"
-                      >
-                        <Typography variant="caption" color="info.main">
-                          <Stack
-                            direction="row"
-                            justifyContent="flex-start"
-                            alignItems="center"
-                            spacing={0}
-                          >
-                            <MailOutlineIcon
-                              sx={{ marginRight: "6px", marginLeft: "10px" }}
-                            />
-                            {content.email}
-                          </Stack>
-                          <Stack
-                            direction="row"
-                            justifyContent="flex-start"
-                            alignItems="center"
-                            spacing={0}
-                          >
-                            <LocalPhoneIcon
-                              sx={{ marginRight: "6px", marginLeft: "10px" }}
-                            />
-                            {content.phone}
-                          </Stack>
-                        </Typography>
-                      </Stack>
-                      {/*------------------------------ Column 3 ------------------------------*/}
-                      <Stack>
-                        <Stack
-                          direction="column"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          width="90px"
-                          spacing={0}
-                          textAlign="center"
-                          margin="0px 10px 0px 10px"
-                        >
-                          <MailOutlineIcon
-                            sx={{ marginRight: "6px", marginLeft: "10px" }}
-                          />
-                          <Typography variant="caption">
-                            Sent {content.date} days ago
-                          </Typography>
-                        </Stack>
-                      </Stack>
-                      {/*------------------------------ Column 4 ------------------------------*/}
-                      <Stack>
-                        <Stack
-                          direction="column"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          width="90px"
-                          textAlign="center"
-                          spacing={0}
-                          color="info.main"
-                        >
-                          <PauseCircleOutlineIcon
-                            sx={{ marginRight: "6px", marginLeft: "10px" }}
-                          />
-                          <Typography variant="caption">
-                            Waiting for review
-                          </Typography>
-                        </Stack>
-                      </Stack>
-                      {/*------------------------------ Column 5 ------------------------------*/}
-                      <Stack
-                        height="auto"
-                        color="info.main"
-                        margin="10px 0 0 20px"
-                      >
-                        <CloseButton
-                          variant="contained"
-                          color="background"
-                          onClick={() => closedPost(content.job_id)}
-                        >
-                          Mark as started
-                        </CloseButton>
-                      </Stack>
-                    </Stack>
-                  </AccordionSummaryStyled>
-                  <Stack margin="0 10px 10px 10px ">
-                    <Typography variant="caption">
-                      LAST UPDATE ON {content.updated}
-                    </Typography>
-                    <Typography variant="subtitle1" color="error.main">
-                      Professional experience
-                    </Typography>
-                    <Typography variant="body2">
-                      {content.experience}
-                    </Typography>
-                    <Typography variant="subtitle1" color="error.main">
-                      Why are you interested in working at The company name SA
-                    </Typography>
-                    <Typography variant="body2">
-                      {content.experience}
                     </Typography>
                   </Stack>
-                </Accordion>
-              );
-            })}
-          </div>
-        </Box>
+                  {/*------------------------------ Column 3 ------------------------------*/}
+                  <Stack>
+                    <Stack
+                      direction="column"
+                      justifyContent="flex-start"
+                      alignItems="center"
+                      width="90px"
+                      spacing={0}
+                      textAlign="center"
+                      margin="0px 10px 0px 10px"
+                    >
+                      <MailOutlineIcon
+                        sx={{ marginRight: "6px", marginLeft: "10px" }}
+                      />
+                      <Typography variant="caption">
+                        Sent {content.date} days ago
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                  {/*------------------------------ Column 4 ------------------------------*/}
+                  <Stack>
+                    <Stack
+                      direction="column"
+                      justifyContent="flex-start"
+                      alignItems="center"
+                      width="90px"
+                      textAlign="center"
+                      spacing={0}
+                      color="info.main"
+                    >
+                      <PauseCircleOutlineIcon
+                        sx={{ marginRight: "6px", marginLeft: "10px" }}
+                      />
+                      <Typography variant="caption">
+                        Waiting for review
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                  {/*------------------------------ Column 5 ------------------------------*/}
+                  <Stack height="auto" color="info.main" margin="10px 0 0 20px">
+                    <CloseButton
+                      variant="contained"
+                      color="background"
+                      onClick={() => closedPost(content.job_id)}
+                    >
+                      Mark as started
+                    </CloseButton>
+                  </Stack>
+                </Stack>
+              </AccordionSummaryStyled>
+              <Stack margin="0 10px 10px 10px ">
+                <Typography variant="caption">
+                  LAST UPDATE ON {content.updated}
+                </Typography>
+                <Typography variant="subtitle1" color="error.main">
+                  Professional experience
+                </Typography>
+                <Typography variant="body2">{content.experience}</Typography>
+                <Typography variant="subtitle1" color="error.main">
+                  Why are you interested in working at The company name SA
+                </Typography>
+                <Typography variant="body2">{content.experience}</Typography>
+              </Stack>
+            </Accordion>
+          );
+        })}
       </Box>
     </Box>
   );

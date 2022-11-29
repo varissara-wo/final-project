@@ -14,6 +14,7 @@ function usePosts() {
   const [isLoading, setIsLoading] = useState(true);
   const [followJob, setFollowJob] = useState([]);
   const [jobApplicationsData, setJobApplicationsData] = useState([]);
+  const [getPostByIdData, setGetPostByIdData] = useState({});
 
   const navigate = useNavigate();
 
@@ -150,6 +151,25 @@ function usePosts() {
     );
   };
 
+  const getPostById = async (jobId) => {
+    const results = await axios.get(
+      `http://localhost:4000/recruiter/post/${jobId}`
+    );
+    const postData = results.data.data;
+    setGetPostByIdData(postData);
+    setIsLoading(false);
+  };
+
+  // const getCandidates= async (recruiterEmail, jobId) => {
+  //   // console.log(recruiterEmail, jobId);
+  //   const results = await axios.get(
+  //     `http://localhost:4000/recruiter/jobs/candidate/${jobId}?recruiterEmail=${recruiterEmail}`
+  //   );
+  //   console.log(results.data.data);
+  //   // setCandidatesData(results.data.data);
+  //   setIsLoading(false);
+  // };
+
   return {
     createPost,
     getPost,
@@ -177,6 +197,8 @@ function usePosts() {
     getJobApplications,
     jobApplicationsData,
     declineApplication,
+    getPostById,
+    getPostByIdData,
   };
 }
 export default usePosts;

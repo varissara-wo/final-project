@@ -1,11 +1,21 @@
-import { Accordion, Stack, Typography } from "@mui/material";
+import { Accordion, AccordionSummary, Stack, Typography } from "@mui/material";
 import React from "react";
 
-export default function CandidatesWrapper() {
+export default function CandidatesWrapper(props) {
+  const {} = props;
+  const AccordionSummaryStyled = styled(AccordionSummary)(() => ({
+    "& .css-o4b71y-MuiAccordionSummary-content": {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+  }));
+
   return (
     <Accordion
-      expanded={expanded === `panal${index + 1}`}
-      onChange={handleChange(`panal${index + 1}`)}
+      expanded={expanded === `panal${index}`}
+      onChange={handleChange(`panal${index}`)}
       sx={{ marginBottom: "16px", width: "945px" }}
     >
       <AccordionSummaryStyled

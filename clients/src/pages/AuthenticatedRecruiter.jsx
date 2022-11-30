@@ -6,7 +6,7 @@ import { JobPost } from "./Recruiter/JobPost.jsx";
 import { ShowJobPostings } from "../components/Recruiter/ShowJobPosting.jsx";
 import CreateJob from "./Recruiter/CreateJob.jsx";
 import RecruiterProfile from "./Recruiter/RecruiterProfile.jsx";
-
+import ErrorPage from "./ErrorPage.jsx";
 const AuthenticatedRecruiter = () => {
   return (
     <ThemeProvider theme={theme}>
@@ -18,6 +18,7 @@ const AuthenticatedRecruiter = () => {
           path="recruiter/jobpost/candidate"
           element={<ShowJobPostings />}
         ></Route>
+        <Route path="/*" element={<ErrorPage />}></Route>
       </Routes>
     </ThemeProvider>
   );

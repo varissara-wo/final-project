@@ -31,25 +31,31 @@ export const validatePhoneNumber = (number) => {
 };
 
 export const validateExperience = (context) => {
-  const experienceRegex = /.{300,2000}/;
+  const experienceRegex = /^.{300,2000}$/;
   const isExperienceValid = experienceRegex.test(context);
   return isExperienceValid;
 };
 
 export const validateEducation = (context) => {
-  const educationRegex = /.{100,2000}/;
+  const educationRegex = /^.{100,2000}$/;
   const isEducationValid = educationRegex.test(context);
   return isEducationValid;
 };
 
 export const validateAbout = (context) => {
-  const aboutRegex = /.{100,2000}$/;
+  const aboutRegex = /^.{100,2000}$/;
   const isAboutValid = aboutRegex.test(context);
   return isAboutValid;
 };
 
+export const validateInterest = (context) => {
+  const interestRegex = /^.{50,100}$/;
+  const isInterestValid = interestRegex.test(context);
+  return isInterestValid;
+};
+
 export const validateCompanyName = (context) => {
-  const companyNameRegex = /.{1,50}/;
+  const companyNameRegex = /^.{1,50}$/;
   const isCompanyNameValid = companyNameRegex.test(context);
   return isCompanyNameValid;
 };

@@ -26,7 +26,12 @@ import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MultilineInputJobPostBig from "../Recruiter/Multiinputbig.jsx";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import usePosts from "../../hooks/usePost.jsx";
+import MultilineInput from "../Register/MultilineInput";
 import { useAuth } from "../../contexts/authentication";
+import {
+  validateInterest,
+  validateExperience,
+} from "../../utils/validateRegister";
 
 const CheckBoxTextStyled = styled(FormControlLabel)(() => ({
   color: "#616161",
@@ -40,23 +45,29 @@ const CheckBoxTextStyled = styled(FormControlLabel)(() => ({
 }));
 
 function Applyjob(props) {
-  const { getJobById, getJobByIdData, isLoading, getUser, userdata } =
-    usePosts();
+  const {
+    getJobById,
+    getJobByIdData,
+    isLoading,
+    getUser,
+    userdata,
+    setIsLoading,
+    Apply,
+  } = usePosts();
   const { state, getUserData } = useAuth();
   const navigate = useNavigate();
   const innitialFileData = "No file chosen";
   const [fileStatus, setFileStatus] = useState(innitialFileData);
-  const { Apply } = usePosts();
-  const [cv, setCv] = useState({});
-  const { jobId } = props;
 
+  const { jobId } = props;
   const [apply, setApply] = useState({
     experience: "",
     statuscv: "false",
+    interest: "",
   });
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       getUserData();
       getJobById(jobId);
       setApply({
@@ -65,9 +76,10 @@ function Applyjob(props) {
         professionalId: state.user["id"],
       });
     }, 800);
-    console.log(state);
+
+    return () => clearTimeout(timer);
   }, [isLoading]);
-  console.log(jobId);
+
   const {
     company_name,
     created_at,
@@ -92,18 +104,23 @@ function Applyjob(props) {
       setApply({ ...apply, [event.target.name]: file });
     }
   };
-  console.log(apply);
+
   const handlerApply = (event) => {
-    const formData = new FormData();
-    event.preventDefault();
-    const data = {
-      ...apply,
-    };
-    console.log(data);
-    for (let key in data) {
-      formData.append(key, data[key]);
+    const checkExperience = validateExperience(apply.experience);
+    const checkInterest = validateInterest(apply.interest);
+    if (checkExperience && checkInterest) {
+      setIsLoading(true);
+      const formData = new FormData();
+      event.preventDefault();
+      const data = {
+        ...apply,
+      };
+      console.log(data);
+      for (let key in data) {
+        formData.append(key, data[key]);
+      }
+      Apply(jobId, formData);
     }
-    Apply(jobId, formData);
   };
 
   const DisplayStyle = styled(Stack)(() => ({
@@ -220,7 +237,6 @@ function Applyjob(props) {
                   >
                     {company_name}
                   </Typography>
-                  <Following />
                 </Stack>
               </Stack>
               <SendButton onClick={handlerApply} />
@@ -441,6 +457,9 @@ function Applyjob(props) {
                   experience: e.target.value,
                 });
               }}
+              helperText="Between 100 and 2000 characters"
+              pattern="^.{100,2000}$"
+              errorMessage="** Should have characters between 100 - 2000 characters"
             />
             <Typography variant="overline" color=" warning.main">
               Why are you interested in working at The company name SA
@@ -453,7 +472,10 @@ function Applyjob(props) {
                   interest: e.target.value,
                 });
               }}
+              value={apply.interest}
               helperText="Between 50 and 100 characters"
+              pattern="^.{50,100}$"
+              errorMessage="** Should have characters between 50 - 100 characters"
             />
 
             <SendButton

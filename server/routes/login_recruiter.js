@@ -2,34 +2,11 @@ import { Router } from "express";
 import { pool } from "../utils/db.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import multer from "multer";
+import { cvUpload } from "../utils/upload.js";
 import { protect } from "../middlewares/protect.js";
 
 const loginRecuiterRouter = Router();
-
-// loginRecuiterRouter.use(protect);
-// const generateaccesstoken = (user)=>{
-//   {
-//     id: userId.rows[0].recruiter_id,
-//     profile: profile.rows[0],
-//     userType: "recruiter",
-//   },
-//   process.env.SECRET_KEY,
-//   {
-//     expiresIn: "900000",
-//   }
-// }
-// const generaterefreshaccesstoken = (user)=>{
-
-//     {
-//       id: userId.rows[0].recruiter_id,
-//       profile: profile.rows[0],
-//       userType: "recruiter",
-//     },
-//     process.env.SECRET_KEY,
-//     {
-//       expiresIn: "900000",
-//     }
-// }
 
 loginRecuiterRouter.post("/", async (req, res) => {
   try {
@@ -64,8 +41,7 @@ loginRecuiterRouter.post("/", async (req, res) => {
       `select * from recruiter_users  where email = $1`,
       [isRecuiterUser.rows[0].email]
     );
-    // generateaccesstoken(profile)
-    // generaterefreshaccesstoken(profile)
+
     const token = jwt.sign(
       {
         id: userId.rows[0].recruiter_id,
@@ -77,24 +53,6 @@ loginRecuiterRouter.post("/", async (req, res) => {
         expiresIn: "900000",
       }
     );
-    // const refreshtoken = jwt.sign(
-    //   {
-    //     id: userId.rows[0].recruiter_id,
-    //     profile: profile.rows[0],
-    //     userType: "recruiter",
-    //   },
-    //   process.env.SECRET_KEY,
-    //   {
-    //     expiresIn: "900000",
-    //   }
-    // )
-    //   const refreshToken = jwt.sign(user, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife})
-    //   const response = {
-    //     "status": "Logged in",
-    //     "token": token,
-    //     "refreshToken": refreshToken,
-    // // }
-    // tokenList[refreshToken] = response
 
     return res.json({
       message: "Login Succesfully",
@@ -105,11 +63,23 @@ loginRecuiterRouter.post("/", async (req, res) => {
     throw error;
   }
 });
-// let refreshtoken = []
-// loginRecuiterRouter.post("/refresh",(req,res)=>{
-//   const refreshtoken = req.body.token
-//   if(!refreshtoken){
-//     return res.status(401).json("not authen")
-//   }
-// })
+
+loginRecuiterRouter.get("/users/exists/:email", async (req, res) => {
+  try {
+    const isUserExist = await pool.query(
+      `select * from recruiter_users where email = $1`,
+      [req.params.email]
+    );
+
+    let check = isUserExist.rows.length > 1 ? true : false;
+
+    return res.status(200).json({
+      isEmailExist: check,
+    });
+  } catch (err) {
+    console.log(err);
+    console.log(err);
+  }
+});
+
 export default loginRecuiterRouter;

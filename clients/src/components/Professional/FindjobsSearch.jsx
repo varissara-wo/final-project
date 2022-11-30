@@ -46,7 +46,7 @@ export function Findjobssearch() {
     setIsLoading(true);
     const timer = setTimeout(() => {
       followJobApplication(jobId, state.user["id"]);
-    }, 800);
+    }, 300);
     return () => clearTimeout(timer);
   };
 

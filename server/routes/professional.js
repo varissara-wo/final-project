@@ -615,50 +615,66 @@ professionalRouter.get("/searchjobs/:userId", async (req, res) => {
 });
 professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
   const statuscv = req.body.statuscv;
-  const jobId = req.params.id;
-  const professId = req.body.professionalId;
-
+  const jobId = Number(req.params.id);
+  const professId = Number(req.body.professionalId);
+  console.log("ข้างนอก");
+  console.log(req.files);
+  console.log("expe");
+  console.log("Kijaaaaaaaaaaaaa");
+  console.log(req.body["experience"]);
+  console.log(req.body.statuscv);
   try {
     const applyornot = await pool.query(
       `select * from job_applications  where professional_id = $1 and job_id =$2`,
       [professId, jobId]
     );
-
+    console.log("545");
+    console.log(applyornot);
     if (applyornot.rows.length !== 0) {
+      console.log("hi if else แตก");
       return res.status(201).json({
         message: "you already apply ",
       });
     } else if (statuscv === "true") {
+      console.log("เข้าอัพcvไหมจะ");
       const file = req.files.cv[0];
+      console.log("ไฟล์เข้าปะ");
+      console.log(file);
       const responseCvUpload = await cvUpload(file);
       const cvUrl = responseCvUpload;
+      console.log("cvurl");
+      console.log(cvUrl);
       const jobapply = {
         job_id: jobId,
-        professionalId: req.body.professionalId,
+        professionalId: professId,
         status: "Waiting",
-        detial: req.body.interest,
-        experiece: req.body.experiece,
+        detail: req.body.interest,
+        experiece: req.body["experience"],
         newcv: cvUrl,
         statuscv: req.body.statuscv,
         created_at: new Date(),
         updated_at: new Date(),
       };
-      await pool.query(
-        `insert into job_applications 
-        (job_id,professional_id,application_status,experience,interested_detail,new_cv_url,created_at,updated_at,is_upload_cv) 
-      values($1,$2,$3,$4,$5,$6,$7,$8,&9)`,
-        [
-          jobapply.job_id,
-          jobapply.professionalId,
-          jobapply.status,
-          jobapply.experiece,
-          jobapply.detial,
-          jobapply.newcv,
-          jobapply.created_at,
-          jobapply.updated_at,
-          jobapply.statuscv,
-        ]
-      );
+      console.log("568");
+      console.log(jobapply);
+      try {
+        await pool.query(
+          `insert into job_applications (job_id,professional_id,interested_detail,new_cv_url,created_at,updated_at,is_upload_cv,experience)
+      values($1,$2,$3,$4,$5,$6,$7,$8)`,
+          [
+            jobapply.job_id,
+            jobapply.professionalId,
+            jobapply.detail,
+            jobapply.newcv,
+            jobapply.created_at,
+            jobapply.updated_at,
+            jobapply.statuscv,
+            jobapply.experiece,
+          ]
+        );
+      } catch (err) {
+        console.log(err);
+      }
     } else if (statuscv == "false") {
       const jobapply = {
         job_id: jobId,

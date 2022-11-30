@@ -128,9 +128,14 @@ function usePosts() {
     );
     setUserdata(results.data.data);
   };
-  const Apply = async (jobId, data) => {
-    console.log(data);
-    await axios.post(`http://localhost:4000/professional/apply/${jobId}`, data);
+
+  const Apply = async (jobId, formData) => {
+    console.log(formData.body);
+    await axios.post(
+      `http://localhost:4000/professional/apply/${jobId}`,
+      formData
+    );
+    console.log("ผ่านไหหมจะ");
     navigate("/applications");
   };
   const UpdateProifleRecruiter = async (recruiterId, formData) => {

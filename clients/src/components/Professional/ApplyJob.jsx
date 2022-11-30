@@ -52,16 +52,22 @@ function Applyjob(props) {
 
   const [apply, setApply] = useState({
     experience: "",
+    statuscv: "false",
   });
 
   useEffect(() => {
     setTimeout(() => {
       getUserData();
       getJobById(jobId);
-      setApply({ ...apply, experience: state.user["profile"]["experience"] });
+      setApply({
+        ...apply,
+        experience: state.user["profile"]["experience"],
+        professionalId: state.user["id"],
+      });
     }, 800);
+    console.log(state);
   }, [isLoading]);
-
+  console.log(jobId);
   const {
     company_name,
     created_at,
@@ -76,19 +82,28 @@ function Applyjob(props) {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     const fileType = file.type.split("/");
-    if (fileType[1] !== "jpeg" && fileType[1] !== "png") {
+    if (fileType[1] !== "pdf" && fileType[1] !== "png") {
       return setFileStatus("Not a PNG, JPEG, IMG file");
     }
     if (file.size > 5 * 1024 * 1024) {
       return setFileStatus("File size more than 5 MB");
     } else {
       setFileStatus(`File ${file.name}`);
-      setCv({ [event.target.name]: file });
+      setApply({ ...apply, [event.target.name]: file });
     }
   };
-
-  const handlerApply = () => {
-    Apply(jobId, apply);
+  console.log(apply);
+  const handlerApply = (event) => {
+    const formData = new FormData();
+    event.preventDefault();
+    const data = {
+      ...apply,
+    };
+    console.log(data);
+    for (let key in data) {
+      formData.append(key, data[key]);
+    }
+    Apply(jobId, formData);
   };
 
   const DisplayStyle = styled(Stack)(() => ({
@@ -441,7 +456,11 @@ function Applyjob(props) {
               helperText="Between 50 and 100 characters"
             />
 
-            <SendButton onClick={handlerApply} />
+            <SendButton
+              onClick={(e) => {
+                handlerApply(e);
+              }}
+            />
           </Box>
         </Box>
       )}

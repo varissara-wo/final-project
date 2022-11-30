@@ -11,29 +11,33 @@ function RegisProvider(props) {
 
   const isProfessionalEmailExist = async (email) => {
     const result = await axios.get(
-      `http://localhost:4000/professional/users/exists/${email}`
+      `http://localhost:4000/login_professional/users/exists/${email}`
     );
     const data = result.data.isEmailExist;
+    console.log(data);
     setProfessionalExist(data);
   };
 
   const isRecruiterEmailExist = async (email) => {
     const result = await axios.get(
-      `http://localhost:4000/recruiter/users/exists/${email}`
+      `http://localhost:4000/login_recruiter/users/exists/${email}`
     );
 
     setRecruiterExist(result.data.isEmailExist);
   };
 
   const registerProfessional = async (formData) => {
-    await axios.post("http://localhost:4000/professional", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-    navigate("/");
+    await axios.post(
+      "http://localhost:4000/login_professional/register",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
   };
 
   const registerRecruiter = async (formData) => {
-    await axios.post("http://localhost:4000/recruiter", formData, {
+    await axios.post("http://local host:4000/recruiter", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     navigate("/");

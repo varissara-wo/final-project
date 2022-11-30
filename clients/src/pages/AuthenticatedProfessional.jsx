@@ -9,8 +9,9 @@ import Applications from "./Professional/Applications.jsx";
 import ApplicationForm from "./Professional/ApplicationForm.jsx";
 import Following from "./Professional/Following.jsx";
 import ProfessionalProfile from "./Professional/ProfessionalProfile.jsx";
-
+import jwtInterceptor from "../utils/jwtInterceptor";
 const AuthenticatedProfessional = () => {
+  jwtInterceptor();
   return (
     <ThemeProvider theme={theme}>
       <Routes>

@@ -11,6 +11,7 @@ import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import { bigIconCategory } from "../../utils/utilsFunction";
 import { useNavigate } from "react-router-dom";
+import { MonetizationOn, CalendarMonth, GpsFixed } from "@mui/icons-material/";
 
 const DisplayStyle = styled(Stack)(() => ({
   border: "1px solid #BF5F82",
@@ -125,7 +126,34 @@ export function JobDetails(props) {
               >
                 {companyName}
               </Typography>
-              <Following />
+              <Button
+                sx={{ paddingLeft: "0px" }}
+                // onClick={() => {
+                //   handlerFollow(jobId);
+                // }}
+              >
+                <GpsFixed
+                  sx={{
+                    color: "#616161",
+                    marginRight: "10px",
+                    padding: "9px",
+                    backgroundColor: "",
+                    borderRadius: "",
+                    // color: isFollow ? "#fff" : "#616161",
+                    // marginRight: "10px",
+                    // padding: "9px",
+                    // backgroundColor: isFollow ? "#F48FB1" : "#fff",
+                    // borderRadius: "50px",
+                  }}
+                  color="info"
+                />
+                <Typography
+                  variant="button"
+                  sx={{ color: "#616161", display: "flex" }}
+                >
+                  Follow
+                </Typography>
+              </Button>
             </Stack>
           </Stack>
           <ApplyNowButton jobId={jobId} />

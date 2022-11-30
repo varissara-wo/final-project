@@ -72,6 +72,7 @@ export function YourApplications() {
         state.user.profile.email,
         selectedFilterApplicationStatus
       );
+      console.log(jobApplicationsData);
       setIsLoading(false);
     }, 150);
   }, [isLoading, setIsLoading, isUserLoading, selectedFilterApplicationStatus]);

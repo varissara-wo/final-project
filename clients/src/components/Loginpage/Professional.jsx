@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Stack, Typography, Box, Step, StepLabel } from "@mui/material";
 
@@ -20,16 +20,14 @@ const Professional = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const { professionalLogin } = useAuth();
-
+  const { professionalLogin, validate, passwordValid, emailValid } = useAuth();
+  console.log(validate);
   const handleSubmit = (event) => {
     professionalLogin({
       email: account.email,
       password: account.password,
     });
   };
-
-
 
   return (
     <>
@@ -62,7 +60,7 @@ const Professional = () => {
                 display="flex"
                 flex={1}
               >
-                {emailMessage}
+                {emailValid}
               </Typography>
             </Stack>
             <InputLabelStyle>PASSWORD</InputLabelStyle>
@@ -86,7 +84,7 @@ const Professional = () => {
                 display="flex"
                 flex={1}
               >
-                {passwordMessage}
+                {passwordValid}
               </Typography>
             </Stack>
 

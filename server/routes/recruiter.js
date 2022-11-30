@@ -360,6 +360,26 @@ recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
 
 recruiterRouter.get("/post/:jobId", async (req, res) => {
   const jobId = req.params.jobId;
+  // query sum total_candidates
+  const queryCandidates = await pool.query(
+    `SELECT COUNT(*) AS total_candidates FROM job_applications WHERE job_id = $1`,
+    [jobId]
+  );
+  const TotalCandidates = Number(queryCandidates.rows[0].total_candidates);
+  // query sum on Track_candidates
+  const queryOnTrackCandidates = await pool.query(
+    `SELECT COUNT(*) AS on_track_candidates FROM job_applications WHERE job_id = $1 AND application_status != 'Declined'`,
+    [jobId]
+  );
+  const onTrackCandidates = Number(
+    queryOnTrackCandidates.rows[0].on_track_candidates
+  );
+  const updated_at = new Date();
+  // update candidates on track and total candidates
+  await pool.query(
+    `UPDATE jobs SET total_candidates = $1, on_track_candidates = $2, updated_at = $3 WHERE job_id = $4`,
+    [TotalCandidates, onTrackCandidates, updated_at, jobId]
+  );
   const relults = await pool.query(
     `SELECT * FROM jobs LEFT JOIN categories ON jobs.categories_id = categories.categories_id WHERE job_id = $1`,
     [jobId]

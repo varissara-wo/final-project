@@ -18,9 +18,11 @@ const OnelineInput = (props) => {
   const [isValid, setIsValid] = useState(false);
 
   const validateInput = () => {
+    console.log(value);
     const regex = pattern;
-    const isValid = regex.test(value);
-    setIsValid(isValid);
+    const checkIsValid = regex.test(value);
+    setIsValid(checkIsValid);
+    console.log(isValid);
     setIsLoading(false);
   };
 

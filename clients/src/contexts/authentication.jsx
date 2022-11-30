@@ -28,7 +28,7 @@ function AuthProvider(props) {
   const recruiterLogin = async (data) => {
     try {
       const result = await axios.post(
-        "http://localhost:4000/login_recuiter",
+        "http://localhost:4000/login_recruiter",
         data
       );
 

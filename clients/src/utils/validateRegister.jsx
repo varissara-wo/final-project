@@ -49,7 +49,7 @@ export const validateAbout = (context) => {
 };
 
 export const validateCompanyName = (context) => {
-  const companyNameRegex = /.{1}/;
+  const companyNameRegex = /.{1,50}/;
   const isCompanyNameValid = companyNameRegex.test(context);
   return isCompanyNameValid;
 };

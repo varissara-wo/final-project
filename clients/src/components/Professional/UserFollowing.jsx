@@ -10,7 +10,6 @@ const UserFollowing = () => {
     getFollow(20);
   }, [isLoading]);
 
-  
   return (
     <Box
       sx={{

@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { pool } from "../utils/db.js";
 import multer from "multer";
 import { cvUpload } from "../utils/upload.js";
+import { v2 as cloudinary } from "cloudinary";
 
 const professionalRouter = Router();
 
@@ -11,6 +12,23 @@ professionalRouter.get("/", async (req, res) => {
   try {
     const professionalUsers = await pool.query(
       `select * from professional_users`
+    );
+
+    return res.status(200).json({
+      data: professionalUsers.rows,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//Get user profile by Id
+professionalRouter.get("profile/:id", async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const professionalUsers = await pool.query(
+      `select * from professional_users where professional_id = $1`,
+      [userId]
     );
 
     return res.status(200).json({
@@ -95,42 +113,104 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
 });
 
 //Update user
-professionalRouter.put("/:id", async (req, res) => {
+professionalRouter.put("/:id", CvUpload, async (req, res) => {
+  console.log("hello");
+  const professional = req.params.id;
+  console.log("102");
+  console.log(req.body);
+  // const userId = req.params.id;
+  let cvUrl;
+
+  if (req.body.cv) {
+    cvUrl = req.body.cv;
+    console.log("kookai");
+  } else {
+    const file = req.files.cv[0];
+    console.log("109");
+    console.log(file);
+    const idimg = await pool.query(
+      `select cv_url from professional_users  where professional_id = $1`,
+      [professional]
+    );
+    console.log("118");
+    console.log(idimg);
+    const id = JSON.parse(idimg.rows[0].cv_url).publicId;
+    console.log("119");
+    console.log(id);
+    try {
+      console.log("120");
+      console.log(file);
+      await cloudinary.uploader.destroy(id);
+      const responseLogoUpload = await cvUpload(file);
+      console.log(responseLogoUpload);
+      cvUrl = responseLogoUpload;
+      console.log("130");
+      console.log(cvUrl);
+    } catch (err) {}
+  }
+
   const updatedUser = {
+    cv_url: cvUrl,
     ...req.body,
     updated_at: new Date(),
   };
-  const userId = req.params.id;
-  const alreadyUse = await pool.query(
-    `select * from professional_users where email =$1`,
-    [updatedUser.email]
-  );
-  if (alreadyUse.rows.length === 1) {
-    return res.json({
-      message: "This email is already available",
-    });
-  } else {
-    await pool.query(
-      `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,
-      [
-        updatedUser.email,
-        updatedUser.name,
-        updatedUser.phone,
-        updatedUser.birthday,
-        updatedUser.linkedin,
-        updatedUser.title,
-        updatedUser.experience,
-        updatedUser.cv,
-        updatedUser.education,
-        updatedUser.updated_at,
-        userId,
-      ]
-    );
+  console.log(updatedUser);
 
-    return res.json({
-      message: `User ${userId} has been updated.`,
-    });
+  const emailUse = await pool.query(
+    `select * from professional_users where email = $1 and professional_id != $2`,
+    [updatedUser.email, professional]
+  );
+
+  try {
+    if (emailUse.rows.length !== 0) {
+      return res.json({
+        message: "** This email is unavailable",
+      });
+    } else {
+      await pool.query(
+        `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,
+        [
+          updatedUser.email,
+          updatedUser.name,
+          updatedUser.phone,
+          updatedUser.birthday,
+          updatedUser.linkedin,
+          updatedUser.title,
+          updatedUser.experience,
+          updatedUser.cv_url,
+          updatedUser.education,
+          updatedUser.updated_at,
+          professional,
+        ]
+      );
+      return res.status(200).json({
+        message: ` ${professional} has been update.`,
+      });
+    }
+  } catch (err) {
+    console.log(err);
   }
+  const userId = req.params.id;
+
+  await pool.query(
+    `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,
+    [
+      updatedUser.email,
+      updatedUser.name,
+      updatedUser.phone,
+      updatedUser.birthday,
+      updatedUser.linkedin,
+      updatedUser.title,
+      updatedUser.experience,
+      updatedUser.cv,
+      updatedUser.education,
+      updatedUser.updated_at,
+      userId,
+    ]
+  );
+  return res.json({
+    message: `User ${userId} has been updated.`,
+  });
 });
 
 //Delete user

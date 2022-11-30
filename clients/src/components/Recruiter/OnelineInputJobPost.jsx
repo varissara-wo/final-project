@@ -3,7 +3,7 @@ import { OnelineTextField, InputLabelStyle } from "../Register/Styles.jsx";
 
 const OnelineInputJobPost = (props) => {
   const { label, name, onChange, value, placeholder } = props;
-  console.log(value);
+
   return (
     <>
       <InputLabelStyle style={{ fontSize: "10px", fontWeight: "500" }}>

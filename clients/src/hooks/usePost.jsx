@@ -14,6 +14,8 @@ function usePosts() {
   const [isLoading, setIsLoading] = useState(true);
   const [followJob, setFollowJob] = useState([]);
   const [jobApplicationsData, setJobApplicationsData] = useState([]);
+  const [ProfessionalProfile, setProfessionalProfile] = useState([]);
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -88,6 +90,17 @@ function usePosts() {
     setProfile(results.data.data);
     setIsLoading(false);
   };
+
+  const getProfessionalUserProfile = async (professionalId) => {
+    console.log(professionalId);
+    const results = await axios.get(
+      `http://localhost:4000/professional/profile/${professionalId}`
+    );
+    console.log(results);
+    setProfessionalProfile(results.data.data);
+    setIsLoading(false);
+  };
+
   const getFollow = async (professionalId) => {
     const results = await axios.get(
       `http://localhost:4000/professional/follow/${professionalId}`
@@ -150,6 +163,28 @@ function usePosts() {
     );
   };
 
+  const UpdateProifleProfessional = async (professionalId, formData) => {
+    try {
+      const result = await axios.put(
+        `http://localhost:4000/professional/${professionalId}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      const message = result.data.message;
+      if (message === "** This email is unavailable") {
+        setMessage(message);
+        window.scrollTo(0, 0);
+        setIsLoading(false);
+      } else {
+        navigate("/findjobs");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(professionalId, formData);
+  };
   return {
     createPost,
     getPost,
@@ -177,6 +212,10 @@ function usePosts() {
     getJobApplications,
     jobApplicationsData,
     declineApplication,
+    UpdateProifleProfessional,
+    getProfessionalUserProfile,
+    ProfessionalProfile,
+    message,
   };
 }
 export default usePosts;

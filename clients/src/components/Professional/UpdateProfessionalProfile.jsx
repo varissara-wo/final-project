@@ -19,9 +19,12 @@ const UpdateProfessionalProfile = () => {
   const [fileStatus, setFileStatus] = useState(innitialFileData);
   const { createPost, UpdateProifleProfessional } = usePosts();
   const { state, getUserData } = useAuth();
+<<<<<<< HEAD
   const { cv, setCv } = useState({
     cv: state.user.profile.cv_url,
   });
+=======
+>>>>>>> 453e297 (feat : edit professional profile)
 
   const handlerInputChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -31,7 +34,11 @@ const UpdateProfessionalProfile = () => {
     const formData = new FormData();
     console.log(userData);
     event.preventDefault();
+<<<<<<< HEAD
     const data = {
+=======
+    UpdateProifleProfessional(state.user["id"], {
+>>>>>>> 453e297 (feat : edit professional profile)
       ...userData,
     };
     console.log(data)

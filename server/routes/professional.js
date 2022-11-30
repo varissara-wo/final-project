@@ -91,7 +91,7 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
-  } catch (err) {}
+  } catch (err) { }
 });
 
 //Update user
@@ -100,38 +100,62 @@ professionalRouter.put("/:id", async (req, res) => {
     ...req.body,
     updated_at: new Date(),
   };
+  console.log(updatedUser)
   const userId = req.params.id;
-  const alreadyUse = await pool.query(
-    `select * from professional_users where email =$1`,
-    [updatedUser.email]
-  );
-  if (alreadyUse.rows.length === 1) {
-    return res.json({
-      message: "This email is already available",
-    });
-  } else {
-    await pool.query(
-      `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,
-      [
-        updatedUser.email,
-        updatedUser.name,
-        updatedUser.phone,
-        updatedUser.birthday,
-        updatedUser.linkedin,
-        updatedUser.title,
-        updatedUser.experience,
-        updatedUser.cv,
-        updatedUser.education,
-        updatedUser.updated_at,
-        userId,
-      ]
-    );
+  //   const alreadyUse = await pool.query(
+  //     `select * from professional_users where email =$1`,
+  //     [updatedUser.email]
+  //   );
+  //   if (alreadyUse.rows.length === 1) {
+  //     return res.json({
+  //       message: "This email is already available",
+  //     });
+  //   } else {
+  //     await pool.query(
+  //       `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,
+  //       [
+  //         updatedUser.email,
+  //         updatedUser.name,
+  //         updatedUser.phone,
+  //         updatedUser.birthday,
+  //         updatedUser.linkedin,
+  //         updatedUser.title,
+  //         updatedUser.experience,
+  //         updatedUser.cv,
+  //         updatedUser.education,
+  //         updatedUser.updated_at,
+  //         userId,
+  //       ]
+  //     );
 
-    return res.json({
-      message: `User ${userId} has been updated.`,
-    });
-  }
+  //     return res.json({
+  //       message: `User ${userId} has been updated.`,
+  //     });
+  //   }
+  // });
+
+  await pool.query(
+    `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,
+    [
+      updatedUser.email,
+      updatedUser.name,
+      updatedUser.phone,
+      updatedUser.birthday,
+      updatedUser.linkedin,
+      updatedUser.title,
+      updatedUser.experience,
+      updatedUser.cv,
+      updatedUser.education,
+      updatedUser.updated_at,
+      userId,
+    ]
+  );
+  return res.json({
+    message: `User ${userId} has been updated.`,
+  });
 });
+
+
 
 //Delete user
 professionalRouter.delete("/:id", async (req, res) => {
@@ -607,7 +631,7 @@ professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
     return res.status(201).json({
       message: "Job has been apply sucessfully",
     });
-  } catch (err) {}
+  } catch (err) { }
 });
 professionalRouter.get("/profile/:id", async (req, res) => {
   const userId = req.params.id;

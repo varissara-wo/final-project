@@ -19,17 +19,27 @@ const UpdateProfessionalProfile = () => {
   const [fileStatus, setFileStatus] = useState(innitialFileData);
   const { createPost, UpdateProifleProfessional } = usePosts();
   const { state, getUserData } = useAuth();
+  const { cv, setCv } = useState({
+    cv: state.user.profile.cv_url,
+  });
 
   const handlerInputChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (event) => {
+    const formData = new FormData();
     console.log(userData);
     event.preventDefault();
-    UpdateProifleProfessional(state.user["id"], {
+    const data = {
       ...userData,
-    });
+    };
+    console.log(data)
+    for (let key in data) {
+      formData.append(key, data[key]);
+    }
+    console.log(formData)
+    UpdateProifleProfessional(state.user["id"], formData);
   };
 
   useEffect(() => {
@@ -58,7 +68,6 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "",
       pattern: /\W+/,
       label: "NAME",
-      value: state.user.profile.name,
     },
     {
       name: "phone",
@@ -67,7 +76,6 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "** Phone number not valid",
       pattern: /^(\+66)(\d{9})$/gm,
       label: "PHONE",
-      value: state.user.profile.phone,
     },
   ];
   const input2 = [
@@ -78,7 +86,6 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "",
       pattern: /\W+/,
       label: "TITLE",
-      value: state.user.profile.job_title,
     },
   ];
   const input3 = [
@@ -89,7 +96,6 @@ const UpdateProfessionalProfile = () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat quam ut tempor maximus. Sed neque arcu, rhoncus elementum sodales a, tristique sed quam. Aliquam nibh velit, pharetra ac faucibus in, ornare eu tortor. Vestibulum lacus ligula, elementum sit amet purus ut, sagittis molestie ex. In hendrerit orci tellus. Integer pharetra porttitor nulla.",
       pattern: /\W+/,
       label: "PROFESSIONAL EXPERIENCE",
-      value: state.user.profile.experience,
     },
     {
       name: "education",
@@ -98,7 +104,6 @@ const UpdateProfessionalProfile = () => {
         "Pellentesque ut mauris neque. Maecenas posuere sit amet erat at placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti.",
       pattern: /^(\+66)(\d{9})$/gm,
       label: "EDUCATION",
-      value: state.user.profile.education,
     },
   ];
   const linkedin = {
@@ -109,16 +114,24 @@ const UpdateProfessionalProfile = () => {
     pattern:
       /((https?:\/\/)?((www|\w\w)\.)?linkedin\.com\/)((([\w]{2,3})?)|([^/]+\/(([\w|\d-&#?=])+\/?){1,}))$/gm,
     label: "LINKEDIN URL",
-    value: state.user.profile.linkedin,
   };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    const type = file.type.split("/");
+    console.log(type)
     //Validate the file is PDF
-    if (file.type !== "application/png") {
-      return setFileStatus("Not a Png file");
+    if (type[1] !== "pdf") {
+
+      return setFileStatus("Not a PDF file");
+    } else {
+      setFileStatus(file.name);
     }
+    console.log(userData)
+    setUserData({ ...userData, [event.target.name]: file });
+    console.log(userData)
   };
+
   return (
     <Box
       sx={{
@@ -154,7 +167,7 @@ const UpdateProfessionalProfile = () => {
         >
           Personal Information
         </Typography>
-        <EmailInput user="professional" value={state.user.profile.email} onChange={handlerInputChange} />
+        <EmailInput user="professional" onChange={handlerInputChange} />
         {input.map((input, index) => {
           return (
             <OnelineInput
@@ -167,7 +180,6 @@ const UpdateProfessionalProfile = () => {
         <InputLabelStyle>BIRTHDAY</InputLabelStyle>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Datepic
-            value={state.user.profile.birthday}
             color="primary"
             focused
             sx={{ width: "350px", Height: "36px", marginBottom: "16px" }}
@@ -236,7 +248,7 @@ const UpdateProfessionalProfile = () => {
             left="10px"
             hidden
             width="300px"
-            accept=".PNG"
+            accept=".PDF"
             multiple
             type="file"
             name="cv"

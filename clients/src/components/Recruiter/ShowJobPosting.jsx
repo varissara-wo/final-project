@@ -30,12 +30,19 @@ import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
 import JobPostWrapper from "./JobPostWrapper";
+import CandidatesWrapper from "./CandidatesWrapper";
 import { useParams } from "react-router-dom";
 
 export function ShowJobPostings() {
   const { getUserData, state, isUserLoading, setIsUserLoading } = useAuth();
-  const { closedPost, getPostById, getPostByIdData, isLoading, setIsLoading } =
-    usePosts();
+  const {
+    closedPost,
+    getPostById,
+    getPostByIdData,
+    candidatesData,
+    isLoading,
+    setIsLoading,
+  } = usePosts();
   const params = useParams();
   const [expanded, setExpanded] = useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
@@ -75,24 +82,8 @@ export function ShowJobPostings() {
     getPostById(jobId);
   }, [selectedFilterCandidateStatus]);
 
-  // console.log(state);
   console.log(getPostByIdData);
-
-  // const calSalary = (num) => {
-  //   let a = num / 1000;
-  //   return Math.floor(a);
-  // };
-
-  // const date = (d) => {
-  //   d = d.toString();
-  //   const arr = [];
-  //   for (let i = 0; i < d.length; i++) {
-  //     if (d[i] == "T") {
-  //       return arr;
-  //     }
-  //     arr.push(d[i]);
-  //   }
-  // };
+  console.log(candidatesData);
 
   const CheckBoxTextStyled = styled(FormControlLabel)(() => ({
     color: "#616161",
@@ -251,155 +242,200 @@ export function ShowJobPostings() {
         </Typography>
 
         {/*------------------------------ Start Candidates ------------------------------*/}
-
-        {candidatesInputs.map((content, index) => {
+        {candidatesData.map((candidate) => {
+          console.log(candidate);
+          const {
+            application_status,
+            applications_experience,
+            applications_updated_at,
+            applied_at,
+            cv_url,
+            declined_at,
+            education,
+            email,
+            interested_detail,
+            is_upload_cv,
+            job_application_id,
+            job_id,
+            job_title,
+            linkedin,
+            name,
+            phone,
+            professional_created_at,
+            professional_experience,
+            professional_updated_at,
+          } = candidate;
           return (
-            <Accordion
-              expanded={expanded === `panal${index + 1}`}
-              onChange={handleChange(`panal${index + 1}`)}
-              sx={{ marginBottom: "16px", width: "945px" }}
-            >
-              <AccordionSummaryStyled
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
-              >
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="flex-start"
-                  width="auto"
-                  spacing={0}
-                >
-                  {/*------------------------------ Column 1 ------------------------------*/}
-                  <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="flex-start"
-                    width="auto"
-                    marginRight="20px"
-                    spacing={0}
-                  >
-                    <Typography variant="h6">{content.name}</Typography>
-                    <Typography variant="caption" color="info.main" sx={{}}>
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={0}
-                        sx={{
-                          "& .MuiSvgIcon-root": {
-                            fontSize: 20,
-                          },
-                        }}
-                      >
-                        <LinkedInIcon
-                          sx={{ marginRight: "6px", marginLeft: "10px" }}
-                        />
-                        {content.title}
-                      </Stack>
-                    </Typography>
-                  </Stack>
-                  {/*------------------------------ Column 2 ------------------------------*/}
-                  <Stack
-                    direction="column"
-                    justifyContent="center"
-                    width="auto"
-                    spacing={0}
-                    margin="10px 20px 0 0"
-                  >
-                    <Typography variant="caption" color="info.main">
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={0}
-                      >
-                        <MailOutlineIcon
-                          sx={{ marginRight: "6px", marginLeft: "10px" }}
-                        />
-                        {content.email}
-                      </Stack>
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={0}
-                      >
-                        <LocalPhoneIcon
-                          sx={{ marginRight: "6px", marginLeft: "10px" }}
-                        />
-                        {content.phone}
-                      </Stack>
-                    </Typography>
-                  </Stack>
-                  {/*------------------------------ Column 3 ------------------------------*/}
-                  <Stack>
-                    <Stack
-                      direction="column"
-                      justifyContent="flex-start"
-                      alignItems="center"
-                      width="90px"
-                      spacing={0}
-                      textAlign="center"
-                      margin="0px 10px 0px 10px"
-                    >
-                      <MailOutlineIcon
-                        sx={{ marginRight: "6px", marginLeft: "10px" }}
-                      />
-                      <Typography variant="caption">
-                        Sent {content.date} days ago
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                  {/*------------------------------ Column 4 ------------------------------*/}
-                  <Stack>
-                    <Stack
-                      direction="column"
-                      justifyContent="flex-start"
-                      alignItems="center"
-                      width="90px"
-                      textAlign="center"
-                      spacing={0}
-                      color="info.main"
-                    >
-                      <PauseCircleOutlineIcon
-                        sx={{ marginRight: "6px", marginLeft: "10px" }}
-                      />
-                      <Typography variant="caption">
-                        Waiting for review
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                  {/*------------------------------ Column 5 ------------------------------*/}
-                  <Stack height="auto" color="info.main" margin="10px 0 0 20px">
-                    <CloseButton
-                      variant="contained"
-                      color="background"
-                      onClick={() => closedPost(content.job_id)}
-                    >
-                      Mark as started
-                    </CloseButton>
-                  </Stack>
-                </Stack>
-              </AccordionSummaryStyled>
-              <Stack margin="0 10px 10px 10px ">
-                <Typography variant="caption">
-                  LAST UPDATE ON {content.updated}
-                </Typography>
-                <Typography variant="subtitle1" color="error.main">
-                  Professional experience
-                </Typography>
-                <Typography variant="body2">{content.experience}</Typography>
-                <Typography variant="subtitle1" color="error.main">
-                  Why are you interested in working at The company name SA
-                </Typography>
-                <Typography variant="body2">{content.experience}</Typography>
-              </Stack>
-            </Accordion>
+            <CandidatesWrapper
+              applicationId={job_application_id}
+              applicationStatus={application_status}
+              applicationsExperience={applications_experience}
+              applicationsUpdatedDate={applications_updated_at}
+              appliedDate={applied_at}
+              cvUrl={cv_url}
+              declinedDate={declined_at}
+              education={education}
+              email={email}
+              interestedDetail={interested_detail}
+              jobTitle={job_title}
+              linkedIn={linkedin}
+              name={name}
+              phone={phone}
+              professionalCreatedDate={professional_created_at}
+              professionalExperience={professional_experience}
+              professionalUpdatedDate={professional_updated_at}
+            />
           );
         })}
       </Box>
     </Box>
   );
 }
+
+// {candidatesInputs.map((content, index) => {
+//   return (
+//     <Accordion
+//       expanded={expanded === `panal${index + 1}`}
+//       onChange={handleChange(`panal${index + 1}`)}
+//       sx={{ marginBottom: "16px", width: "945px" }}
+//     >
+//       <AccordionSummaryStyled
+//         expandIcon={<ExpandMoreIcon />}
+//         aria-controls="panel1bh-content"
+//         id="panel1bh-header"
+//       >
+//         <Stack
+//           direction="row"
+//           justifyContent="center"
+//           alignItems="flex-start"
+//           width="auto"
+//           spacing={0}
+//         >
+//           {/*------------------------------ Column 1 ------------------------------*/}
+//           <Stack
+//             direction="column"
+//             justifyContent="center"
+//             alignItems="flex-start"
+//             width="auto"
+//             marginRight="20px"
+//             spacing={0}
+//           >
+//             <Typography variant="h6">{content.name}</Typography>
+//             <Typography variant="caption" color="info.main" sx={{}}>
+//               <Stack
+//                 direction="row"
+//                 justifyContent="flex-start"
+//                 alignItems="center"
+//                 spacing={0}
+//                 sx={{
+//                   "& .MuiSvgIcon-root": {
+//                     fontSize: 20,
+//                   },
+//                 }}
+//               >
+//                 <LinkedInIcon
+//                   sx={{ marginRight: "6px", marginLeft: "10px" }}
+//                 />
+//                 {content.title}
+//               </Stack>
+//             </Typography>
+//           </Stack>
+//           {/*------------------------------ Column 2 ------------------------------*/}
+//           <Stack
+//             direction="column"
+//             justifyContent="center"
+//             width="auto"
+//             spacing={0}
+//             margin="10px 20px 0 0"
+//           >
+//             <Typography variant="caption" color="info.main">
+//               <Stack
+//                 direction="row"
+//                 justifyContent="flex-start"
+//                 alignItems="center"
+//                 spacing={0}
+//               >
+//                 <MailOutlineIcon
+//                   sx={{ marginRight: "6px", marginLeft: "10px" }}
+//                 />
+//                 {content.email}
+//               </Stack>
+//               <Stack
+//                 direction="row"
+//                 justifyContent="flex-start"
+//                 alignItems="center"
+//                 spacing={0}
+//               >
+//                 <LocalPhoneIcon
+//                   sx={{ marginRight: "6px", marginLeft: "10px" }}
+//                 />
+//                 {content.phone}
+//               </Stack>
+//             </Typography>
+//           </Stack>
+//           {/*------------------------------ Column 3 ------------------------------*/}
+//           <Stack>
+//             <Stack
+//               direction="column"
+//               justifyContent="flex-start"
+//               alignItems="center"
+//               width="90px"
+//               spacing={0}
+//               textAlign="center"
+//               margin="0px 10px 0px 10px"
+//             >
+//               <MailOutlineIcon
+//                 sx={{ marginRight: "6px", marginLeft: "10px" }}
+//               />
+//               <Typography variant="caption">
+//                 Sent {content.date} days ago
+//               </Typography>
+//             </Stack>
+//           </Stack>
+//           {/*------------------------------ Column 4 ------------------------------*/}
+//           <Stack>
+//             <Stack
+//               direction="column"
+//               justifyContent="flex-start"
+//               alignItems="center"
+//               width="90px"
+//               textAlign="center"
+//               spacing={0}
+//               color="info.main"
+//             >
+//               <PauseCircleOutlineIcon
+//                 sx={{ marginRight: "6px", marginLeft: "10px" }}
+//               />
+//               <Typography variant="caption">
+//                 Waiting for review
+//               </Typography>
+//             </Stack>
+//           </Stack>
+//           {/*------------------------------ Column 5 ------------------------------*/}
+//           <Stack height="auto" color="info.main" margin="10px 0 0 20px">
+//             <CloseButton
+//               variant="contained"
+//               color="background"
+//               onClick={() => closedPost(content.job_id)}
+//             >
+//               Mark as started
+//             </CloseButton>
+//           </Stack>
+//         </Stack>
+//       </AccordionSummaryStyled>
+//       <Stack margin="0 10px 10px 10px ">
+//         <Typography variant="caption">
+//           LAST UPDATE ON {content.updated}
+//         </Typography>
+//         <Typography variant="subtitle1" color="error.main">
+//           Professional experience
+//         </Typography>
+//         <Typography variant="body2">{content.experience}</Typography>
+//         <Typography variant="subtitle1" color="error.main">
+//           Why are you interested in working at The company name SA
+//         </Typography>
+//         <Typography variant="body2">{content.experience}</Typography>
+//       </Stack>
+//     </Accordion>
+//   );
+// })}

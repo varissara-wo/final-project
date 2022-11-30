@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Typography, Box, TextField } from "@mui/material";
 import { InputLabelStyle, Datepic } from "../Register/Styles.jsx";
@@ -19,12 +18,9 @@ const UpdateProfessionalProfile = () => {
   const [fileStatus, setFileStatus] = useState(innitialFileData);
   const { createPost, UpdateProifleProfessional } = usePosts();
   const { state, getUserData } = useAuth();
-<<<<<<< HEAD
   const { cv, setCv } = useState({
     cv: state.user.profile.cv_url,
   });
-=======
->>>>>>> 453e297 (feat : edit professional profile)
 
   const handlerInputChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -34,26 +30,16 @@ const UpdateProfessionalProfile = () => {
     const formData = new FormData();
     console.log(userData);
     event.preventDefault();
-<<<<<<< HEAD
     const data = {
-=======
-    UpdateProifleProfessional(state.user["id"], {
->>>>>>> 453e297 (feat : edit professional profile)
       ...userData,
     };
-    console.log(data)
+    console.log(data);
     for (let key in data) {
       formData.append(key, data[key]);
     }
-    console.log(formData)
+    console.log(formData);
     UpdateProifleProfessional(state.user["id"], formData);
   };
-
-  useEffect(() => {
-    getUserData()
-  }, [])
-
-  console.log(state)
 
   const [userData, setUserData] = useState({
     email: "",
@@ -67,6 +53,21 @@ const UpdateProfessionalProfile = () => {
     cv: {},
   });
 
+  useEffect(() => {
+    getUserData();
+    setUserData({
+      email: state.user.profile.email,
+      name: state.user.profile.name,
+      phone: state.user.profile.phone,
+      birthday: state.user.profile.birthday,
+      linkedin: state.user.profile.linkedin,
+      title: state.user.profile.job_title,
+      experience: state.user.profile.experience,
+      education: state.user.profile.education,
+      cv: state.user.profile.cv,
+    });
+  }, []);
+
   const input = [
     {
       name: "name",
@@ -75,6 +76,7 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "",
       pattern: /\W+/,
       label: "NAME",
+      value: userData.name,
     },
     {
       name: "phone",
@@ -83,6 +85,7 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "** Phone number not valid",
       pattern: /^(\+66)(\d{9})$/gm,
       label: "PHONE",
+      value: userData.phone,
     },
   ];
   const input2 = [
@@ -93,6 +96,7 @@ const UpdateProfessionalProfile = () => {
       errorMessage: "",
       pattern: /\W+/,
       label: "TITLE",
+      value: userData.title,
     },
   ];
   const input3 = [
@@ -103,6 +107,7 @@ const UpdateProfessionalProfile = () => {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat quam ut tempor maximus. Sed neque arcu, rhoncus elementum sodales a, tristique sed quam. Aliquam nibh velit, pharetra ac faucibus in, ornare eu tortor. Vestibulum lacus ligula, elementum sit amet purus ut, sagittis molestie ex. In hendrerit orci tellus. Integer pharetra porttitor nulla.",
       pattern: /\W+/,
       label: "PROFESSIONAL EXPERIENCE",
+      value: userData.experience,
     },
     {
       name: "education",
@@ -111,6 +116,7 @@ const UpdateProfessionalProfile = () => {
         "Pellentesque ut mauris neque. Maecenas posuere sit amet erat at placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti.",
       pattern: /^(\+66)(\d{9})$/gm,
       label: "EDUCATION",
+      value: userData.education,
     },
   ];
   const linkedin = {
@@ -121,23 +127,25 @@ const UpdateProfessionalProfile = () => {
     pattern:
       /((https?:\/\/)?((www|\w\w)\.)?linkedin\.com\/)((([\w]{2,3})?)|([^/]+\/(([\w|\d-&#?=])+\/?){1,}))$/gm,
     label: "LINKEDIN URL",
+    value: userData.linkedin,
   };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     const type = file.type.split("/");
-    console.log(type)
+    console.log(type);
     //Validate the file is PDF
     if (type[1] !== "pdf") {
-
       return setFileStatus("Not a PDF file");
     } else {
       setFileStatus(file.name);
     }
-    console.log(userData)
+    console.log(userData);
     setUserData({ ...userData, [event.target.name]: file });
-    console.log(userData)
+    console.log(userData);
   };
+
+  console.log(userData.title);
 
   return (
     <Box
@@ -174,7 +182,11 @@ const UpdateProfessionalProfile = () => {
         >
           Personal Information
         </Typography>
-        <EmailInput user="professional" onChange={handlerInputChange} />
+        <EmailInput
+          user="professional"
+          value={userData.email}
+          onChange={handlerInputChange}
+        />
         {input.map((input, index) => {
           return (
             <OnelineInput
@@ -200,10 +212,7 @@ const UpdateProfessionalProfile = () => {
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
-        <OnelineInput
-          {...linkedin}
-          onChange={handlerInputChange}
-        />
+        <OnelineInput {...linkedin} onChange={handlerInputChange} />
         {/*------------------------------ Form Part 2 ------------------------------*/}
         <Typography
           variant="h5"
@@ -265,6 +274,9 @@ const UpdateProfessionalProfile = () => {
         <Typography variant="overline" sx={{ color: "#8E8E8E" }}>
           Only PDF. Max size 5MB
         </Typography>
+        <Typography variant="overline" sx={{ color: "#8E8E8E" }}>
+          {fileStatus}
+        </Typography>
         <Buttonwidth
           variant="contained"
           color="primary"
@@ -281,7 +293,4 @@ const UpdateProfessionalProfile = () => {
   );
 };
 
-
 export default UpdateProfessionalProfile;
-
-

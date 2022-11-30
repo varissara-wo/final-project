@@ -4,8 +4,11 @@ import { pool } from "../utils/db.js";
 import multer from "multer";
 import { cvUpload } from "../utils/upload.js";
 import { v2 as cloudinary } from "cloudinary";
+import { protect } from "../middlewares/protect.js";
 
 const professionalRouter = Router();
+
+professionalRouter.use(protect);
 
 //Get user profile
 professionalRouter.get("/", async (req, res) => {

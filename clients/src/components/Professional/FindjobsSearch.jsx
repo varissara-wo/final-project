@@ -1,12 +1,7 @@
 import { Textinput, Textseacrh, Textseacrh1 } from "./styles.jsx";
 import { useState, useEffect } from "react";
 import React from "react";
-import {
-  Search,
-  MonetizationOn,
-  HorizontalRule,
-  Maximize,
-} from "@mui/icons-material";
+import { Search, MonetizationOn, HorizontalRule } from "@mui/icons-material";
 import {
   Typography,
   CircularProgress,
@@ -77,9 +72,11 @@ export function Findjobssearch() {
       sx={{
         backgroundColor: "#F5F5F6",
         width: "100%",
-        height: "100vh",
+        height: "100%",
         minWidth: "100vh",
+        minHeight: "100vh",
         marginLeft: "240px",
+        paddingBottom: "50px",
       }}
     >
       <Box

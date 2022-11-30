@@ -2,12 +2,15 @@ import React, { useEffect } from "react";
 import { Box, Typography, CircularProgress, Stack } from "@mui/material";
 import usePosts from "../../hooks/usePost";
 import FollowJobWrapper from "./FollowJobWrapper";
+import { useAuth } from "../../contexts/authentication.jsx";
 
 const UserFollowing = () => {
   const { isLoading, getFollow, follow } = usePosts();
+  const { state, getUserData, isUserLoading } = useAuth();
 
   useEffect(() => {
-    getFollow(20);
+    getUserData();
+    getFollow(state.user["id"]);
   }, [isLoading]);
 
   return (

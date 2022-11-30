@@ -5,6 +5,7 @@ import { theme } from "../theme.js";
 import HomePage from "./Homepage.jsx";
 import Login from "./Login.jsx";
 import Register from "./Register.jsx";
+import ErrorPage from "./ErrorPage.jsx";
 
 const UnauthenticatedApp = () => {
   return (
@@ -13,6 +14,7 @@ const UnauthenticatedApp = () => {
         <Route path="/" element={<HomePage />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
+        <Route path="/*" element={<ErrorPage />}></Route>
       </Routes>
     </ThemeProvider>
   );

@@ -92,7 +92,12 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
+<<<<<<< HEAD
   } catch (err) {}
+=======
+  } catch (err) { }
+
+>>>>>>> dd63e20 (fixed : fix data in input in profile page)
 });
 
 //Update user

@@ -22,6 +22,23 @@ professionalRouter.get("/", async (req, res) => {
   }
 });
 
+//Get user profile by Id
+professionalRouter.get("profile/:id", async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const professionalUsers = await pool.query(
+      `select * from professional_users where professional_id = $1`,
+      [userId]
+    );
+
+    return res.status(200).json({
+      data: professionalUsers.rows,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 //Check email
 professionalRouter.get("/users/exists/:email", async (req, res) => {
   try {
@@ -92,12 +109,7 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
     return res.status(201).json({
       message: "New user has been created sucessfully",
     });
-<<<<<<< HEAD
   } catch (err) {}
-=======
-  } catch (err) { }
-
->>>>>>> dd63e20 (fixed : fix data in input in profile page)
 });
 
 //Update user
@@ -152,7 +164,7 @@ professionalRouter.put("/:id", CvUpload, async (req, res) => {
   try {
     if (emailUse.rows.length !== 0) {
       return res.json({
-        message: "email is alreadyuse",
+        message: "** This email is unavailable",
       });
     } else {
       await pool.query(
@@ -179,37 +191,6 @@ professionalRouter.put("/:id", CvUpload, async (req, res) => {
     console.log(err);
   }
   const userId = req.params.id;
-  //   const alreadyUse = await pool.query(
-  //     `select * from professional_users where email =$1`,
-  //     [updatedUser.email]
-  //   );
-  //   if (alreadyUse.rows.length === 1) {
-  //     return res.json({
-  //       message: "This email is already available",
-  //     });
-  //   } else {
-  //     await pool.query(
-  //       `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,
-  //       [
-  //         updatedUser.email,
-  //         updatedUser.name,
-  //         updatedUser.phone,
-  //         updatedUser.birthday,
-  //         updatedUser.linkedin,
-  //         updatedUser.title,
-  //         updatedUser.experience,
-  //         updatedUser.cv,
-  //         updatedUser.education,
-  //         updatedUser.updated_at,
-  //         userId,
-  //       ]
-  //     );
-
-  //     return res.json({
-  //       message: `User ${userId} has been updated.`,
-  //     });
-  //   }
-  // });
 
   await pool.query(
     `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,

@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Typography, Box, TextField } from "@mui/material";
+import {
+  Typography,
+  Box,
+  TextField,
+  CircularProgress,
+  Stack,
+} from "@mui/material";
 import { InputLabelStyle, Datepic } from "../Register/Styles.jsx";
 import OnelineInput from "../Register/OnelineInput";
 import EmailInput from "../Register/EmailInputs.jsx";
@@ -11,34 +17,62 @@ import { Buttonwidth, UploadButton } from "../Register/Styles";
 import usePosts from "../../hooks/usePost.jsx";
 import { useEffect } from "react";
 import { useAuth } from "../../contexts/authentication.jsx";
+import {
+  validateEmail,
+  validateLinkdin,
+  validatePhoneNumber,
+  validateExperience,
+  validateEducation,
+} from "../../utils/validateRegister.jsx";
 
 const UpdateProfessionalProfile = () => {
   const innitialFileData = "No file chosen";
   const [value, setValue] = React.useState(null);
   const [fileStatus, setFileStatus] = useState(innitialFileData);
-  const { createPost, UpdateProifleProfessional } = usePosts();
-  const { state, getUserData } = useAuth();
-  const { cv, setCv } = useState({
-    cv: state.user.profile.cv_url,
-  });
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+  const [submit, setSubmit] = useState(false);
+  const {
+    createPost,
+    UpdateProifleProfessional,
+    getProfessionalUserProfile,
+    ProfessionalProfile,
+    isLoading,
+    setIsLoading,
+    message,
+  } = usePosts();
+  const { state, getUserData, isUserLoading } = useAuth();
 
   const handlerInputChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (event) => {
-    const formData = new FormData();
-    console.log(userData);
-    event.preventDefault();
-    const data = {
-      ...userData,
-    };
-    console.log(data);
-    for (let key in data) {
-      formData.append(key, data[key]);
+    const checkEmail = validateEmail(userData.email);
+    const checkLinkedin = validateLinkdin(userData.linkedin);
+    const checkPhoneNumber = validatePhoneNumber(userData.phone);
+    const checkExperience = validateExperience(userData.experience);
+    const checkEducation = validateEducation(userData.education);
+
+    if (
+      checkEmail &&
+      (checkLinkedin || userData.linkedin === "") &&
+      (checkPhoneNumber || userData.phone === "") &&
+      (checkExperience || userData.experience === "") &&
+      (checkEducation || userData.education === "")
+    ) {
+      setIsLoadingProfile(true);
+      const formData = new FormData();
+      event.preventDefault();
+      const data = {
+        ...userData,
+      };
+      for (let key in data) {
+        formData.append(key, data[key]);
+      }
+      UpdateProifleProfessional(state.user["id"], formData);
+    } else {
+      window.scrollTo(0, 0);
     }
-    console.log(formData);
-    UpdateProifleProfessional(state.user["id"], formData);
   };
 
   const [userData, setUserData] = useState({
@@ -54,19 +88,31 @@ const UpdateProfessionalProfile = () => {
   });
 
   useEffect(() => {
-    getUserData();
-    setUserData({
-      email: state.user.profile.email,
-      name: state.user.profile.name,
-      phone: state.user.profile.phone,
-      birthday: state.user.profile.birthday,
-      linkedin: state.user.profile.linkedin,
-      title: state.user.profile.job_title,
-      experience: state.user.profile.experience,
-      education: state.user.profile.education,
-      cv: state.user.profile.cv,
-    });
-  }, []);
+    // setIsLoadingProfile(true);
+    const timer = setTimeout(() => {
+      getUserData();
+      console.log(state);
+      getProfessionalUserProfile(state.user["id"]);
+      setUserData({
+        email: ProfessionalProfile.email,
+        name: ProfessionalProfile.name,
+        phone: ProfessionalProfile.phone,
+        birthday: ProfessionalProfile.birthday,
+        linkedin: ProfessionalProfile.linkedin,
+        title: ProfessionalProfile.job_title,
+        experience: ProfessionalProfile.experience,
+        education: ProfessionalProfile.education,
+        cv: ProfessionalProfile.cv,
+      });
+      if (userData.email !== "") {
+        setIsLoadingProfile(false);
+      }
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [isLoading, isUserLoading, isLoadingProfile, submit]);
+
+  console.log(ProfessionalProfile);
 
   const input = [
     {
@@ -104,19 +150,22 @@ const UpdateProfessionalProfile = () => {
       name: "experience",
       type: "text",
       placeholder:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat quam ut tempor maximus. Sed neque arcu, rhoncus elementum sodales a, tristique sed quam. Aliquam nibh velit, pharetra ac faucibus in, ornare eu tortor. Vestibulum lacus ligula, elementum sit amet purus ut, sagittis molestie ex. In hendrerit orci tellus. Integer pharetra porttitor nulla.",
-      pattern: /\W+/,
+        "Worked 6 years in a bitcoin farm until I decided to cahnge my life...",
+      pattern: /.{300,2000}/,
       label: "PROFESSIONAL EXPERIENCE",
       value: userData.experience,
+      helperText: "Between 300 and 2000 characters",
+      errorMessage: "** Should have characters between 300 - 2000 characters",
     },
     {
       name: "education",
       type: "text",
-      placeholder:
-        "Pellentesque ut mauris neque. Maecenas posuere sit amet erat at placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti.",
-      pattern: /^(\+66)(\d{9})$/gm,
+      placeholder: "Major in life experience with a PHD in procrastination",
+      pattern: /.{100,2000}/,
       label: "EDUCATION",
       value: userData.education,
+      helperText: "Between 100 and 2000 characters",
+      errorMessage: "** Should have characters between 100 - 2000 characters",
     },
   ];
   const linkedin = {
@@ -175,119 +224,150 @@ const UpdateProfessionalProfile = () => {
         >
           Profile
         </Typography>
-        {/*------------------------------ Form Part 1 ------------------------------*/}
-        <Typography
-          variant="h5"
-          sx={{ marginTop: "10px", marginBottom: "0px", fontWeight: "400" }}
-        >
-          Personal Information
-        </Typography>
-        <EmailInput
-          user="professional"
-          value={userData.email}
-          onChange={handlerInputChange}
-        />
-        {input.map((input, index) => {
-          return (
-            <OnelineInput
-              key={index}
-              {...input}
+        {isLoadingProfile === true && (
+          <Stack
+            width="90%"
+            height="50vh"
+            flexDirection="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <CircularProgress disableShrink />
+          </Stack>
+        )}
+        {isLoadingProfile === false && (
+          <>
+            {/*------------------------------ Form Part 1 ------------------------------*/}
+            <Typography
+              variant="h5"
+              sx={{ marginTop: "10px", marginBottom: "0px", fontWeight: "400" }}
+            >
+              Personal Information
+            </Typography>
+            <EmailInput
+              user="updateProfile"
+              message={message}
+              value={userData.email}
               onChange={handlerInputChange}
             />
-          );
-        })}
-        <InputLabelStyle>BIRTHDAY</InputLabelStyle>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Datepic
-            color="primary"
-            focused
-            sx={{ width: "350px", Height: "36px", marginBottom: "16px" }}
-            onChange={(newValue) => {
-              setUserData({
-                ...userData,
-                birthday: newValue.$d,
-              });
-              setValue(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
-        <OnelineInput {...linkedin} onChange={handlerInputChange} />
-        {/*------------------------------ Form Part 2 ------------------------------*/}
-        <Typography
-          variant="h5"
-          sx={{ marginTop: "10px", marginBottom: "0px", fontWeight: "400" }}
-        >
-          Professional information
-        </Typography>
-        <Typography
-          variant="h6"
-          sx={{
-            marginTop: "10px",
-            marginBottom: "0px",
-            fontWeight: "400",
-            fontSize: "14px",
-          }}
-        >
-          Changes made here will be reflected in your future applications
-        </Typography>
-        {input2.map((input, index) => {
-          return (
-            <OnelineInput
-              key={index}
-              {...input}
-              onChange={handlerInputChange}
-            />
-          );
-        })}
-        {input3.map((input, index) => {
-          return (
-            <MultilineInput
-              key={index}
-              {...input}
-              onChange={handlerInputChange}
-            />
-          );
-        })}
-        <InputLabelStyle>UPLOAD/UPDATE YOUR CV</InputLabelStyle>
-        <UploadButton
-          startIcon={<FileUploadOutlined />}
-          variant="contained"
-          component="label"
-          color="primary"
-          helperText="hi"
-          position="relative"
-          sx={{ width: "auto", fontSize: "12px", padding: "9px" }}
-        >
-          Choose a file
-          <input
-            left="10px"
-            hidden
-            width="300px"
-            accept=".PDF"
-            multiple
-            type="file"
-            name="cv"
-            onChange={handleFileChange}
-          />
-        </UploadButton>{" "}
-        <Typography variant="overline" sx={{ color: "#8E8E8E" }}>
-          Only PDF. Max size 5MB
-        </Typography>
-        <Typography variant="overline" sx={{ color: "#8E8E8E" }}>
-          {fileStatus}
-        </Typography>
-        <Buttonwidth
-          variant="contained"
-          color="primary"
-          onClick={(e) => {
-            handleSubmit(e);
-          }}
-          type="submit"
-          sx={{ marginBottom: "100px", width: "auto" }}
-        >
-          UPDATE PROFILE
-        </Buttonwidth>
+            {/* <Typography
+              variant="body2"
+              color="primary"
+              component="span"
+              display="flex"
+              flex={1}
+            >
+              {message}
+            </Typography> */}
+            {input.map((input, index) => {
+              return (
+                <OnelineInput
+                  key={index}
+                  isLoadingProfile={isLoadingProfile}
+                  {...input}
+                  onChange={handlerInputChange}
+                />
+              );
+            })}
+            <InputLabelStyle>BIRTHDAY</InputLabelStyle>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Datepic
+                value={userData.birthday}
+                color="primary"
+                focused
+                sx={{
+                  width: "350px",
+                  Height: "36px",
+                  marginBottom: "16px",
+                }}
+                onChange={(newValue) => {
+                  setUserData({
+                    ...userData,
+                    birthday: newValue.$d,
+                  });
+                  setValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+            <OnelineInput {...linkedin} onChange={handlerInputChange} />
+            {/*------------------------------ Form Part 2 ------------------------------*/}
+            <Typography
+              variant="h5"
+              sx={{ marginTop: "10px", marginBottom: "0px", fontWeight: "400" }}
+            >
+              Professional information
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                marginTop: "10px",
+                marginBottom: "0px",
+                fontWeight: "400",
+                fontSize: "14px",
+              }}
+            >
+              Changes made here will be reflected in your future applications
+            </Typography>
+            {input2.map((input, index) => {
+              return (
+                <OnelineInput
+                  key={index}
+                  {...input}
+                  onChange={handlerInputChange}
+                />
+              );
+            })}
+            {input3.map((input, index) => {
+              return (
+                <MultilineInput
+                  key={index}
+                  {...input}
+                  onChange={handlerInputChange}
+                />
+              );
+            })}
+            <InputLabelStyle>UPLOAD/UPDATE YOUR CV</InputLabelStyle>
+            <UploadButton
+              startIcon={<FileUploadOutlined />}
+              variant="contained"
+              component="label"
+              color="primary"
+              helperText="hi"
+              position="relative"
+              sx={{ width: "auto", fontSize: "12px", padding: "9px" }}
+            >
+              Choose a file
+              <input
+                left="10px"
+                hidden
+                width="300px"
+                accept=".PDF"
+                multiple
+                type="file"
+                name="cv"
+                onChange={handleFileChange}
+              />
+            </UploadButton>{" "}
+            <Typography variant="overline" sx={{ color: "#8E8E8E" }}>
+              Only PDF. Max size 5MB
+            </Typography>
+            <Typography variant="overline" sx={{ color: "#8E8E8E" }}>
+              {fileStatus}
+            </Typography>
+            <Buttonwidth
+              variant="contained"
+              color="primary"
+              onClick={(e) => {
+                handleSubmit(e);
+              }}
+              type="submit"
+              sx={{ marginBottom: "100px", width: "auto" }}
+            >
+              UPDATE PROFILE
+            </Buttonwidth>
+          </>
+        )}
       </Box>
     </Box>
   );

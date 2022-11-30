@@ -13,28 +13,28 @@ function AuthProvider(props) {
     error: null,
     user: null,
   });
-    
+
   const getUserData = async () => {
+    console.log("hi");
     const token = localStorage.getItem("token");
     const userDataFromToken = jwtDecode(token);
     setState({ ...state, user: userDataFromToken });
     setIsUserLoading(false);
   };
-  
+  console.log(state);
+
   const recruiterLogin = async (data) => {
     const result = await axios.post(
       "http://localhost:4000/login_recuiter",
       data
     );
     const token = result.data.token;
-    
+
     localStorage.setItem("token", token);
     const userDataFromToken = jwtDecode(token);
     setState({ ...state, user: userDataFromToken });
     navigate("/recruiter/jobpost");
   };
-
-  
 
   const professionalLogin = async (data) => {
     const result = await axios.post(

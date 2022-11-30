@@ -193,6 +193,10 @@ export const Datepic = styled(DatePicker)(() => ({
       borderColor: "#F48FB1",
     },
   },
+  "& .css-sfqmct-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline":
+    {
+      borderColor: "#F48FB1",
+    },
 }));
 // ----buttono to hide password
 export const IconButton = styled(ButtonUnstyled)(

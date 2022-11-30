@@ -3,7 +3,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
-  FormControlLabel,
   Typography,
 } from "@mui/material";
 import { Stack } from "@mui/system";
@@ -19,12 +18,10 @@ import { iconCategory } from "../../utils/utilsFunction";
 import SearchIcon from "@mui/icons-material/Search";
 import { useAuth } from "../../contexts/authentication";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import usePosts from "../../hooks/usePost";
 
 export default function JobPostWrapper(props) {
   const navigate = useNavigate();
-  //   const params = useParams();
   const { getUserData, state, isUserLoading, setIsUserLoading } = useAuth();
   const { closedPost, getPostById, getPostByIdData, isLoading, setIsLoading } =
     usePosts();
@@ -50,22 +47,10 @@ export default function JobPostWrapper(props) {
     optionRequirement,
     categoryId,
   } = props;
-  //   const jobId = params.jobId;
-  //   console.log(jobId);
+
   const calSalary = (num) => {
     let a = num / 1000;
     return Math.floor(a);
-  };
-
-  const date = (d) => {
-    d = d.toString();
-    const arr = [];
-    for (let i = 0; i < d.length; i++) {
-      if (d[i] == "T") {
-        return arr;
-      }
-      arr.push(d[i]);
-    }
   };
 
   const AccordionSummaryStyled = styled(AccordionSummary)(() => ({

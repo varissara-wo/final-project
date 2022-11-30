@@ -262,7 +262,7 @@ export function Jobpostings() {
                           },
                         }}
                       >
-                        <OpenOn date={date(content.created_at)} />
+                        <OpenOn date={content.created_at} />
 
                         <TotalCandidates
                           candidates={content.total_candidates}

@@ -15,6 +15,7 @@ function usePosts() {
   const [followJob, setFollowJob] = useState([]);
   const [jobApplicationsData, setJobApplicationsData] = useState([]);
   const [getPostByIdData, setGetPostByIdData] = useState({});
+  const [candidatesData, setCandidatesData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -145,7 +146,6 @@ function usePosts() {
 
   //Decline Application
   const declineApplication = async (applicationId) => {
-    console.log(applicationId);
     await axios.put(
       `http://localhost:4000/professional/applications/${applicationId}`
     );
@@ -153,22 +153,15 @@ function usePosts() {
 
   const getPostById = async (jobId) => {
     const results = await axios.get(
-      `http://localhost:4000/recruiter/post/${jobId}`
+      `http://localhost:4000/recruiter/posts/${jobId}`
     );
     const postData = results.data.data;
+    const candidatesData = results.data.candidatesData;
+
     setGetPostByIdData(postData);
+    setCandidatesData(candidatesData);
     setIsLoading(false);
   };
-
-  // const getCandidates= async (recruiterEmail, jobId) => {
-  //   // console.log(recruiterEmail, jobId);
-  //   const results = await axios.get(
-  //     `http://localhost:4000/recruiter/jobs/candidate/${jobId}?recruiterEmail=${recruiterEmail}`
-  //   );
-  //   console.log(results.data.data);
-  //   // setCandidatesData(results.data.data);
-  //   setIsLoading(false);
-  // };
 
   return {
     createPost,
@@ -199,6 +192,7 @@ function usePosts() {
     declineApplication,
     getPostById,
     getPostByIdData,
+    candidatesData,
   };
 }
 export default usePosts;

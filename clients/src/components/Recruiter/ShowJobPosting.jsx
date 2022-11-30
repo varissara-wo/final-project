@@ -17,21 +17,17 @@ import {
 import styled from "@emotion/styled";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Stack } from "@mui/system";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
-import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
-import { OpenOn, TotalCandidates, CandidatesOnTrack } from "../Status";
 import { useEffect } from "react";
-import { iconCategory } from "../../utils/utilsFunction";
-import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
 import JobPostWrapper from "./JobPostWrapper";
-import CandidatesWrapper from "./CandidatesWrapper";
 import { useParams } from "react-router-dom";
+import { SentStatus } from "../SentStatus";
+import { ReviewStatus } from "../ReviewStatus";
+import { DownloadCvButton } from "../Professional/styles";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 export function ShowJobPostings() {
   const { getUserData, state, isUserLoading, setIsUserLoading } = useAuth();
@@ -79,6 +75,7 @@ export function ShowJobPostings() {
   useEffect(() => {
     getUserData();
     const jobId = params.postId;
+    console.log(jobId);
     getPostById(jobId);
   }, [selectedFilterCandidateStatus]);
 
@@ -116,29 +113,6 @@ export function ShowJobPostings() {
       fontSize: 28,
     },
   }));
-
-  const candidatesInputs = [
-    {
-      name: "Guybrush Threepwood",
-      email: "guy.brush@mail.com",
-      title: "Mighty Pirate",
-      phone: "+333555777",
-      experience:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat quam ut tempor maximus. Sed neque arcu, rhoncus elementum sodales a, tristique sed quam. Aliquam nibh velit, pharetra ac faucibus in, ornare eu tortor. Vestibulum lacus ligula, elementum sit amet purus ut, sagittis molestie ex. In hendrerit orci tellus. Integer pharetra porttitor nulla, nec fringilla dolor ultricies et. Integer accumsan feugiat urna, eu hendrerit dui varius sit amet. Mauris eget tristique turpis. Curabitur eget hendrerit turpis. Etiam rutrum dolor eu posuere vehicula.",
-      date: "1",
-      updated: "03/10/22",
-    },
-    {
-      name: "Ramón Valdés",
-      email: "ramon.valdes@vecindad.com",
-      title: "Professional Multiservices",
-      phone: "+524831212891",
-      experience:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat quam ut tempor maximus. Sed neque arcu, rhoncus elementum sodales a, tristique sed quam. Aliquam nibh velit, pharetra ac faucibus in, ornare eu tortor. Vestibulum lacus ligula, elementum sit amet purus ut, sagittis molestie ex. In hendrerit orci tellus. Integer pharetra porttitor nulla, nec fringilla dolor ultricies et. Integer accumsan feugiat urna, eu hendrerit dui varius sit amet. Mauris eget tristique turpis. Curabitur eget hendrerit turpis. Etiam rutrum dolor eu posuere vehicula.",
-      date: "1",
-      updated: "04/11/22",
-    },
-  ];
 
   return (
     <Box
@@ -236,13 +210,11 @@ export function ShowJobPostings() {
           </RadioGroup>
         </FormControl>
         {/*------------------------------ Start Candidates ------------------------------*/}
-
         <Typography variant="h5" sx={{ marginBottom: "8px" }}>
-          {candidatesInputs.length} candidates found
+          {candidatesData.length} candidates found
         </Typography>
-
         {/*------------------------------ Start Candidates ------------------------------*/}
-        {candidatesData.map((candidate) => {
+        {candidatesData.map((candidate, index) => {
           console.log(candidate);
           const {
             application_status,
@@ -266,176 +238,174 @@ export function ShowJobPostings() {
             professional_updated_at,
           } = candidate;
           return (
-            <CandidatesWrapper
-              applicationId={job_application_id}
-              applicationStatus={application_status}
-              applicationsExperience={applications_experience}
-              applicationsUpdatedDate={applications_updated_at}
-              appliedDate={applied_at}
-              cvUrl={cv_url}
-              declinedDate={declined_at}
-              education={education}
-              email={email}
-              interestedDetail={interested_detail}
-              jobTitle={job_title}
-              linkedIn={linkedin}
-              name={name}
-              phone={phone}
-              professionalCreatedDate={professional_created_at}
-              professionalExperience={professional_experience}
-              professionalUpdatedDate={professional_updated_at}
-            />
+            <Accordion
+              expanded={expanded === `panal${job_application_id}`}
+              onChange={handleChange(`panal${job_application_id}`)}
+              sx={{
+                width: "945px",
+                borderRadius: "8px",
+                boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)",
+                marginBottom: "16px",
+              }}
+            >
+              <AccordionSummaryStyled
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+              >
+                {/*------------------------------ Column 1 ------------------------------*/}
+                <Stack
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="flex-start"
+                  width="auto"
+                  marginRight="20px"
+                  spacing={0}
+                >
+                  <Typography variant="h6">{name}</Typography>
+
+                  <Stack
+                    color="info.main"
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={0}
+                    sx={{
+                      "& .MuiSvgIcon-root": {
+                        fontSize: 20,
+                      },
+                    }}
+                  >
+                    <LinkedInIcon sx={{ marginRight: "6px" }} />
+                    <Typography variant="subtitle2">{job_title}</Typography>
+                  </Stack>
+                </Stack>
+                {/*------------------------------ Column 2 ------------------------------*/}
+                <Stack
+                  direction="column"
+                  justifyContent="center"
+                  width="auto"
+                  spacing={0}
+                  margin="10px 20px 0 0"
+                >
+                  <Typography variant="caption" color="info.main">
+                    <Stack
+                      direction="row"
+                      justifyContent="flex-start"
+                      alignItems="center"
+                      spacing={0}
+                    >
+                      <MailOutlineIcon
+                        sx={{ marginRight: "6px", marginLeft: "10px" }}
+                      />
+                      {email}
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      justifyContent="flex-start"
+                      alignItems="center"
+                      spacing={0}
+                    >
+                      <LocalPhoneIcon
+                        sx={{ marginRight: "6px", marginLeft: "10px" }}
+                      />
+                      {phone}
+                    </Stack>
+                  </Typography>
+                </Stack>
+                {/*------------------------------ Column 3 ------------------------------*/}
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={0}
+                  color="secondary"
+                >
+                  <SentStatus applyDate={applied_at} />
+                  {application_status === "Declined" && (
+                    <ReviewStatus
+                      status={application_status}
+                      declinedDate={declined_at}
+                    />
+                  )}
+                  {application_status !== "Declined" && (
+                    <ReviewStatus status={application_status} />
+                  )}
+                </Stack>
+                {/*------------------------------ Column 4 ------------------------------*/}
+                <Stack height="auto" color="info.main" margin="10px 0 0 20px">
+                  {application_status.toLowerCase() === "waiting" && (
+                    <CloseButton
+                      variant="contained"
+                      color="background"
+                      // onClick={() => {}}
+                      sx={{ border: "1px solid #F48FB1" }}
+                    >
+                      Mark as Started
+                    </CloseButton>
+                  )}
+                  {application_status.toLowerCase() === "reviewing" && (
+                    <CloseButton
+                      variant="contained"
+                      color="background"
+                      // onClick={() => {}}
+                      sx={{ border: "1px solid #F48FB1" }}
+                    >
+                      Mark as Finished
+                    </CloseButton>
+                  )}
+                  {application_status.toLowerCase() === "finished" && (
+                    <CloseButton
+                      disabled
+                      variant="contained"
+                      color="background"
+                      // onClick={() => {}}
+                    >
+                      Finished
+                    </CloseButton>
+                  )}
+                </Stack>
+              </AccordionSummaryStyled>
+              <AccordionDetails sx={{ paddingBottom: "0", paddingTop: "0" }}>
+                <Typography variant="overline" color="secondary">
+                  Last Updated on {applications_updated_at.slice(0, 10)}
+                </Typography>
+              </AccordionDetails>
+              <AccordionDetails>
+                <Typography variant="subtitle1" color="error.main">
+                  Professional experience
+                </Typography>
+                <Typography variant="body2">
+                  {applications_experience}
+                </Typography>
+              </AccordionDetails>
+              <AccordionDetails>
+                <Typography variant="subtitle1" color="error.main">
+                  Why are you interested in working at The company name SA
+                </Typography>
+                <Typography variant="body2">{interested_detail}</Typography>
+              </AccordionDetails>
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={0}
+                padding="0 16px 16px 16px"
+              >
+                <DownloadCvButton
+                  startIcon={<FileDownloadOutlinedIcon color="secondary" />}
+                  href={cv_url}
+                  download={name}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Download CV
+                </DownloadCvButton>
+              </Stack>
+            </Accordion>
           );
         })}
       </Box>
     </Box>
   );
 }
-
-// {candidatesInputs.map((content, index) => {
-//   return (
-//     <Accordion
-//       expanded={expanded === `panal${index + 1}`}
-//       onChange={handleChange(`panal${index + 1}`)}
-//       sx={{ marginBottom: "16px", width: "945px" }}
-//     >
-//       <AccordionSummaryStyled
-//         expandIcon={<ExpandMoreIcon />}
-//         aria-controls="panel1bh-content"
-//         id="panel1bh-header"
-//       >
-//         <Stack
-//           direction="row"
-//           justifyContent="center"
-//           alignItems="flex-start"
-//           width="auto"
-//           spacing={0}
-//         >
-//           {/*------------------------------ Column 1 ------------------------------*/}
-//           <Stack
-//             direction="column"
-//             justifyContent="center"
-//             alignItems="flex-start"
-//             width="auto"
-//             marginRight="20px"
-//             spacing={0}
-//           >
-//             <Typography variant="h6">{content.name}</Typography>
-//             <Typography variant="caption" color="info.main" sx={{}}>
-//               <Stack
-//                 direction="row"
-//                 justifyContent="flex-start"
-//                 alignItems="center"
-//                 spacing={0}
-//                 sx={{
-//                   "& .MuiSvgIcon-root": {
-//                     fontSize: 20,
-//                   },
-//                 }}
-//               >
-//                 <LinkedInIcon
-//                   sx={{ marginRight: "6px", marginLeft: "10px" }}
-//                 />
-//                 {content.title}
-//               </Stack>
-//             </Typography>
-//           </Stack>
-//           {/*------------------------------ Column 2 ------------------------------*/}
-//           <Stack
-//             direction="column"
-//             justifyContent="center"
-//             width="auto"
-//             spacing={0}
-//             margin="10px 20px 0 0"
-//           >
-//             <Typography variant="caption" color="info.main">
-//               <Stack
-//                 direction="row"
-//                 justifyContent="flex-start"
-//                 alignItems="center"
-//                 spacing={0}
-//               >
-//                 <MailOutlineIcon
-//                   sx={{ marginRight: "6px", marginLeft: "10px" }}
-//                 />
-//                 {content.email}
-//               </Stack>
-//               <Stack
-//                 direction="row"
-//                 justifyContent="flex-start"
-//                 alignItems="center"
-//                 spacing={0}
-//               >
-//                 <LocalPhoneIcon
-//                   sx={{ marginRight: "6px", marginLeft: "10px" }}
-//                 />
-//                 {content.phone}
-//               </Stack>
-//             </Typography>
-//           </Stack>
-//           {/*------------------------------ Column 3 ------------------------------*/}
-//           <Stack>
-//             <Stack
-//               direction="column"
-//               justifyContent="flex-start"
-//               alignItems="center"
-//               width="90px"
-//               spacing={0}
-//               textAlign="center"
-//               margin="0px 10px 0px 10px"
-//             >
-//               <MailOutlineIcon
-//                 sx={{ marginRight: "6px", marginLeft: "10px" }}
-//               />
-//               <Typography variant="caption">
-//                 Sent {content.date} days ago
-//               </Typography>
-//             </Stack>
-//           </Stack>
-//           {/*------------------------------ Column 4 ------------------------------*/}
-//           <Stack>
-//             <Stack
-//               direction="column"
-//               justifyContent="flex-start"
-//               alignItems="center"
-//               width="90px"
-//               textAlign="center"
-//               spacing={0}
-//               color="info.main"
-//             >
-//               <PauseCircleOutlineIcon
-//                 sx={{ marginRight: "6px", marginLeft: "10px" }}
-//               />
-//               <Typography variant="caption">
-//                 Waiting for review
-//               </Typography>
-//             </Stack>
-//           </Stack>
-//           {/*------------------------------ Column 5 ------------------------------*/}
-//           <Stack height="auto" color="info.main" margin="10px 0 0 20px">
-//             <CloseButton
-//               variant="contained"
-//               color="background"
-//               onClick={() => closedPost(content.job_id)}
-//             >
-//               Mark as started
-//             </CloseButton>
-//           </Stack>
-//         </Stack>
-//       </AccordionSummaryStyled>
-//       <Stack margin="0 10px 10px 10px ">
-//         <Typography variant="caption">
-//           LAST UPDATE ON {content.updated}
-//         </Typography>
-//         <Typography variant="subtitle1" color="error.main">
-//           Professional experience
-//         </Typography>
-//         <Typography variant="body2">{content.experience}</Typography>
-//         <Typography variant="subtitle1" color="error.main">
-//           Why are you interested in working at The company name SA
-//         </Typography>
-//         <Typography variant="body2">{content.experience}</Typography>
-//       </Stack>
-//     </Accordion>
-//   );
-// })}

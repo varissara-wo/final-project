@@ -17,6 +17,8 @@ function usePosts() {
   const [ProfessionalProfile, setProfessionalProfile] = useState([]);
   const [message, setMessage] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
+  const [getPostByIdData, setGetPostByIdData] = useState({});
+  const [candidatesData, setCandidatesData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -142,16 +144,26 @@ function usePosts() {
     navigate("/applications");
   };
   const UpdateProifleRecruiter = async (recruiterId, formData) => {
+    console.log("เข้าอันแรก");
     console.log(recruiterId, formData);
-    await axios.put(
+    const result = await axios.put(
       `http://localhost:4000/recruiter/profile/${recruiterId}`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
-    setIsLoading(false);
-    navigate("/recruiter/profile");
+    console.log("เข้าไหม");
+    const message = result.data.message;
+    console.log(message);
+    if (message === "** This email is unavailable") {
+      setMessage(message);
+      window.scrollTo(0, 0);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      navigate("/recruiter/jobpost");
+    }
   };
 
   //Get jobs applications
@@ -167,10 +179,10 @@ function usePosts() {
 
   //Decline Application
   const declineApplication = async (applicationId) => {
-    console.log(applicationId);
     await axios.put(
       `http://localhost:4000/professional/applications/${applicationId}`
     );
+    setIsLoading(false);
   };
 
   const UpdateProifleProfessional = async (professionalId, formData) => {
@@ -202,6 +214,31 @@ function usePosts() {
     setJobApplicationsData(results.data.data);
     setIsLoading(false);
   };
+
+  const getPostById = async (jobId, applicationStatus) => {
+    console.log(jobId, applicationStatus);
+    const results = await axios.get(
+      `http://localhost:4000/recruiter/posts/${jobId}?status=${applicationStatus}`
+    );
+    console.log("getit");
+    const postData = results.data.data;
+    const candidatesData = results.data.candidatesData;
+
+    setGetPostByIdData(postData);
+    setCandidatesData(candidatesData);
+    setIsLoading(false);
+  };
+  //Change Application Status
+  const changeApplicationStatus = async (applicationId, applicationStatus) => {
+    console.log(applicationId, applicationStatus);
+    await axios.put(
+      `http://localhost:4000/recruiter/applications/status/${applicationId}?status=${applicationStatus}`
+    );
+    setIsLoading(false);
+  };
+
+  //Change Application Status
+
   return {
     createPost,
     getPost,
@@ -234,6 +271,10 @@ function usePosts() {
     ProfessionalProfile,
     message,
     Datajob,
+    getPostById,
+    getPostByIdData,
+    candidatesData,
+    changeApplicationStatus,
   };
 }
 export default usePosts;

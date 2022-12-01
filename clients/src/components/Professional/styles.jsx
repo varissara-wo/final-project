@@ -151,6 +151,7 @@ export const DownloadCvButton = styled(Button)(() => ({
   color: "#616161",
   border: "1px solid #F48FB1",
   borderRadius: "16px",
+  padding: "8px 16px 8px 16px",
 }));
 
 export const DeclineApplicaciontButton = styled(Button)(() => ({

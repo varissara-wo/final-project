@@ -27,6 +27,18 @@ const DisplayStyle = styled(Stack)(() => ({
   marginRight: "16px",
 }));
 
+const CloseButton = styled(Button)(() => ({
+  fontFamily: "var( --inter-font)",
+  fontWeight: "500",
+  fontSize: "14px",
+  borderRadius: "16px",
+  padding: "8px 16px",
+  width: "115px",
+  "& .MuiSvgIcon-root": {
+    fontSize: 28,
+  },
+}));
+
 export function JobDetails(props) {
   const {
     aboutCompany,
@@ -46,10 +58,6 @@ export function JobDetails(props) {
 
   const icon = bigIconCategory(category);
   const date = getPublishedDate(createdTime);
-  const navigate = useNavigate();
-  const handlerBack = () => {
-    navigate("/findjobs");
-  };
 
   return (
     <Box
@@ -73,10 +81,10 @@ export function JobDetails(props) {
         }}
       >
         {/*------------------------------ Back ------------------------------*/}
-        <Button
+        <CloseButton
           variant="button"
           sx={{ padding: "0px", marginBottom: "19px" }}
-          onClick={handlerBack}
+          href="/findjobs"
         >
           <ArrowBackIosNewOutlinedIcon fontSize="small" color="secondary" />
           <Typography
@@ -86,7 +94,7 @@ export function JobDetails(props) {
           >
             Back
           </Typography>
-        </Button>
+        </CloseButton>
         {/*------------------------------ Job Header ------------------------------*/}
         <Stack
           sx={{

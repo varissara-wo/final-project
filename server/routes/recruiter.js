@@ -37,7 +37,6 @@ recruiterRouter.get("/users/exists/:email", async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    console.log(err);
   }
 });
 
@@ -100,7 +99,7 @@ recruiterRouter.put("/:id", async (req, res) => {
     [updatedUser.email]
   );
 
-  console.log(userId);
+  // console.log(userId);
   if (alreadyUse.rows.length === 1) {
     return res.json({
       message: "This email is already available",
@@ -159,7 +158,7 @@ recruiterRouter.post("/createpost", async (req, res) => {
       updated_at: new Date(),
     };
 
-    console.log(post);
+    // console.log(post);
 
     await pool.query(
       `insert into jobs  ( recruiter_id,categories_id,job_title, type,min_salary, 
@@ -190,8 +189,8 @@ recruiterRouter.post("/createpost", async (req, res) => {
     console.log(er);
   }
 });
-recruiterRouter.get("/jobs/:id", async (req, res) => {
-  const recruiter_id = req.params.id;
+recruiterRouter.get("/jobs/:recruiterId", async (req, res) => {
+  const recruiter_id = req.params.recruiterId;
   const type = req.query.type || "";
   let query = "";
   let values = [];
@@ -210,7 +209,7 @@ recruiterRouter.get("/jobs/:id", async (req, res) => {
       categories.categories_id where recruiter_id = $1 `;
       values = [recruiter_id];
     }
-    console.log(query, values);
+    // console.log(query, values);
     const results = await pool.query(query, values);
     const data = results.rows;
     return res.status(200).json({
@@ -293,30 +292,30 @@ recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
   const recruiter = req.params.id;
 
   // console.log(file);
-  console.log(req.body);
+  // console.log(req.body);
 
   let logoUrl;
 
   if (req.body.logo) {
     logoUrl = req.body.logo;
   } else {
-    console.log("hahhaha");
+    // console.log("hahhaha");
     const file = req.files.logo[0];
-    console.log(file);
+    // console.log(file);
     // const file = req.files.logo;
     const idimg = await pool.query(
       `select logo_url  from recruiter_users  where recruiter_id = $1`,
       [recruiter]
     );
     const id = JSON.parse(idimg.rows[0].logo_url).publicId;
-    console.log("idimgjaaaaaaaaaaaaaaaaaa");
-    console.log(id);
+    // console.log("idimgjaaaaaaaaaaaaaaaaaa");
+    // console.log(id);
     try {
       await cloudinary.uploader.destroy(id);
-      console.log("kookai");
+      // console.log("kookai");
       const responseLogoUpload = await logoUpload(file);
       logoUrl = responseLogoUpload;
-      console.log(logoUrl);
+      // console.log(logoUrl);
     } catch (err) {}
   }
 
@@ -335,7 +334,7 @@ recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
   try {
     if (emailUse.rows.length !== 0) {
       return res.json({
-        message: "email is alreadyuse",
+        message: "** This email is unavailable",
       });
     } else {
       await pool.query(
@@ -358,4 +357,103 @@ recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
     console.log(err);
   }
 });
+
+recruiterRouter.get("/posts/:jobId", async (req, res) => {
+  const jobId = req.params.jobId || "";
+  const applicationStatus = req.query.status || "";
+
+  const queryForm = `SELECT job_applications.job_application_id, job_applications.job_id, job_applications.interested_detail,job_applications.application_status,job_applications.new_cv_url,job_applications.created_at AS applied_at,job_applications.updated_at AS applications_updated_at,job_applications.is_upload_cv, job_applications.experience AS applications_experience,job_applications.declined_at,professional_users.email,professional_users.name,professional_users.phone,professional_users.linkedin,professional_users.job_title,professional_users.experience AS professional_experience,professional_users.education,professional_users.cv_url,professional_users.created_at AS professional_created_at,professional_users.updated_at AS professional_updated_at,recruiter_users.company_name
+  FROM job_applications
+  LEFT JOIN professional_users
+  ON job_applications.professional_id = professional_users.professional_id
+  LEFT JOIN jobs
+  ON job_applications.job_id = jobs.job_id 
+  LEFT JOIN recruiter_users 
+  ON jobs.recruiter_id = recruiter_users.recruiter_id `;
+
+  let query = "";
+  let values = [];
+
+  try {
+    // query sum total_candidates
+    const queryCandidates = await pool.query(
+      `SELECT COUNT(*) AS total_candidates FROM job_applications WHERE job_id = $1 AND application_status != 'Declined'`,
+      [jobId]
+    );
+    const TotalCandidates = Number(queryCandidates.rows[0].total_candidates);
+    // query sum on Track_candidates
+    const queryOnTrackCandidates = await pool.query(
+      `SELECT COUNT(*) AS on_track_candidates FROM job_applications WHERE job_id = $1 AND application_status = 'Waiting' AND application_status = 'Reviewing'`,
+      [jobId]
+    );
+    const onTrackCandidates = Number(
+      queryOnTrackCandidates.rows[0].on_track_candidates
+    );
+    const updated_at = new Date();
+    // update candidates on track and total candidates
+    await pool.query(
+      `UPDATE jobs SET total_candidates = $1, on_track_candidates = $2, updated_at = $3 WHERE job_id = $4`,
+      [TotalCandidates, onTrackCandidates, updated_at, jobId]
+    );
+    const relults = await pool.query(
+      `SELECT * FROM jobs LEFT JOIN categories ON jobs.categories_id = categories.categories_id WHERE job_id = $1`,
+      [jobId]
+    );
+    const data = relults.rows[0];
+
+    if (applicationStatus === "All") {
+      query =
+        queryForm +
+        `WHERE job_applications.job_id = $1  AND application_status != 'Declined' ORDER BY job_applications.created_at DESC`;
+      values = [jobId];
+    }
+    if (applicationStatus === "Waiting") {
+      query =
+        queryForm +
+        `WHERE job_applications.job_id = $1 AND application_status = $2 ORDER BY job_applications.created_at DESC`;
+      values = [jobId, applicationStatus];
+    }
+    if (applicationStatus === "Reviewing") {
+      query =
+        queryForm +
+        `WHERE job_applications.job_id = $1 AND application_status = $2 ORDER BY job_applications.created_at DESC`;
+      values = [jobId, applicationStatus];
+    }
+    if (applicationStatus === "Finished") {
+      query =
+        queryForm +
+        `WHERE job_applications.job_id = $1 AND application_status = $2 ORDER BY job_applications.created_at DESC`;
+      values = [jobId, applicationStatus];
+    }
+
+    const candidates = await pool.query(query, values);
+
+    const candidatesData = [];
+    for (const row of candidates.rows) {
+      row.cv_url = JSON.parse(row.cv_url).url;
+      if (row.is_upload_cv === "true") {
+        row.cv_url = JSON.parse(row.new_cv_url).url;
+      }
+      candidatesData.push(row);
+    }
+    return res.status(200).json({
+      data: data,
+      candidatesData: candidatesData,
+    });
+  } catch (error) {}
+});
+
+//Change Application Status
+recruiterRouter.put("/applications/status/:applicationId", async (req, res) => {
+  const applicationId = req.params.applicationId;
+  const applicationStatus = req.query.status;
+  const updated_at = new Date();
+  try {
+    await pool.query(
+      `UPDATE job_applications SET application_status = $1, updated_at= $2 WHERE job_application_id = $3`,
+      [applicationStatus, updated_at, applicationId]
+    );
+  } catch (error) {}
+});
+
 export default recruiterRouter;

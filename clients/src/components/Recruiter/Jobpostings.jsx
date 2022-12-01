@@ -34,8 +34,10 @@ import { iconCategory } from "../../utils/utilsFunction";
 import { FormatAlignCenter, TypeSpecimen } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useAuth } from "../../contexts/authentication";
+import { useNavigate } from "react-router-dom";
 
 export function Jobpostings() {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const {
     data,
@@ -47,7 +49,7 @@ export function Jobpostings() {
     setIsLoading,
   } = usePosts();
   const [recruiterId, setRecruiterId] = useState("");
-  const { state, getUserData, userLoading } = useAuth();
+  const { state, getUserData, isUserLoading } = useAuth();
   const [type, setType] = useState("all");
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -60,7 +62,7 @@ export function Jobpostings() {
       selectPost(state.user["id"], type);
     }, 800);
     return () => clearTimeout(timer);
-  }, [isLoading, setIsLoading, userLoading]);
+  }, [isLoading, setIsLoading, isUserLoading]);
 
   const handlechoose = (chooseType) => {
     setType(chooseType.target.value);
@@ -192,6 +194,7 @@ export function Jobpostings() {
           <div>
             {/*------------------------------ Start information------------------------------*/}
             {data.map((content, index) => {
+              const jobId = content.job_id;
               return (
                 <>
                   <Accordion
@@ -259,7 +262,7 @@ export function Jobpostings() {
                           },
                         }}
                       >
-                        <OpenOn date={date(content.created_at)} />
+                        <OpenOn date={content.created_at} />
 
                         <TotalCandidates
                           candidates={content.total_candidates}
@@ -284,6 +287,9 @@ export function Jobpostings() {
                               color="info"
                             />
                           }
+                          onClick={() => {
+                            navigate(`candidate/${jobId}`);
+                          }}
                         >
                           SHOW
                         </CloseButton>

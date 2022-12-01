@@ -162,6 +162,13 @@ function usePosts() {
     setCandidatesData(candidatesData);
     setIsLoading(false);
   };
+  //Change Application Status
+  const changeApplicationStatus = async (applicationId, applicationStatus) => {
+    console.log(applicationId, applicationStatus);
+    await axios.put(
+      `http://localhost:4000/recruiter/applications/status/${applicationId}?status=${applicationStatus}`
+    );
+  };
 
   return {
     createPost,
@@ -193,6 +200,7 @@ function usePosts() {
     getPostById,
     getPostByIdData,
     candidatesData,
+    changeApplicationStatus,
   };
 }
 export default usePosts;

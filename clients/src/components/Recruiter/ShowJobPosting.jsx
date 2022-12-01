@@ -23,7 +23,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import JobPostWrapper from "./JobPostWrapper";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { SentStatus } from "../SentStatus";
 import { ReviewStatus } from "../ReviewStatus";
 import { DownloadCvButton } from "../Professional/styles";
@@ -38,6 +38,7 @@ export function ShowJobPostings() {
     candidatesData,
     isLoading,
     setIsLoading,
+    changeApplicationStatus,
   } = usePosts();
   const params = useParams();
   const [expanded, setExpanded] = useState(false);
@@ -51,6 +52,13 @@ export function ShowJobPostings() {
     setSelectedFilterCandidateStatus(event.target.value);
     setExpanded(false);
     setIsLoading(true);
+  };
+
+  //Change Application Status
+  const [applicationStatus, setApplicationStatus] = useState("");
+  const handleChangeApplicationStatus = (applicationId) => {
+    changeApplicationStatus(applicationId, applicationStatus);
+    setExpanded(false);
   };
   const {
     about_job_position,
@@ -75,13 +83,11 @@ export function ShowJobPostings() {
   useEffect(() => {
     getUserData();
     const jobId = params.postId;
-    console.log(jobId);
     getPostById(jobId, selectedFilterCandidateStatus);
   }, [selectedFilterCandidateStatus]);
 
   console.log(getPostByIdData);
   console.log(candidatesData);
-  console.log(selectedFilterCandidateStatus);
 
   const CheckBoxTextStyled = styled(FormControlLabel)(() => ({
     color: "#616161",
@@ -278,8 +284,15 @@ export function ShowJobPostings() {
                       },
                     }}
                   >
-                    <LinkedInIcon sx={{ marginRight: "6px" }} />
-                    <Typography variant="subtitle2">{job_title}</Typography>
+                    <Button
+                      href={linkedin}
+                      target="_blank"
+                      variant="subtitle2"
+                      startIcon={<LinkedInIcon />}
+                      sx={{ padding: "0", textTransform: "none" }}
+                    >
+                      <Typography variant="subtitle2">{job_title}</Typography>
+                    </Button>
                   </Stack>
                 </Stack>
                 {/*------------------------------ Column 2 ------------------------------*/}
@@ -340,8 +353,11 @@ export function ShowJobPostings() {
                     <CloseButton
                       variant="contained"
                       color="background"
-                      // onClick={() => {}}
                       sx={{ border: "1px solid #F48FB1" }}
+                      onClick={() => {
+                        setApplicationStatus("Reviewing");
+                        handleChangeApplicationStatus(job_application_id);
+                      }}
                     >
                       Mark as Started
                     </CloseButton>
@@ -350,8 +366,11 @@ export function ShowJobPostings() {
                     <CloseButton
                       variant="contained"
                       color="background"
-                      // onClick={() => {}}
                       sx={{ border: "1px solid #F48FB1" }}
+                      onClick={() => {
+                        setApplicationStatus("Finished");
+                        handleChangeApplicationStatus(job_application_id);
+                      }}
                     >
                       Mark as Finished
                     </CloseButton>
@@ -361,7 +380,6 @@ export function ShowJobPostings() {
                       disabled
                       variant="contained"
                       color="background"
-                      // onClick={() => {}}
                     >
                       Finished
                     </CloseButton>

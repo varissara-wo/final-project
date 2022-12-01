@@ -76,7 +76,7 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
       name: req.body.name,
       phone: req.body.phone,
       birthday: req.body.birthday,
-      likedin: req.body.likedin,
+      linkedin: req.body.linkedin,
       title: req.body.title,
       experience: req.body.experience,
       education: req.body.education,
@@ -99,7 +99,7 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
         newProfessionalUser.name,
         newProfessionalUser.phone,
         newProfessionalUser.birthday,
-        newProfessionalUser.likedin,
+        newProfessionalUser.linkedin,
         newProfessionalUser.title,
         newProfessionalUser.experience,
         newProfessionalUser.education,
@@ -117,38 +117,26 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
 
 //Update user
 professionalRouter.put("/:id", CvUpload, async (req, res) => {
-  console.log("hello");
   const professional = req.params.id;
-  console.log("102");
-  console.log(req.body);
+
   // const userId = req.params.id;
   let cvUrl;
 
   if (req.body.cv) {
     cvUrl = req.body.cv;
-    console.log("kookai");
   } else {
     const file = req.files.cv[0];
-    console.log("109");
-    console.log(file);
+
     const idimg = await pool.query(
       `select cv_url from professional_users  where professional_id = $1`,
       [professional]
     );
-    console.log("118");
-    console.log(idimg);
+
     const id = JSON.parse(idimg.rows[0].cv_url).publicId;
-    console.log("119");
-    console.log(id);
     try {
-      console.log("120");
-      console.log(file);
       await cloudinary.uploader.destroy(id);
       const responseLogoUpload = await cvUpload(file);
-      console.log(responseLogoUpload);
       cvUrl = responseLogoUpload;
-      console.log("130");
-      console.log(cvUrl);
     } catch (err) {}
   }
 
@@ -157,7 +145,6 @@ professionalRouter.put("/:id", CvUpload, async (req, res) => {
     ...req.body,
     updated_at: new Date(),
   };
-  console.log(updatedUser);
 
   const emailUse = await pool.query(
     `select * from professional_users where email = $1 and professional_id != $2`,
@@ -617,33 +604,23 @@ professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
   const statuscv = req.body.statuscv;
   const jobId = Number(req.params.id);
   const professId = Number(req.body.professionalId);
-  console.log("ข้างนอก");
-  console.log(req.files);
-  console.log("expe");
-  console.log("Kijaaaaaaaaaaaaa");
-  console.log(req.body["experience"]);
-  console.log(req.body.statuscv);
+
   try {
     const applyornot = await pool.query(
       `select * from job_applications  where professional_id = $1 and job_id =$2`,
       [professId, jobId]
     );
-    console.log("545");
-    console.log(applyornot);
+
     if (applyornot.rows.length !== 0) {
-      console.log("hi if else แตก");
       return res.status(201).json({
         message: "you already apply ",
       });
     } else if (statuscv === "true") {
-      console.log("เข้าอัพcvไหมจะ");
       const file = req.files.cv[0];
-      console.log("ไฟล์เข้าปะ");
-      console.log(file);
+
       const responseCvUpload = await cvUpload(file);
       const cvUrl = responseCvUpload;
-      console.log("cvurl");
-      console.log(cvUrl);
+
       const jobapply = {
         job_id: jobId,
         professionalId: professId,
@@ -652,15 +629,15 @@ professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
         experiece: req.body["experience"],
         newcv: cvUrl,
         statuscv: req.body.statuscv,
+        status: "Waiting",
         created_at: new Date(),
         updated_at: new Date(),
       };
-      console.log("568");
-      console.log(jobapply);
+
       try {
         await pool.query(
-          `insert into job_applications (job_id,professional_id,interested_detail,new_cv_url,created_at,updated_at,is_upload_cv,experience)
-      values($1,$2,$3,$4,$5,$6,$7,$8)`,
+          `insert into job_applications (job_id,professional_id,interested_detail,new_cv_url,created_at,updated_at,is_upload_cv,experience,application_status)
+      values($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
           [
             jobapply.job_id,
             jobapply.professionalId,
@@ -670,6 +647,7 @@ professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
             jobapply.updated_at,
             jobapply.statuscv,
             jobapply.experiece,
+            jobapply.status,
           ]
         );
       } catch (err) {
@@ -682,7 +660,6 @@ professionalRouter.post("/apply/:id", CvUpload, async (req, res) => {
         status: "Waiting",
         experience: req.body.experience,
         detial: req.body.interest,
-
         statuscv: req.body.statuscv,
         created_at: new Date(),
         updated_at: new Date(),
@@ -726,9 +703,14 @@ professionalRouter.get("/profile/:id", async (req, res) => {
 
 //Get job applications
 professionalRouter.get("/applications", async (req, res) => {
-  const user_email = req.query.user_email || "";
+  console.log("hiiiiiiiii");
+  const job_id = req.query.user_id || "";
   const applicationStatus = req.query.status || "";
-  const queryForm = `SELECT job_applications.job_application_id, job_applications.interested_detail, job_applications.application_status, job_applications.new_cv_url, job_applications.created_at as applied_at, job_applications.updated_at as application_updated_at, job_applications.is_upload_cv, job_applications.declined_at, jobs.job_id, jobs.job_title, jobs.type, jobs.min_salary, jobs.max_salary, jobs.created_at as jobs_created_at, jobs.closed_at as job_closed_at, recruiter_users.company_name, recruiter_users.logo_url, professional_users.experience, professional_users.cv_url, professional_users.updated_at as professional_profile_updated_at, professional_users.name as professional_name, categories.name
+  const queryForm = `SELECT job_applications.job_application_id, job_applications.interested_detail, job_applications.application_status, 
+  job_applications.new_cv_url, job_applications.created_at as applied_at, job_applications.updated_at as application_updated_at,
+   job_applications.is_upload_cv, job_applications.declined_at, jobs.job_id, jobs.job_title, jobs.type, jobs.min_salary, 
+   jobs.max_salary, jobs.created_at as jobs_created_at, jobs.closed_at as job_closed_at, recruiter_users.company_name,
+    recruiter_users.logo_url,  job_applications.experience, professional_users.cv_url, professional_users.updated_at as professional_profile_updated_at, professional_users.name as professional_name, categories.name
   FROM job_applications
   LEFT JOIN jobs
   ON job_applications.job_id = jobs.job_id
@@ -746,44 +728,43 @@ professionalRouter.get("/applications", async (req, res) => {
     if (applicationStatus === "All") {
       query =
         queryForm +
-        `WHERE professional_users.email = $1 ORDER BY applied_at DESC`;
-      values = [user_email];
-    }
-    if (applicationStatus === "Waiting") {
+        `WHERE job_applications.professional_id = $1 ORDER BY applied_at DESC`;
+      values = [job_id];
+    } else if (applicationStatus === "Waiting") {
       query =
         queryForm +
-        `WHERE professional_users.email = $1 AND application_status = $2 ORDER BY applied_at DESC`;
-      values = [user_email, applicationStatus];
-    }
-    if (applicationStatus === "Reviewing") {
+        `WHERE job_applications.professional_id = $1 AND application_status = $2 ORDER BY applied_at DESC`;
+      values = [job_id, applicationStatus];
+    } else if (applicationStatus === "Reviewing") {
       query =
         queryForm +
-        `WHERE professional_users.email = $1 AND application_status = $2 ORDER BY applied_at DESC`;
-      values = [user_email, applicationStatus];
-    }
-    if (applicationStatus === "Finished") {
+        `WHERE job_applications.professional_id = $1 AND application_status = $2 ORDER BY applied_at DESC`;
+      values = [job_id, applicationStatus];
+    } else if (applicationStatus === "Finished") {
       query =
         queryForm +
-        `WHERE professional_users.email = $1 AND application_status = $2 ORDER BY applied_at DESC`;
-      values = [user_email, applicationStatus];
-    }
-    if (applicationStatus === "Declined") {
+        `WHERE job_applications.professional_id = $1 AND application_status = $2 ORDER BY applied_at DESC`;
+      values = [job_id, applicationStatus];
+    } else if (applicationStatus === "Declined") {
       query =
         queryForm +
-        `WHERE professional_users.email = $1 AND application_status = $2 ORDER BY applied_at DESC`;
-      values = [user_email, applicationStatus];
+        `WHERE job_applications.professional_id = $1 AND application_status = $2 ORDER BY applied_at DESC`;
+      values = [job_id, applicationStatus];
     }
     const results = await pool.query(query, values);
     const data = [];
+
     for (const row of results.rows) {
       row.logo_url = JSON.parse(row.logo_url).url;
       row.cv_url = JSON.parse(row.cv_url).url;
+
       if (row.is_upload_cv === "true") {
         row.cv_url = JSON.parse(row.new_cv_url).url;
       }
       data.push(row);
     }
 
+    console.log(data);
     return res.status(200).json({
       data: data,
     });
@@ -804,5 +785,16 @@ professionalRouter.put("/applications/:applicationId", async (req, res) => {
     );
   } catch (error) {}
 });
-
+professionalRouter.get("/applications/:Id", async (req, res) => {
+  const applicationId = req.params.Id;
+  try {
+    const result = await pool.query(
+      `select * from job_applications where job_application_id = $1 `,
+      [applicationId]
+    );
+    return res.status(200).json({
+      data: result.rows[0],
+    });
+  } catch (error) {}
+});
 export default professionalRouter;

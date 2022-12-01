@@ -96,7 +96,7 @@ loginProfessionalRouter.post("/register", CvUpload, async (req, res) => {
       name: req.body.name,
       phone: req.body.phone,
       birthday: req.body.birthday,
-      likedin: req.body.likedin,
+      linkedin: req.body.linkedin,
       title: req.body.title,
       experience: req.body.experience,
       education: req.body.education,
@@ -105,6 +105,8 @@ loginProfessionalRouter.post("/register", CvUpload, async (req, res) => {
       updated_at: new Date(),
       last_logged_in: new Date(),
     };
+
+    console.log(newProfessionalUser);
     const salt = await bcrypt.genSalt(10);
     newProfessionalUser.password = await bcrypt.hash(
       newProfessionalUser.password,
@@ -119,7 +121,7 @@ loginProfessionalRouter.post("/register", CvUpload, async (req, res) => {
         newProfessionalUser.name,
         newProfessionalUser.phone,
         newProfessionalUser.birthday,
-        newProfessionalUser.likedin,
+        newProfessionalUser.linkedin,
         newProfessionalUser.title,
         newProfessionalUser.experience,
         newProfessionalUser.education,

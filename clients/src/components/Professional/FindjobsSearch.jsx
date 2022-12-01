@@ -23,6 +23,7 @@ export function Findjobssearch() {
   const options = ["Manufacturing", "Legal", "Education", "Goverment", "Sales"];
   const options1 = ["Fulltime", "Partime"];
   const [salary, setSalary] = useState({});
+  const [isFollow, setIsFollow] = useState(false);
   const {
     getSearch,
     getJobData,
@@ -43,11 +44,8 @@ export function Findjobssearch() {
   };
 
   const handlerFollow = (jobId) => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      followJobApplication(jobId, state.user["id"]);
-    }, 300);
-    return () => clearTimeout(timer);
+    followJobApplication(jobId, state.user["id"]);
+    setIsFollow(true);
   };
 
   useEffect(() => {
@@ -61,9 +59,10 @@ export function Findjobssearch() {
         typeValue,
         state.user["id"]
       );
+      setIsFollow(false);
     }, 800);
     return () => clearTimeout(timer);
-  }, [isLoading, setIsLoading, isUserLoading]);
+  }, [isLoading, setIsLoading, isUserLoading, isFollow]);
 
   console.log(isUserLoading);
 
@@ -177,6 +176,7 @@ export function Findjobssearch() {
               focused
               onChange={(event, newValue) => {
                 setTypeValue(newValue);
+                setIsLoading(true);
               }}
               inputValue={typeInputValue}
               onInputChange={(event, newInputValue) => {

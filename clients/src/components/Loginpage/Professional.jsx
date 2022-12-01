@@ -21,7 +21,7 @@ const Professional = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { professionalLogin, validate, passwordValid, emailValid } = useAuth();
-  console.log(validate);
+
   const handleSubmit = (event) => {
     professionalLogin({
       email: account.email,

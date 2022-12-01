@@ -121,39 +121,12 @@ export function JobDetails(props) {
                 variant="h5"
                 sx={{
                   marginBottom: "8px",
+                  padding: "9px",
                   fontWeight: "400",
                 }}
               >
                 {companyName}
               </Typography>
-              <Button
-                sx={{ paddingLeft: "0px" }}
-                // onClick={() => {
-                //   handlerFollow(jobId);
-                // }}
-              >
-                <GpsFixed
-                  sx={{
-                    color: "#616161",
-                    marginRight: "10px",
-                    padding: "9px",
-                    backgroundColor: "",
-                    borderRadius: "",
-                    // color: isFollow ? "#fff" : "#616161",
-                    // marginRight: "10px",
-                    // padding: "9px",
-                    // backgroundColor: isFollow ? "#F48FB1" : "#fff",
-                    // borderRadius: "50px",
-                  }}
-                  color="info"
-                />
-                <Typography
-                  variant="button"
-                  sx={{ color: "#616161", display: "flex" }}
-                >
-                  Follow
-                </Typography>
-              </Button>
             </Stack>
           </Stack>
           <ApplyNowButton jobId={jobId} />

@@ -9,9 +9,12 @@ const UserFollowing = () => {
   const { state, getUserData, isUserLoading } = useAuth();
 
   useEffect(() => {
-    getUserData();
-    getFollow(state.user["id"]);
-  }, [isLoading]);
+    const timer = setTimeout(() => {
+      getUserData();
+      getFollow(state.user["id"]);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [isLoading, isUserLoading]);
 
   return (
     <Box
@@ -46,7 +49,7 @@ const UserFollowing = () => {
         {isLoading === true && (
           <Stack
             width="90%"
-            height="50vh"
+            height="60vh"
             flexDirection="row"
             justifyContent="center"
             alignItems="center"

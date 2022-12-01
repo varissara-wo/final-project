@@ -91,7 +91,6 @@ const UpdateProfessionalProfile = () => {
     // setIsLoadingProfile(true);
     const timer = setTimeout(() => {
       getUserData();
-      console.log(state);
       getProfessionalUserProfile(state.user["id"]);
       setUserData({
         email: ProfessionalProfile.email,
@@ -222,7 +221,7 @@ const UpdateProfessionalProfile = () => {
         {isLoadingProfile === true && (
           <Stack
             width="90%"
-            height="50vh"
+            height="65vh"
             flexDirection="row"
             justifyContent="center"
             alignItems="center"

@@ -34,8 +34,10 @@ import { iconCategory } from "../../utils/utilsFunction";
 import { FormatAlignCenter, TypeSpecimen } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useAuth } from "../../contexts/authentication";
+import { useNavigate } from "react-router-dom";
 
 export function Jobpostings() {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const {
     data,
@@ -192,6 +194,7 @@ export function Jobpostings() {
           <div>
             {/*------------------------------ Start information------------------------------*/}
             {data.map((content, index) => {
+              const jobId = content.job_id;
               return (
                 <>
                   <Accordion
@@ -284,6 +287,9 @@ export function Jobpostings() {
                               color="info"
                             />
                           }
+                          onClick={() => {
+                            navigate(`candidate/${jobId}`);
+                          }}
                         >
                           SHOW
                         </CloseButton>

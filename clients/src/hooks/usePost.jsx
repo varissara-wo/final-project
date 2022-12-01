@@ -17,6 +17,7 @@ function usePosts() {
   const [ProfessionalProfile, setProfessionalProfile] = useState([]);
   const [message, setMessage] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
+  const [getPostByIdData, setGetPostByIdData] = useState({});
 
   const navigate = useNavigate();
 
@@ -202,6 +203,25 @@ function usePosts() {
     setJobApplicationsData(results.data.data);
     setIsLoading(false);
   };
+  const getPostById = async (jobId) => {
+    const results = await axios.get(
+      `http://localhost:4000/recruiter/post/${jobId}`
+    );
+    const postData = results.data.data;
+    setGetPostByIdData(postData);
+    setIsLoading(false);
+  };
+
+  // const getCandidates= async (recruiterEmail, jobId) => {
+  //   // console.log(recruiterEmail, jobId);
+  //   const results = await axios.get(
+  //     `http://localhost:4000/recruiter/jobs/candidate/${jobId}?recruiterEmail=${recruiterEmail}`
+  //   );
+  //   console.log(results.data.data);
+  //   // setCandidatesData(results.data.data);
+  //   setIsLoading(false);
+  // };
+
   return {
     createPost,
     getPost,
@@ -234,6 +254,8 @@ function usePosts() {
     ProfessionalProfile,
     message,
     Datajob,
+    getPostById,
+    getPostByIdData,
   };
 }
 export default usePosts;

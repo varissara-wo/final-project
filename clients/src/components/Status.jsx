@@ -23,6 +23,11 @@ export const StackFlex = styled(Stack)(() => ({
 
 export const OpenOn = (props) => {
   const { date } = props;
+  let open_date = new Date(date);
+  const open_date_day = open_date.getDate();
+  const open_date_month = open_date.getMonth() + 1;
+  const open_date_year = open_date.getFullYear();
+  const openDate = `${open_date_day}/${open_date_month}/${open_date_year}`;
   return (
     <Stack
       direction="column"
@@ -36,7 +41,7 @@ export const OpenOn = (props) => {
         Open on
       </Typography>
       <Typography variant="caption" color="secondary">
-        {date}
+        {openDate}
       </Typography>
     </Stack>
   );
@@ -104,149 +109,6 @@ export const CandidatesOnTrack = (props) => {
         on track
       </Typography>
     </Stack>
-  );
-};
-
-export const SentOn = (props) => {
-  const { date } = props;
-  return (
-    <Stack
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      spacing={0}
-      sx={{ marginLeft: "10px", marginRight: "10px" }}
-      color="secondary"
-    >
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={0.2}
-        color="secondary"
-      >
-        <EmailOutlinedIcon color="secondary" />
-      </Stack>
-      <Typography variant="caption" color="secondary">
-        Sent on
-      </Typography>
-      <Typography variant="caption" color="secondary">
-        {date}
-      </Typography>
-    </Stack>
-  );
-};
-
-export const SentAgo = (props) => {
-  const { date, time, day } = props;
-  return (
-    <Stack
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      spacing={0}
-      sx={{ marginLeft: "10px", marginRight: "10px" }}
-      color="secondary"
-    >
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={0.2}
-        color="secondary"
-      >
-        <EmailOutlinedIcon color="secondary" />
-      </Stack>
-      {day && (
-        <Typography variant="caption" color="secondary">
-          Sent {day} days
-        </Typography>
-      )}
-      {time && (
-        <Typography variant="caption" color="secondary">
-          Sent {time} hr
-        </Typography>
-      )}
-      <Typography variant="caption" color="secondary">
-        ago
-      </Typography>
-    </Stack>
-  );
-};
-
-export const WaitingForReview = (props) => {
-  return (
-    <Stack
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      spacing={0}
-      sx={{ marginLeft: "10px", marginRight: "10px" }}
-      color="secondary"
-    >
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={0.2}
-        color="secondary"
-      >
-        <PauseCircleOutlineOutlinedIcon color="primary" />
-      </Stack>
-      <Typography variant="caption" color="primary">
-        Waiting for
-      </Typography>
-      <Typography variant="caption" color="primary">
-        review
-      </Typography>
-    </Stack>
-  );
-};
-
-export const ReviewInProgress = (props) => {
-  return (
-    <StackFlex sx={{ marginLeft: "10px", marginRight: "10px" }}>
-      <MarkEmailReadOutlinedIcon color="primary" />
-      <Typography variant="caption" color="primary">
-        Review in
-      </Typography>
-      <Typography variant="caption" color="primary">
-        progress
-      </Typography>
-    </StackFlex>
-  );
-};
-
-export const ReviewFinished = (props) => {
-  return (
-    <StackFlex sx={{ marginLeft: "10px", marginRight: "10px" }}>
-      <Stack>
-        <MarkChatReadOutlinedIcon color="primary" />
-      </Stack>
-      <Typography variant="caption" color="primary">
-        Review
-      </Typography>
-      <Typography variant="caption" color="primary">
-        finished
-      </Typography>
-    </StackFlex>
-  );
-};
-
-export const DeclinedOn = (props) => {
-  const { date } = props;
-  return (
-    <StackFlex sx={{ marginLeft: "10px", marginRight: "10px" }}>
-      <Stack>
-        <HighlightOffIcon color="primary" />
-      </Stack>
-      <Typography variant="caption" color="primary">
-        Declined on
-      </Typography>
-      <Typography variant="caption" color="primary">
-        {date}
-      </Typography>
-    </StackFlex>
   );
 };
 

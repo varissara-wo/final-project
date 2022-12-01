@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Stack, Typography, Box, Step, StepLabel } from "@mui/material";
 
@@ -6,7 +6,7 @@ import { NextButton, OnelineTextField, InputLabelStyle } from "./Styles.jsx";
 
 import { FileUploadOutlined, ArrowForwardIos } from "@mui/icons-material";
 
-import { useAuth } from "../../contexts/professionalAuth.jsx";
+import { useAuth } from "../../contexts/authentication.jsx";
 
 const Professional = () => {
   const [account, setAccount] = useState({
@@ -18,19 +18,16 @@ const Professional = () => {
   const [passwordMessage, setPasswordMessage] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
 
-  
-  const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const { professionalLogin, validate, passwordValid, emailValid } = useAuth();
 
   const handleSubmit = (event) => {
-    login({
+    professionalLogin({
       email: account.email,
       password: account.password,
     });
-    // event.preventDefalt();
   };
-
-
-  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <>
@@ -63,7 +60,7 @@ const Professional = () => {
                 display="flex"
                 flex={1}
               >
-                {emailMessage}
+                {emailValid}
               </Typography>
             </Stack>
             <InputLabelStyle>PASSWORD</InputLabelStyle>
@@ -78,6 +75,7 @@ const Professional = () => {
                 placeholder="******"
                 focused
                 inputProps={{ style: { padding: 8 } }}
+                type={showPassword ? "text" : "password"}
               />
               <Typography
                 variant="body2"
@@ -86,7 +84,7 @@ const Professional = () => {
                 display="flex"
                 flex={1}
               >
-                {passwordMessage}
+                {passwordValid}
               </Typography>
             </Stack>
 

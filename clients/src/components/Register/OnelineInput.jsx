@@ -3,6 +3,7 @@ import { Stack, Typography } from "@mui/material";
 import { OnelineTextField, InputLabelStyle } from "./Styles.jsx";
 
 const OnelineInput = (props) => {
+  const [isLoading, setIsLoading] = useState(true);
   const {
     name,
     label,
@@ -15,17 +16,19 @@ const OnelineInput = (props) => {
   } = props;
 
   const [isValid, setIsValid] = useState(false);
-  console.log(isValid);
 
   const validateInput = () => {
+    console.log(value);
     const regex = pattern;
-    const isValid = regex.test(value);
-    setIsValid(isValid);
+    const checkIsValid = regex.test(value);
+    setIsValid(checkIsValid);
+    console.log(isValid);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     validateInput();
-  }, [value]);
+  }, [value, isLoading]);
 
   return (
     <>

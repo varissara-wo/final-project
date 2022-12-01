@@ -8,8 +8,10 @@ import {
   GithubProfileStyled,
 } from "./styles.jsx";
 import { Favorite, GitHub } from "@mui/icons-material";
+import { useAuth } from "../../contexts/authentication.jsx";
 
 const ProfessionalSidebar = (props) => {
+  const { logout } = useAuth();
   const index = Number(props.selectedIndex);
   const navigate = useNavigate();
   const [selectedIndex, setSelectedIndex] = useState(index);
@@ -18,6 +20,12 @@ const ProfessionalSidebar = (props) => {
     setSelectedIndex(index);
     navigate(path);
   };
+
+  const handlerLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
   useEffect(() => {}, [index]);
 
   return (
@@ -104,7 +112,7 @@ const ProfessionalSidebar = (props) => {
                 <TextButtonStyled>Profile</TextButtonStyled>
               </SidebarButtonStyled>
 
-              <SidebarButtonStyled component="a" href="/">
+              <SidebarButtonStyled component="a" onClick={handlerLogout}>
                 <IconBoxStyled>
                   <img
                     src="https://res.cloudinary.com/dgzvwxecn/image/upload/v1668954324/Group_5_qxgp4r.svg"

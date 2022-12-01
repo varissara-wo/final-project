@@ -1,23 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import Box from "@mui/material/Box";
-
 import { Typography } from "@mui/material";
-
 import TextField from "@mui/material/TextField";
 import usePosts from "../../hooks/usePost.jsx";
 import { Buttonwidth } from "../Register/Styles.jsx";
-
+import { useAuth } from "../../contexts/authentication.jsx";
 import MultilineInputJobPost from "./MultilineInputJobPost.jsx";
 import OnelineInputJobPost from "./OnelineInputJobPost.jsx";
 import { Textseacrh1, Categoryinput } from "../Professional/styles.jsx";
-
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import InputAdornment from "@mui/material/InputAdornment";
 
 export function Createjobpost() {
   const { createPost } = usePosts();
+  const { getUserData, state, isUserLoading, setIsUserLoading } = useAuth();
   const [inputValue, setInputValue] = React.useState("");
   const [inputValue1, setInputValue1] = React.useState("");
   const [info, setInfo] = useState({
@@ -32,6 +30,15 @@ export function Createjobpost() {
     optional: "",
   });
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      getUserData();
+      setInfo({ ...info, recruiterId: state.user["id"] });
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [isUserLoading]);
+
+  console.log(info);
   //categeory
   const category = [
     "Manufacturing",
@@ -45,6 +52,7 @@ export function Createjobpost() {
     createPost({
       ...info,
     });
+    setIsUserLoading(true);
   };
 
   const handlerInputChange = (e) => {
@@ -85,9 +93,11 @@ export function Createjobpost() {
       sx={{
         backgroundColor: "#F5F5F6",
         width: "100%",
-        height: "100vh",
+        height: "100%",
+        minHeight: "100vh",
         minWidth: "100vh",
         marginLeft: "240px",
+        paddingBottom: "50px",
       }}
     >
       <Box
@@ -283,7 +293,7 @@ export function Createjobpost() {
           </Typography>
           {/*------------------------------ Start information------------------------------*/}
           <Typography variant="h5" mb="8px" style={{ fontWeight: "400" }}>
-            Addtional information{" "}
+            Addtional information
           </Typography>
         </Box>
 

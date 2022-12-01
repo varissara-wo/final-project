@@ -4,15 +4,22 @@ import { useNavigate } from "react-router-dom";
 
 function usePosts() {
   const [data, setData] = useState([]);
-
   const [follow, setFollow] = useState([]);
   const [numberOffollow, setNumberOffollow] = useState(0);
-
+  const [profile, setProfile] = useState([]);
   const [getJobData, setGetJobData] = useState([]);
   const [getJobByIdData, setGetJobByIdData] = useState({});
+  const [userdata, setUserdata] = useState([]);
   const [numberOfJobs, setNumberOfJobs] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [userdata, setUserdata] = useState([]);
+  const [followJob, setFollowJob] = useState([]);
+  const [jobApplicationsData, setJobApplicationsData] = useState([]);
+  const [ProfessionalProfile, setProfessionalProfile] = useState([]);
+  const [message, setMessage] = useState("");
+  const [filterStatus, setFilterStatus] = useState("All");
+  const [getPostByIdData, setGetPostByIdData] = useState({});
+  const [candidatesData, setCandidatesData] = useState([]);
+
   const navigate = useNavigate();
 
   const createPost = async (data) => {
@@ -29,11 +36,13 @@ function usePosts() {
   const closedPost = async (jobId) => {
     await axios.put(`http://localhost:4000/recruiter/jobs/${jobId}`, []);
   };
+
   const selectPost = async (recruiterId, type) => {
     const results = await axios.get(
       `http://localhost:4000/recruiter/jobs/${recruiterId}?type=${type}`
     );
     setData(results.data.data);
+    setIsLoading(false);
   };
 
   const getJobs = async () => {
@@ -48,22 +57,52 @@ function usePosts() {
       `http://localhost:4000/professional/jobs/${jobId}`
     );
     const jobData = results.data.data;
+
     setGetJobByIdData(jobData);
     setIsLoading(false);
   };
 
-  const getSearch = async (keywords, category, minPrice, maxPrice, type) => {
+  const getSearch = async (
+    keywords,
+    category,
+    minPrice,
+    maxPrice,
+    type,
+    userId
+  ) => {
     let key = keywords || "";
     let cat = category || "";
     let min = minPrice || "";
     let max = maxPrice || "";
     let type1 = type || "";
-
+    console.log(type1);
+    console.log(min);
+    console.log(max);
     const results = await axios.get(
-      `http://localhost:4000/professional/searchjobs?maxPrice=${max}&minPrice=${min}&category=${cat}&keywords=${key}&type=${type1}`
+      `http://localhost:4000/professional/searchjobs/${userId}?maxPrice=${max}&minPrice=${min}&category=${cat}&keywords=${key}&type=${type1}`
     );
 
     setGetJobData(results.data.data);
+    setFollowJob(results.data.follow);
+    setIsLoading(false);
+  };
+  const getUserprofile = async (recruiterId) => {
+    console.log(recruiterId);
+    const results = await axios.get(
+      `http://localhost:4000/recruiter/profile/${recruiterId}`
+    );
+    console.log(results);
+    setProfile(results.data.data);
+    setIsLoading(false);
+  };
+
+  const getProfessionalUserProfile = async (professionalId) => {
+    console.log(professionalId);
+    const results = await axios.get(
+      `http://localhost:4000/professional/profile/${professionalId}`
+    );
+    console.log(results);
+    setProfessionalProfile(results.data.data);
     setIsLoading(false);
   };
 
@@ -76,26 +115,130 @@ function usePosts() {
     setIsLoading(false);
   };
 
+  const followJobApplication = async (jobId, professionalId) => {
+    const data = {
+      jobId: jobId,
+      professionalId: professionalId,
+    };
+
+    await axios.post(
+      `http://localhost:4000/professional/follow/application`,
+      data
+    );
+    setIsLoading(false);
+  };
   const getUser = async (professionalId) => {
     const results = await axios.get(
       `http://localhost:4000/professional/profile/${professionalId}`
     );
     setUserdata(results.data.data);
   };
-  // const getuser = async (professionalId) => {
-  //   const results = await axios.get(
-  //     `http://localhost:4000/professional/follow/${professionalId}`
-  //   );
 
-  //   setFollow(results.data.data);
-
-  //   setNumberOffollow(results.data.data.length);
-
-  // };
-  const Apply = async (jobId, data) => {
-    await axios.post(`http://localhost:4000/professional/apply/${jobId}`, data);
+  const Apply = async (jobId, formData) => {
+    console.log(formData.body);
+    await axios.post(
+      `http://localhost:4000/professional/apply/${jobId}`,
+      formData
+    );
+    console.log("ผ่านไหหมจะ");
     navigate("/applications");
   };
+  const UpdateProifleRecruiter = async (recruiterId, formData) => {
+    console.log("เข้าอันแรก");
+    console.log(recruiterId, formData);
+    const result = await axios.put(
+      `http://localhost:4000/recruiter/profile/${recruiterId}`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    console.log("เข้าไหม");
+    const message = result.data.message;
+    console.log(message);
+    if (message === "** This email is unavailable") {
+      setMessage(message);
+      window.scrollTo(0, 0);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      navigate("/recruiter/jobpost");
+    }
+  };
+
+  //Get jobs applications
+  const getJobApplications = async (user_id, applicationStatus) => {
+    console.log(user_id);
+    const results = await axios.get(
+      `http://localhost:4000/professional/applications?user_id=${user_id}&status=${applicationStatus}`
+    );
+    setJobApplicationsData(results.data.data);
+    setFilterStatus(applicationStatus);
+    setIsLoading(false);
+  };
+
+  //Decline Application
+  const declineApplication = async (applicationId) => {
+    await axios.put(
+      `http://localhost:4000/professional/applications/${applicationId}`
+    );
+    setIsLoading(false);
+  };
+
+  const UpdateProifleProfessional = async (professionalId, formData) => {
+    try {
+      const result = await axios.put(
+        `http://localhost:4000/professional/${professionalId}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      const message = result.data.message;
+      if (message === "** This email is unavailable") {
+        setMessage(message);
+        window.scrollTo(0, 0);
+        setIsLoading(false);
+      } else {
+        navigate("/findjobs");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(professionalId, formData);
+  };
+  const Datajob = async (user_id) => {
+    const results = await axios.get(
+      `http://localhost:4000/professional/applications/${user_id}`
+    );
+    setJobApplicationsData(results.data.data);
+    setIsLoading(false);
+  };
+
+  const getPostById = async (jobId, applicationStatus) => {
+    console.log(jobId, applicationStatus);
+    const results = await axios.get(
+      `http://localhost:4000/recruiter/posts/${jobId}?status=${applicationStatus}`
+    );
+    console.log("getit");
+    const postData = results.data.data;
+    const candidatesData = results.data.candidatesData;
+
+    setGetPostByIdData(postData);
+    setCandidatesData(candidatesData);
+    setIsLoading(false);
+  };
+  //Change Application Status
+  const changeApplicationStatus = async (applicationId, applicationStatus) => {
+    console.log(applicationId, applicationStatus);
+    await axios.put(
+      `http://localhost:4000/recruiter/applications/status/${applicationId}?status=${applicationStatus}`
+    );
+    setIsLoading(false);
+  };
+
+  //Change Application Status
+
   return {
     createPost,
     getPost,
@@ -109,33 +252,29 @@ function usePosts() {
     getJobById,
     getJobByIdData,
     getSearch,
+    getUserprofile,
+    profile,
+    followJob,
     getFollow,
-    follow,
     userdata,
     getUser,
     Apply,
+    follow,
+    setIsLoading,
+    followJobApplication,
+    UpdateProifleRecruiter,
+    getJobApplications,
+    jobApplicationsData,
+    declineApplication,
+    UpdateProifleProfessional,
+    getProfessionalUserProfile,
+    ProfessionalProfile,
+    message,
+    Datajob,
+    getPostById,
+    getPostByIdData,
+    candidatesData,
+    changeApplicationStatus,
   };
-
-  //   const getFollow = async (professionalId) => {
-  //     const results = await axios.get(
-  //       `http://localhost:4000/professional/follow/${professionalId}`
-  //     );
-
-  //     setFollow(results.data.data);
-
-  //     setNumberOffollow(results.data.data.length);
-  //     console.log(numberOfJobs);
-  //   };
-  //   return {
-  //     createPost,
-  //     getPost,
-  //     data,
-  //     numberOfJobs,
-  //     closedPost,
-  //     selectPost,
-  //     follow,
-  //     getFollow,
-  //     numberOfJobs,
-  //   };
 }
 export default usePosts;

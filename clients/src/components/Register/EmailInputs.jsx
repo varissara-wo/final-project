@@ -6,7 +6,7 @@ import { OnelineTextField, InputLabelStyle } from "./Styles.jsx";
 const EmailInput = (props) => {
   const { isProfessionalExist, isRecruiterExist } = useRegis();
 
-  const { user, value, onChange } = props;
+  const { user, value, onChange, message } = props;
 
   const [isValid, setIsValid] = useState(false);
 
@@ -64,6 +64,17 @@ const EmailInput = (props) => {
               flex={1}
             >
               {isRecruiterExist && `** This email is available`}
+            </Typography>
+          )}
+          {user === "updateProfile" && (
+            <Typography
+              variant="body2"
+              color="primary"
+              component="span"
+              display="flex"
+              flex={1}
+            >
+              {message}
             </Typography>
           )}
         </Stack>

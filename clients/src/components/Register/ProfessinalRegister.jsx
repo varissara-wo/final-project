@@ -17,6 +17,7 @@ import {
   Step,
   StepLabel,
   TextField,
+  CircularProgress,
 } from "@mui/material";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -44,10 +45,10 @@ import EmailInput from "./EmailInputs.jsx";
 import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
 import { useEffect } from "react";
-import { useAuth } from "../../contexts/professionalAuth.jsx";
+import { useAuth } from "../../contexts/authentication.jsx";
 
 const ProfessionalRegister = () => {
-  const { login } = useAuth();
+  const { professionalLogin } = useAuth();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -71,6 +72,7 @@ const ProfessionalRegister = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [value, setValue] = React.useState(null);
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -137,16 +139,18 @@ const ProfessionalRegister = () => {
 
       if (checkExperience || userData.experience === "") {
         if (checkEducation || userData.education === "") {
+          setIsSubmit(true);
           setUserData({ ...userData, birthday: String(userData.birthday) });
           const data = {
             ...userData,
           };
+          console.log(data);
           const formData = new FormData();
           for (let key in data) {
             formData.append(key, data[key]);
           }
           await registerProfessional(formData);
-          login({
+          professionalLogin({
             email: userData.email,
             password: userData.password,
           });
@@ -246,7 +250,7 @@ const ProfessionalRegister = () => {
       type: "text",
       placeholder:
         "Worked 6 years in a bitcoin farm until I decided to cahnge my life...",
-      pattern: /.{300,2000}/,
+      pattern: /^.{300,2000}$/,
       label: "PROFESSIONAL EXPERIENCE",
       helperText: "Between 300 and 2000 characters",
       errorMessage: "** Should have characters between 300 - 2000 characters",
@@ -255,7 +259,7 @@ const ProfessionalRegister = () => {
       name: "education",
       type: "text",
       placeholder: "Major in life experience with a PHD in procrastination",
-      pattern: /.{100,2000}/,
+      pattern: /^.{100,2000}$/,
       label: "EDUCATION",
       helperText: "Between 100 and 2000 characters",
       errorMessage: "** Should have characters between 100 - 2000 characters",
@@ -430,108 +434,127 @@ const ProfessionalRegister = () => {
         </React.Fragment>
       )}
       {activeStep === 2 && (
-        <Box
-          marginTop="36px"
-          component="form"
-          sx={{ width: "600px" }}
-          noValidate
-          autoComplete="off"
-        >
-          <Box>
-            <InputLabelStyle>TITLE</InputLabelStyle>
-            <OnelineTextField
-              onChange={(e) => {
-                setUserData({
-                  ...userData,
-                  title: e.target.value,
-                });
-              }}
-              defaultValue=""
-              label=""
-              color="primary"
-              placeholder="Mechanical administrator..."
-              focused
-              inputProps={{ style: { padding: 8 } }}
-            />
-            {inputPageThree.map((input, index) => {
-              return (
-                <MultilineInput
-                  key={index}
-                  {...input}
-                  value={userData[input.name]}
-                  onChange={handlerInputChange}
-                />
-              );
-            })}
-
-            <InputLabelStyle>UPLOAD/UPDATE YOUR CV</InputLabelStyle>
-            <UploadButton
-              startIcon={<FileUploadOutlined />}
-              variant="contained"
-              component="label"
-              color="primary"
-              helperText="hi"
-              position="relative"
-            >
-              Choose a file
-              <input
-                left="10px"
-                hidden
-                width="300px"
-                accept=".pdf"
-                multiple
-                type="file"
-                name="cv"
-                onChange={handleFileChange}
-              />
-            </UploadButton>
-
-            <Typography component="span" variant="body2" color="secondary.main">
-              {fileStatus}
-            </Typography>
-
-            <Typography
-              component="p"
-              variant="body2"
-              marginTop="4px"
-              color="info.main"
-              textTransform="none"
-            >
-              Only PDF. Max size 5MB
-            </Typography>
+        <>
+          {isSubmit === true && (
             <Stack
-              direction="row"
-              display="flex"
+              width="90%"
+              height="50vh"
+              flexDirection="row"
               justifyContent="center"
-              gap="15px"
-              width="360px"
+              alignItems="center"
             >
-              <NextButton
-                startIcon={<ArrowBackIosNew />}
-                variant="contained"
-                color="primary"
-                onClick={handleBack}
-              >
-                PREVIOUS
-              </NextButton>
-              <SkipButton
-                onClick={handleNext}
-                variant="outlined"
-                color="primary"
-              >
-                SKIP THIS!
-              </SkipButton>
-              <NextButton
-                endIcon={<ArrowForwardIos />}
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-              >
-                FINISH
-              </NextButton>
+              <CircularProgress disableShrink />
             </Stack>
-          </Box>
-        </Box>
+          )}
+          {isSubmit === false && (
+            <Box
+              marginTop="36px"
+              component="form"
+              sx={{ width: "600px" }}
+              noValidate
+              autoComplete="off"
+            >
+              <Box>
+                <InputLabelStyle>TITLE</InputLabelStyle>
+                <OnelineTextField
+                  onChange={(e) => {
+                    setUserData({
+                      ...userData,
+                      title: e.target.value,
+                    });
+                  }}
+                  defaultValue=""
+                  label=""
+                  color="primary"
+                  placeholder="Mechanical administrator..."
+                  focused
+                  inputProps={{ style: { padding: 8 } }}
+                />
+                {inputPageThree.map((input, index) => {
+                  return (
+                    <MultilineInput
+                      key={index}
+                      {...input}
+                      value={userData[input.name]}
+                      onChange={handlerInputChange}
+                    />
+                  );
+                })}
+
+                <InputLabelStyle>UPLOAD/UPDATE YOUR CV</InputLabelStyle>
+                <UploadButton
+                  startIcon={<FileUploadOutlined />}
+                  variant="contained"
+                  component="label"
+                  color="primary"
+                  helperText="hi"
+                  position="relative"
+                >
+                  Choose a file
+                  <input
+                    left="10px"
+                    hidden
+                    width="300px"
+                    accept=".pdf"
+                    multiple
+                    type="file"
+                    name="cv"
+                    onChange={handleFileChange}
+                  />
+                </UploadButton>
+
+                <Typography
+                  component="span"
+                  variant="body2"
+                  color="secondary.main"
+                >
+                  {fileStatus}
+                </Typography>
+
+                <Typography
+                  component="p"
+                  variant="body2"
+                  marginTop="4px"
+                  color="info.main"
+                  textTransform="none"
+                >
+                  Only PDF. Max size 5MB
+                </Typography>
+                <Stack
+                  direction="row"
+                  display="flex"
+                  justifyContent="center"
+                  gap="15px"
+                  width="360px"
+                >
+                  <NextButton
+                    startIcon={<ArrowBackIosNew />}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleBack}
+                  >
+                    PREVIOUS
+                  </NextButton>
+                  <SkipButton
+                    onClick={handleNext}
+                    variant="outlined"
+                    color="primary"
+                  >
+                    SKIP THIS!
+                  </SkipButton>
+                  <NextButton
+                    endIcon={<ArrowForwardIos />}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleNext}
+                  >
+                    FINISH
+                  </NextButton>
+                </Stack>
+              </Box>
+            </Box>
+          )}
+        </>
       )}
     </>
   );

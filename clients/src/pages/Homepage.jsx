@@ -22,7 +22,8 @@ const Homepage = () => {
     {
       name: "Cholanuch Kasemtanakitti",
       github: "https://github.com/cholanuchkorn123",
-      linkedin: "https://www.linkedin.com/in/cholanuch-kasemtanakitti-8b3202244/",
+      linkedin:
+        "https://www.linkedin.com/in/cholanuch-kasemtanakitti-8b3202244/",
       img: "images/korn-avatar.png",
     },
     {
@@ -135,7 +136,7 @@ const Homepage = () => {
                 variant="contained"
                 color="primary"
                 fontFamily="button"
-                onClick={() => navigate("/auth")}
+                onClick={() => navigate("/register")}
                 sx={{
                   display: "flex",
                   color: "#FFF",

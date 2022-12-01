@@ -9,8 +9,9 @@ import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import getPublishedDate from "../../utils/getPublishedDate";
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
-
 import { bigIconCategory } from "../../utils/utilsFunction";
+import { useNavigate } from "react-router-dom";
+import { MonetizationOn, CalendarMonth, GpsFixed } from "@mui/icons-material/";
 
 const DisplayStyle = styled(Stack)(() => ({
   border: "1px solid #BF5F82",
@@ -24,6 +25,18 @@ const DisplayStyle = styled(Stack)(() => ({
   padding: "8px 32px 16px 35px",
   marginLeft: "16px",
   marginRight: "16px",
+}));
+
+const CloseButton = styled(Button)(() => ({
+  fontFamily: "var( --inter-font)",
+  fontWeight: "500",
+  fontSize: "14px",
+  borderRadius: "16px",
+  padding: "8px 16px",
+  width: "115px",
+  "& .MuiSvgIcon-root": {
+    fontSize: 28,
+  },
 }));
 
 export function JobDetails(props) {
@@ -68,10 +81,10 @@ export function JobDetails(props) {
         }}
       >
         {/*------------------------------ Back ------------------------------*/}
-        <Button
+        <CloseButton
           variant="button"
-          href="/findjobs"
           sx={{ padding: "0px", marginBottom: "19px" }}
+          href="/findjobs"
         >
           <ArrowBackIosNewOutlinedIcon fontSize="small" color="secondary" />
           <Typography
@@ -81,7 +94,7 @@ export function JobDetails(props) {
           >
             Back
           </Typography>
-        </Button>
+        </CloseButton>
         {/*------------------------------ Job Header ------------------------------*/}
         <Stack
           sx={{
@@ -116,12 +129,12 @@ export function JobDetails(props) {
                 variant="h5"
                 sx={{
                   marginBottom: "8px",
+                  padding: "9px",
                   fontWeight: "400",
                 }}
               >
                 {companyName}
               </Typography>
-              <Following />
             </Stack>
           </Stack>
           <ApplyNowButton jobId={jobId} />
@@ -258,7 +271,7 @@ export function JobDetails(props) {
               fontWeight="400"
               marginTop="8px"
             >
-              - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              {requirement}
             </Typography>
           </Stack>
           <Stack marginBottom="16px">

@@ -23,6 +23,7 @@ const logoUpload = async (file) => {
     public_id: file.originalname,
     // resource_type: "image",
   });
+  console.log(result);
   const logoFileUrl = {
     url: result.secure_url,
     publicId: result.public_id,

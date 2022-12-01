@@ -53,35 +53,6 @@ export function ShowJobPostings() {
     setExpanded(false);
     setIsLoading(true);
   };
-<<<<<<< HEAD
-=======
-
-  //Change Application Status
-  const [applicationStatus, setApplicationStatus] = useState("");
-  const handleChangeApplicationStatus = (applicationId) => {
-    changeApplicationStatus(applicationId, applicationStatus);
-    setExpanded(false);
-  };
-  const {
-    about_job_position,
-    closed_at,
-    created_at,
-    job_id,
-    job_requirement,
-    job_title,
-    max_salary,
-    min_salary,
-    on_track_candidates,
-    option_requirement,
-    recruit_status,
-    recruiter_id,
-    total_candidates,
-    type,
-    updated_at,
-    categories_id,
-    name,
-  } = getPostByIdData;
->>>>>>> 2a50dff9ec59c8ff093de181f289bc0afbe93945
 
   //Change Application Status
   const handleChangeApplicationStatus = (applicationId, applicationStatus) => {
@@ -113,11 +84,7 @@ export function ShowJobPostings() {
     getUserData();
     const jobId = params.postId;
     getPostById(jobId, selectedFilterCandidateStatus);
-<<<<<<< HEAD
   }, [selectedFilterCandidateStatus, isLoading]);
-=======
-  }, [selectedFilterCandidateStatus]);
->>>>>>> 2a50dff9ec59c8ff093de181f289bc0afbe93945
 
   console.log(getPostByIdData);
   console.log(candidatesData);
@@ -153,19 +120,17 @@ export function ShowJobPostings() {
       fontSize: 28,
     },
   }));
-<<<<<<< HEAD
   console.log(candidatesData);
-=======
-
->>>>>>> 2a50dff9ec59c8ff093de181f289bc0afbe93945
   return (
     <Box
       sx={{
         backgroundColor: "#F5F5F6",
         width: "100%",
-        height: "100vh",
-        minWidth: "100vh",
+        height: "100%",
+        minWidth: "100vw",
+        minHeight: "100vh",
         marginLeft: "240px",
+        paddingBottom: "30px",
       }}
     >
       <Box
@@ -392,16 +357,11 @@ export function ShowJobPostings() {
                       color="background"
                       sx={{ border: "1px solid #F48FB1" }}
                       onClick={() => {
-<<<<<<< HEAD
                         handleChangeApplicationStatus(
                           job_application_id,
                           "Reviewing"
                         );
                         setIsLoading(true);
-=======
-                        setApplicationStatus("Reviewing");
-                        handleChangeApplicationStatus(job_application_id);
->>>>>>> 2a50dff9ec59c8ff093de181f289bc0afbe93945
                       }}
                     >
                       Mark as Started
@@ -413,16 +373,11 @@ export function ShowJobPostings() {
                       color="background"
                       sx={{ border: "1px solid #F48FB1" }}
                       onClick={() => {
-<<<<<<< HEAD
                         handleChangeApplicationStatus(
                           job_application_id,
                           "Finished"
                         );
                         setIsLoading(true);
-=======
-                        setApplicationStatus("Finished");
-                        handleChangeApplicationStatus(job_application_id);
->>>>>>> 2a50dff9ec59c8ff093de181f289bc0afbe93945
                       }}
                     >
                       Mark as Finished

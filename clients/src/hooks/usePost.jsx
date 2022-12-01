@@ -16,6 +16,7 @@ function usePosts() {
   const [jobApplicationsData, setJobApplicationsData] = useState([]);
   const [ProfessionalProfile, setProfessionalProfile] = useState([]);
   const [message, setMessage] = useState("");
+  const [filterStatus, setFilterStatus] = useState("All");
 
   const navigate = useNavigate();
 
@@ -72,7 +73,9 @@ function usePosts() {
     let min = minPrice || "";
     let max = maxPrice || "";
     let type1 = type || "";
-
+    console.log(type1);
+    console.log(min);
+    console.log(max);
     const results = await axios.get(
       `http://localhost:4000/professional/searchjobs/${userId}?maxPrice=${max}&minPrice=${min}&category=${cat}&keywords=${key}&type=${type1}`
     );
@@ -128,9 +131,14 @@ function usePosts() {
     );
     setUserdata(results.data.data);
   };
-  const Apply = async (jobId, data) => {
-    console.log(data);
-    await axios.post(`http://localhost:4000/professional/apply/${jobId}`, data);
+
+  const Apply = async (jobId, formData) => {
+    console.log(formData.body);
+    await axios.post(
+      `http://localhost:4000/professional/apply/${jobId}`,
+      formData
+    );
+    console.log("ผ่านไหหมจะ");
     navigate("/applications");
   };
   const UpdateProifleRecruiter = async (recruiterId, formData) => {
@@ -147,11 +155,13 @@ function usePosts() {
   };
 
   //Get jobs applications
-  const getJobApplications = async (user_email, applicationStatus) => {
+  const getJobApplications = async (user_id, applicationStatus) => {
+    console.log(user_id);
     const results = await axios.get(
-      `http://localhost:4000/professional/applications?user_email=${user_email}&status=${applicationStatus}`
+      `http://localhost:4000/professional/applications?user_id=${user_id}&status=${applicationStatus}`
     );
     setJobApplicationsData(results.data.data);
+    setFilterStatus(applicationStatus);
     setIsLoading(false);
   };
 
@@ -185,6 +195,13 @@ function usePosts() {
     }
     console.log(professionalId, formData);
   };
+  const Datajob = async (user_id) => {
+    const results = await axios.get(
+      `http://localhost:4000/professional/applications/${user_id}`
+    );
+    setJobApplicationsData(results.data.data);
+    setIsLoading(false);
+  };
   return {
     createPost,
     getPost,
@@ -216,6 +233,7 @@ function usePosts() {
     getProfessionalUserProfile,
     ProfessionalProfile,
     message,
+    Datajob,
   };
 }
 export default usePosts;

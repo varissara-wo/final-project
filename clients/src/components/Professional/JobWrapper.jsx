@@ -23,6 +23,7 @@ const JobWrapper = (props) => {
 
   const categoryIcon = iconCategory(category);
   const navigate = useNavigate();
+  const isFollowMessage = isFollow ? "FOLLOWING" : "FOLLOW";
 
   return (
     <>
@@ -162,16 +163,21 @@ const JobWrapper = (props) => {
                 color: isFollow ? "#fff" : "#616161",
                 marginRight: "10px",
                 padding: "9px",
-                backgroundColor: isFollow ? "#F48FB1" : "",
-                borderRadius: isFollow ? "50px" : "",
+                backgroundColor: isFollow ? "#F48FB1" : "#fff",
+                borderRadius: "50px",
               }}
               color="info"
             />
             <Typography
               variant="button"
-              sx={{ color: "#616161", display: "flex" }}
+              sx={{
+                color: "#616161",
+                display: "flex",
+                whiteSpace: "nowrap",
+                width: "87px",
+              }}
             >
-              Follow
+              {isFollowMessage}
             </Typography>
           </Button>
 

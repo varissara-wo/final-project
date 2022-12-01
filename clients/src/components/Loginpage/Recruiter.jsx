@@ -18,7 +18,7 @@ const Recruiter = () => {
   const [passwordMessage, setPasswordMessage] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
 
-  const { recruiterLogin } = useAuth();
+  const { recruiterLogin, passwordValid, emailValid } = useAuth();
 
   const handleSubmit = (event) => {
     recruiterLogin({
@@ -60,7 +60,7 @@ const Recruiter = () => {
                 display="flex"
                 flex={1}
               >
-                {emailMessage}
+                {emailValid}
               </Typography>
             </Stack>
             <InputLabelStyle>PASSWORD</InputLabelStyle>
@@ -84,7 +84,7 @@ const Recruiter = () => {
                 display="flex"
                 flex={1}
               >
-                {passwordMessage}
+                {passwordValid}
               </Typography>
             </Stack>
 

@@ -25,12 +25,12 @@ import EmailInput from "./EmailInputs.jsx";
 import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
 import PasswordInput from "./PasswordInput.jsx";
-
+import { useAuth } from "../../contexts/authentication.jsx";
 import { FileUploadOutlined, ArrowForwardIos } from "@mui/icons-material";
 
 const RecruiterRegister = () => {
   const steps = ["Login information", "Company information"];
-
+  const { recruiterLogin } = useAuth();
   const [userData, setUserData] = useState({
     companyname: "",
     email: "",
@@ -52,7 +52,7 @@ const RecruiterRegister = () => {
   };
   useEffect(() => {
     isRecruiterEmailExist(userData.email);
-  }, [isRecruiterEmailExist, userData.email]);
+  }, [isRecruiterEmailExist, userData]);
 
   const handleNext = async () => {
     let newSkipped = skipped;
@@ -94,7 +94,11 @@ const RecruiterRegister = () => {
         for (let key in data) {
           formData.append(key, data[key]);
         }
-        registerRecruiter(formData);
+        await registerRecruiter(formData);
+        recruiterLogin({
+          email: userData.email,
+          password: userData.password,
+        });
       }
     }
   };
@@ -146,7 +150,7 @@ const RecruiterRegister = () => {
       type: "text",
       placeholder: "MY Company S.A Doe",
       errorMessage: "** Company name is not valid",
-      pattern: /^\w+\w*$/,
+      pattern: /^.{1,50}$/,
       label: "NAME",
     },
   ];
@@ -172,7 +176,7 @@ const RecruiterRegister = () => {
       name: "about",
       type: "text",
       placeholder: "My Company SA has the vision to change the way how...",
-      pattern: /.{100,2000}/,
+      pattern: /^.{100,2000}$/,
       label: "ABOUT THE COMPANY",
       helperText: "Between 100 and 2000 characters",
       errorMessage: "** Should have characters between 100 - 2000 characters",
@@ -223,7 +227,7 @@ const RecruiterRegister = () => {
                   <OnelineInput
                     key={index}
                     {...input}
-                    value={userData[input.companyname]}
+                    value={userData.companyname}
                     onChange={handlerInputChange}
                   />
                 );

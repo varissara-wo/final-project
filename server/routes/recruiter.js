@@ -5,7 +5,10 @@ import multer from "multer";
 import { logoUpload } from "../utils/upload.js";
 import { cvUpload } from "../utils/upload.js";
 import { v2 as cloudinary } from "cloudinary";
+import { protect } from "../middlewares/protect.js";
 const recruiterRouter = Router();
+
+recruiterRouter.use(protect);
 
 //Get user profile
 recruiterRouter.get("/", async (req, res) => {

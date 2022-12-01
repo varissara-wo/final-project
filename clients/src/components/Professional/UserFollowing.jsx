@@ -2,13 +2,19 @@ import React, { useEffect } from "react";
 import { Box, Typography, CircularProgress, Stack } from "@mui/material";
 import usePosts from "../../hooks/usePost";
 import FollowJobWrapper from "./FollowJobWrapper";
+import { useAuth } from "../../contexts/authentication.jsx";
 
 const UserFollowing = () => {
   const { isLoading, getFollow, follow } = usePosts();
+  const { state, getUserData, isUserLoading } = useAuth();
 
   useEffect(() => {
-    getFollow(20);
-  }, [isLoading]);
+    const timer = setTimeout(() => {
+      getUserData();
+      getFollow(state.user["id"]);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [isLoading, isUserLoading]);
 
   return (
     <Box
@@ -43,7 +49,7 @@ const UserFollowing = () => {
         {isLoading === true && (
           <Stack
             width="90%"
-            height="50vh"
+            height="60vh"
             flexDirection="row"
             justifyContent="center"
             alignItems="center"

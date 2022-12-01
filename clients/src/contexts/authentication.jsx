@@ -8,6 +8,9 @@ const AuthContext = React.createContext();
 function AuthProvider(props) {
   const navigate = useNavigate();
   const [isUserLoading, setIsUserLoading] = useState(true);
+  const [validate, setValidate] = useState("");
+  const [emailValid, setEmailvalid] = useState("");
+  const [passwordValid, setPasswordvalid] = useState("");
   const [state, setState] = useState({
     loading: null,
     error: null,
@@ -21,32 +24,61 @@ function AuthProvider(props) {
     setState({ ...state, user: userDataFromToken });
     setIsUserLoading(false);
   };
-  console.log(state);
 
   const recruiterLogin = async (data) => {
-    const result = await axios.post(
-      "http://localhost:4000/login_recuiter",
-      data
-    );
-    const token = result.data.token;
+    try {
+      const result = await axios.post(
+        "http://localhost:4000/login_recruiter",
+        data
+      );
 
-    localStorage.setItem("token", token);
-    const userDataFromToken = jwtDecode(token);
-    setState({ ...state, user: userDataFromToken });
-    navigate("/recruiter/jobpost");
+      const token = result.data.token;
+      localStorage.setItem("token", token);
+      const userDataFromToken = jwtDecode(token);
+      setState({ ...state, user: userDataFromToken });
+      navigate("/recruiter/jobpost");
+    } catch (err) {
+      const message = err.response.data.message;
+      if (message === "This E-mail not found") {
+        setPasswordvalid("");
+        setEmailvalid(message);
+      } else {
+        setEmailvalid("");
+        setPasswordvalid(message);
+      }
+      // return Promise.reject(err);
+    }
   };
 
   const professionalLogin = async (data) => {
-    const result = await axios.post(
-      "http://localhost:4000/login_professional",
-      data
-    );
-    const token = result.data.token;
-    localStorage.setItem("token", token);
-    const userDataFromToken = jwtDecode(token);
-    setState({ ...state, user: userDataFromToken });
-    navigate("/findjobs");
+    try {
+      const result = await axios.post(
+        "http://localhost:4000/login_professional",
+        data
+      );
+      const token = result.data.token;
+      localStorage.setItem("token", token);
+      const userDataFromToken = jwtDecode(token);
+      setState({ ...state, user: userDataFromToken });
+      navigate("/findjobs");
+    } catch (err) {
+      const message = err.response.data.message;
+      if (message === "This E-mail not found") {
+        setPasswordvalid("");
+        setEmailvalid(message);
+      } else {
+        setEmailvalid("");
+        setPasswordvalid(message);
+      }
+      // return Promise.reject(err);
+      // setValidate(err.response.data.message);
+    }
   };
+
+  // if (result.response.data.message) {
+  //   console.log(result.response.data.message);
+  //   setValidate(result.response.data.message);
+  // }
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -65,6 +97,9 @@ function AuthProvider(props) {
         isAuthenticated,
         getUserData,
         isUserLoading,
+        validate,
+        passwordValid,
+        emailValid,
       }}
     >
       {props.children}

@@ -91,7 +91,6 @@ const UpdateProfessionalProfile = () => {
     // setIsLoadingProfile(true);
     const timer = setTimeout(() => {
       getUserData();
-      console.log(state);
       getProfessionalUserProfile(state.user["id"]);
       setUserData({
         email: ProfessionalProfile.email,
@@ -151,7 +150,7 @@ const UpdateProfessionalProfile = () => {
       type: "text",
       placeholder:
         "Worked 6 years in a bitcoin farm until I decided to cahnge my life...",
-      pattern: /.{300,2000}/,
+      pattern: /^.{300,2000}$/,
       label: "PROFESSIONAL EXPERIENCE",
       value: userData.experience,
       helperText: "Between 300 and 2000 characters",
@@ -161,7 +160,7 @@ const UpdateProfessionalProfile = () => {
       name: "education",
       type: "text",
       placeholder: "Major in life experience with a PHD in procrastination",
-      pattern: /.{100,2000}/,
+      pattern: /^.{100,2000}$/,
       label: "EDUCATION",
       value: userData.education,
       helperText: "Between 100 and 2000 characters",
@@ -182,19 +181,14 @@ const UpdateProfessionalProfile = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     const type = file.type.split("/");
-    console.log(type);
     //Validate the file is PDF
     if (type[1] !== "pdf") {
       return setFileStatus("Not a PDF file");
     } else {
       setFileStatus(file.name);
     }
-    console.log(userData);
     setUserData({ ...userData, [event.target.name]: file });
-    console.log(userData);
   };
-
-  console.log(userData.title);
 
   return (
     <Box
@@ -227,7 +221,7 @@ const UpdateProfessionalProfile = () => {
         {isLoadingProfile === true && (
           <Stack
             width="90%"
-            height="50vh"
+            height="65vh"
             flexDirection="row"
             justifyContent="center"
             alignItems="center"
@@ -250,15 +244,6 @@ const UpdateProfessionalProfile = () => {
               value={userData.email}
               onChange={handlerInputChange}
             />
-            {/* <Typography
-              variant="body2"
-              color="primary"
-              component="span"
-              display="flex"
-              flex={1}
-            >
-              {message}
-            </Typography> */}
             {input.map((input, index) => {
               return (
                 <OnelineInput

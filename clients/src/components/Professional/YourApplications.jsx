@@ -37,44 +37,40 @@ export function YourApplications() {
     isLoading,
     setIsLoading,
     declineApplication,
+    filterStatus,
   } = usePosts();
-
-  console.log(state);
-  // const user_email = ;
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-
+  const [isFilter, setIsFilter] = useState(true);
   //Handle filter applications
   const [selectedFilterApplicationStatus, setSelectedFilterApplicationStatus] =
     useState("All");
+
   const handleFilterApplications = (event) => {
     setSelectedFilterApplicationStatus(event.target.value);
-    setExpanded(false);
     setIsLoading(true);
+    setExpanded(false);
   };
-
+  console.log(selectedFilterApplicationStatus);
   //Handle Decline Applications
   const handleDeclineApplications = (applicationId) => {
     declineApplication(applicationId);
-    getJobApplications(
-      state.user.profile.email,
-      selectedFilterApplicationStatus
-    );
+    getJobApplications(state.user["id"], selectedFilterApplicationStatus);
     setExpanded(false);
   };
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       getUserData();
-      getJobApplications(
-        state.user.profile.email,
-        selectedFilterApplicationStatus
-      );
-      setIsLoading(false);
-    }, 150);
-  }, [isLoading, setIsLoading, isUserLoading, selectedFilterApplicationStatus]);
+      getJobApplications(state.user["id"], selectedFilterApplicationStatus);
+      setIsFilter(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [isUserLoading, isFilter, isLoading, setIsLoading]);
+
+  console.log(jobApplicationsData);
 
   const CheckBoxTextStyled = styled(FormControlLabel)(() => ({
     color: "#616161",
@@ -122,7 +118,7 @@ export function YourApplications() {
           variant="h4"
           sx={{ marginTop: "24px", marginBottom: "16px", fontWeight: "400" }}
         >
-          Job Postngs
+          Job Postings
         </Typography>
         {/*------------------------------ Start Filter Jobs ------------------------------*/}
         <FormControl>
@@ -133,6 +129,7 @@ export function YourApplications() {
             row
             aria-labelledby="demo-row-radio-buttons-group-label"
             name="row-radio-buttons-group"
+            defaultValue={selectedFilterApplicationStatus}
           >
             <CheckBoxTextStyled
               value="All"
@@ -180,7 +177,7 @@ export function YourApplications() {
         </Typography>
 
         {/*------------------------------ Start information------------------------------*/}
-        {isLoading === true && (
+        {isFilter === true && (
           <Stack
             flexDirection="row"
             justifyContent="center"
@@ -188,13 +185,13 @@ export function YourApplications() {
             sx={{
               backgroundColor: "#F5F5F6",
               width: "100%",
-              height: "100%",
+              height: "55vh",
             }}
           >
             <CircularProgress disableShrink />
           </Stack>
         )}
-        {isLoading === false && (
+        {isFilter === false && (
           <div>
             {jobApplicationsData.map((applications, index) => {
               const applicationId = applications.job_application_id;

@@ -362,8 +362,6 @@ recruiterRouter.get("/posts/:jobId", async (req, res) => {
   const jobId = req.params.jobId || "";
   const applicationStatus = req.query.status || "";
 
-  console.log(applicationStatus);
-
   const queryForm = `SELECT job_applications.job_application_id, job_applications.job_id, job_applications.interested_detail,job_applications.application_status,job_applications.new_cv_url,job_applications.created_at AS applied_at,job_applications.updated_at AS applications_updated_at,job_applications.is_upload_cv, job_applications.experience AS applications_experience,job_applications.declined_at,professional_users.email,professional_users.name,professional_users.phone,professional_users.linkedin,professional_users.job_title,professional_users.experience AS professional_experience,professional_users.education,professional_users.cv_url,professional_users.created_at AS professional_created_at,professional_users.updated_at AS professional_updated_at,recruiter_users.company_name
   FROM job_applications
   LEFT JOIN professional_users
@@ -404,32 +402,27 @@ recruiterRouter.get("/posts/:jobId", async (req, res) => {
     const data = relults.rows[0];
 
     if (applicationStatus === "All") {
-      console.log("--All");
       query =
         queryForm +
         `WHERE job_applications.job_id = $1 ORDER BY job_applications.created_at DESC`;
       values = [jobId];
-      console.log(query);
     }
     if (applicationStatus === "Waiting") {
-      console.log("--Waiting");
       query =
         queryForm +
         `WHERE job_applications.job_id = $1 AND application_status = $2 ORDER BY job_applications.created_at DESC`;
       values = [jobId, applicationStatus];
     }
     if (applicationStatus === "Reviewing") {
-      console.log("--Reviewing");
       query =
         queryForm +
         `WHERE job_applications.job_id = $1 AND application_status = $2 ORDER BY job_applications.created_at DESC`;
       values = [jobId, applicationStatus];
     }
     if (applicationStatus === "Finished") {
-      console.log("--Finished");
       query =
         queryForm +
-        `WHERE job_applications.job_id = $1 AND application_status = $2 OORDER BY job_applications.created_at DESC`;
+        `WHERE job_applications.job_id = $1 AND application_status = $2 ORDER BY job_applications.created_at DESC`;
       values = [jobId, applicationStatus];
     }
 
@@ -447,6 +440,19 @@ recruiterRouter.get("/posts/:jobId", async (req, res) => {
       data: data,
       candidatesData: candidatesData,
     });
+  } catch (error) {}
+});
+
+//Change Application Status
+recruiterRouter.put("/applications/status/:applicationId", async (req, res) => {
+  const applicationId = req.params.applicationId;
+  const applicationStatus = req.query.status;
+  const updated_at = new Date();
+  try {
+    await pool.query(
+      `UPDATE job_applications SET application_status = $1, updated_at= $2 WHERE job_application_id = $3`,
+      [applicationStatus, updated_at, applicationId]
+    );
   } catch (error) {}
 });
 

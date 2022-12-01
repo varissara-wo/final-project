@@ -237,6 +237,8 @@ function usePosts() {
     setIsLoading(false);
   };
 
+  //Change Application Status
+
   return {
     createPost,
     getPost,

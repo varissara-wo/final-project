@@ -359,7 +359,23 @@ recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
 });
 
 recruiterRouter.get("/posts/:jobId", async (req, res) => {
-  const jobId = req.params.jobId;
+  const jobId = req.params.jobId || "";
+  const applicationStatus = req.query.status || "";
+
+  console.log(applicationStatus);
+
+  const queryForm = `SELECT job_applications.job_application_id, job_applications.job_id, job_applications.interested_detail,job_applications.application_status,job_applications.new_cv_url,job_applications.created_at AS applied_at,job_applications.updated_at AS applications_updated_at,job_applications.is_upload_cv, job_applications.experience AS applications_experience,job_applications.declined_at,professional_users.email,professional_users.name,professional_users.phone,professional_users.linkedin,professional_users.job_title,professional_users.experience AS professional_experience,professional_users.education,professional_users.cv_url,professional_users.created_at AS professional_created_at,professional_users.updated_at AS professional_updated_at,recruiter_users.company_name
+  FROM job_applications
+  LEFT JOIN professional_users
+  ON job_applications.professional_id = professional_users.professional_id
+  LEFT JOIN jobs
+  ON job_applications.job_id = jobs.job_id 
+  LEFT JOIN recruiter_users 
+  ON jobs.recruiter_id = recruiter_users.recruiter_id `;
+
+  let query = "";
+  let values = [];
+
   try {
     // query sum total_candidates
     const queryCandidates = await pool.query(
@@ -386,10 +402,39 @@ recruiterRouter.get("/posts/:jobId", async (req, res) => {
       [jobId]
     );
     const data = relults.rows[0];
-    const candidates = await pool.query(
-      `SELECT job_applications.job_application_id, job_applications.job_id, job_applications.interested_detail,job_applications.application_status,job_applications.new_cv_url,job_applications.created_at AS applied_at,job_applications.updated_at AS applications_updated_at,job_applications.is_upload_cv, job_applications.experience AS applications_experience,job_applications.declined_at,professional_users.email,professional_users.name,professional_users.phone,professional_users.linkedin,professional_users.job_title,professional_users.experience AS professional_experience,professional_users.education,professional_users.cv_url,professional_users.created_at AS professional_created_at,professional_users.updated_at AS professional_updated_at FROM job_applications LEFT JOIN professional_users ON job_applications.professional_id = professional_users.professional_id  WHERE job_id = $1 ORDER BY job_applications.created_at DESC`,
-      [jobId]
-    );
+
+    if (applicationStatus === "All") {
+      console.log("--All");
+      query =
+        queryForm +
+        `WHERE job_applications.job_id = $1 ORDER BY job_applications.created_at DESC`;
+      values = [jobId];
+      console.log(query);
+    }
+    if (applicationStatus === "Waiting") {
+      console.log("--Waiting");
+      query =
+        queryForm +
+        `WHERE job_applications.job_id = $1 AND application_status = $2 ORDER BY job_applications.created_at DESC`;
+      values = [jobId, applicationStatus];
+    }
+    if (applicationStatus === "Reviewing") {
+      console.log("--Reviewing");
+      query =
+        queryForm +
+        `WHERE job_applications.job_id = $1 AND application_status = $2 ORDER BY job_applications.created_at DESC`;
+      values = [jobId, applicationStatus];
+    }
+    if (applicationStatus === "Finished") {
+      console.log("--Finished");
+      query =
+        queryForm +
+        `WHERE job_applications.job_id = $1 AND application_status = $2 OORDER BY job_applications.created_at DESC`;
+      values = [jobId, applicationStatus];
+    }
+
+    const candidates = await pool.query(query, values);
+
     const candidatesData = [];
     for (const row of candidates.rows) {
       row.cv_url = JSON.parse(row.cv_url).url;

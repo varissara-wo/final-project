@@ -76,11 +76,12 @@ export function ShowJobPostings() {
     getUserData();
     const jobId = params.postId;
     console.log(jobId);
-    getPostById(jobId);
+    getPostById(jobId, selectedFilterCandidateStatus);
   }, [selectedFilterCandidateStatus]);
 
   console.log(getPostByIdData);
   console.log(candidatesData);
+  console.log(selectedFilterCandidateStatus);
 
   const CheckBoxTextStyled = styled(FormControlLabel)(() => ({
     color: "#616161",
@@ -236,6 +237,7 @@ export function ShowJobPostings() {
             professional_created_at,
             professional_experience,
             professional_updated_at,
+            company_name,
           } = candidate;
           return (
             <Accordion
@@ -381,7 +383,7 @@ export function ShowJobPostings() {
               </AccordionDetails>
               <AccordionDetails>
                 <Typography variant="subtitle1" color="error.main">
-                  Why are you interested in working at The company name SA
+                  Why are you interested in working at {company_name}
                 </Typography>
                 <Typography variant="body2">{interested_detail}</Typography>
               </AccordionDetails>

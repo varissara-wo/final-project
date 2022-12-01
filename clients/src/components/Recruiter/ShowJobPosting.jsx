@@ -55,10 +55,10 @@ export function ShowJobPostings() {
   };
 
   //Change Application Status
-  const [applicationStatus, setApplicationStatus] = useState("");
-  const handleChangeApplicationStatus = (applicationId) => {
+  const handleChangeApplicationStatus = (applicationId, applicationStatus) => {
     changeApplicationStatus(applicationId, applicationStatus);
     setExpanded(false);
+    setIsLoading(true);
   };
   const {
     about_job_position,
@@ -79,12 +79,12 @@ export function ShowJobPostings() {
     categories_id,
     name,
   } = getPostByIdData;
-
+  console.log(job_id, job_requirement, job_title, max_salary, min_salary);
   useEffect(() => {
     getUserData();
     const jobId = params.postId;
     getPostById(jobId, selectedFilterCandidateStatus);
-  }, [selectedFilterCandidateStatus]);
+  }, [selectedFilterCandidateStatus, isLoading]);
 
   console.log(getPostByIdData);
   console.log(candidatesData);
@@ -120,7 +120,7 @@ export function ShowJobPostings() {
       fontSize: 28,
     },
   }));
-
+  console.log(candidatesData);
   return (
     <Box
       sx={{
@@ -355,8 +355,11 @@ export function ShowJobPostings() {
                       color="background"
                       sx={{ border: "1px solid #F48FB1" }}
                       onClick={() => {
-                        setApplicationStatus("Reviewing");
-                        handleChangeApplicationStatus(job_application_id);
+                        handleChangeApplicationStatus(
+                          job_application_id,
+                          "Reviewing"
+                        );
+                        setIsLoading(true);
                       }}
                     >
                       Mark as Started
@@ -368,8 +371,11 @@ export function ShowJobPostings() {
                       color="background"
                       sx={{ border: "1px solid #F48FB1" }}
                       onClick={() => {
-                        setApplicationStatus("Finished");
-                        handleChangeApplicationStatus(job_application_id);
+                        handleChangeApplicationStatus(
+                          job_application_id,
+                          "Finished"
+                        );
+                        setIsLoading(true);
                       }}
                     >
                       Mark as Finished

@@ -49,7 +49,7 @@ export function Jobpostings() {
     setIsLoading,
   } = usePosts();
   const [recruiterId, setRecruiterId] = useState("");
-  const { state, getUserData, userLoading } = useAuth();
+  const { state, getUserData, isUserLoading } = useAuth();
   const [type, setType] = useState("all");
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -62,7 +62,7 @@ export function Jobpostings() {
       selectPost(state.user["id"], type);
     }, 800);
     return () => clearTimeout(timer);
-  }, [isLoading, setIsLoading, userLoading]);
+  }, [isLoading, setIsLoading, isUserLoading]);
 
   const handlechoose = (chooseType) => {
     setType(chooseType.target.value);

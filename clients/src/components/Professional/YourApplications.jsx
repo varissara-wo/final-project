@@ -118,7 +118,7 @@ export function YourApplications() {
           variant="h4"
           sx={{ marginTop: "24px", marginBottom: "16px", fontWeight: "400" }}
         >
-          Job Postings
+          Your applications
         </Typography>
         {/*------------------------------ Start Filter Jobs ------------------------------*/}
         <FormControl>

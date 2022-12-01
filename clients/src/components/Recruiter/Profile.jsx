@@ -8,6 +8,14 @@ import OnelineInputJobPost from "./OnelineInputJobPost.jsx";
 import { Buttonwidth, UploadButton } from "../Register/Styles.jsx";
 import { FileUploadOutlined } from "@mui/icons-material";
 import { useAuth } from "../../contexts/authentication.jsx";
+import EmailInput from "../Register/EmailInputs.jsx";
+import MultilineInput from "../Professional/MultilineInput.jsx";
+
+import {
+  validateEmail,
+  validateAbout,
+  validateCompanyName,
+} from "../../utils/validateRegister.jsx";
 export default function Profile() {
   const innitialFileData = "No file chosen";
   const [fileStatus, setFileStatus] = useState(innitialFileData);
@@ -18,7 +26,9 @@ export default function Profile() {
     isLoading,
     setIsLoading,
     UpdateProifleRecruiter,
+    message,
   } = usePosts();
+
   console.log(profile);
 
   const [info, setInfo] = useState({
@@ -28,39 +38,40 @@ export default function Profile() {
     company_website: "",
     about_company: "",
   });
-  const { getUserData, state } = useAuth();
-
+  const { getUserData, state, isUserLoading } = useAuth();
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [img, setImg] = useState(profile.logo_url);
   const [isFetch, setIsFetch] = useState(true);
-  console.log(state);
+  console.log(profile);
   useEffect(() => {
     const timer = setTimeout(() => {
+      console.log("hi");
+
       getUserData();
-      getUserprofile(9);
+
+      getUserprofile(state.user["id"]);
       setInfo({
         logo: state.user.profile.logo_url,
-        email: state.user.profile.email,
-        company_name: state.user.profile.company_name,
-        company_website: state.user.profile.company_website,
-        about_company: state.user.profile.about_company,
+        email: profile.email,
+        company_name: profile.company_name,
+        company_website: profile.company_website,
+        about_company: profile.about_company,
       });
+
       setImg(profile.logo_url);
-      console.log(img);
       setIsFetch(false);
-    }, 1000);
+    }, 800);
+
     return () => clearTimeout(timer);
-  }, [isLoading]);
+  }, [isLoading, isUserLoading, isFetch, isLoadingProfile]);
 
   const additionalInputs = [
-    {
-      name: "email",
-      label: "COMPANY EMAIL",
-      value: info.email,
-    },
     {
       name: "company_name",
       label: "COMPANY NAME",
       value: info.company_name,
+      errorMessage: "** Company name is not valid",
+      pattern: /^.{1,50}$/,
     },
     {
       name: "company_website",
@@ -68,20 +79,27 @@ export default function Profile() {
       value: info.company_website,
     },
   ];
+  const aboutPattern = { pattern: /^.{100,2000}$/ };
   console.log(info.logo_url);
   const handlerInputChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
   const handleSubmit = (event) => {
-    const formData = new FormData();
-    event.preventDefault();
-    const data = {
-      ...info,
-    };
-    for (let key in data) {
-      formData.append(key, data[key]);
+    const checkEmail = validateEmail(info.email);
+    const checkAbout = validateAbout(info.about_company);
+    const checkName = validateCompanyName(info.company_name);
+
+    if (checkEmail && (checkAbout || info.about_company === "") && checkName) {
+      const formData = new FormData();
+      event.preventDefault();
+      const data = {
+        ...info,
+      };
+      for (let key in data) {
+        formData.append(key, data[key]);
+      }
+      UpdateProifleRecruiter(state.user["id"], formData);
     }
-    UpdateProifleRecruiter(state.user["id"], formData);
   };
 
   const handleFileChange = (event) => {
@@ -208,7 +226,12 @@ export default function Profile() {
             </Box>
 
             {/*------------------------------ Company Data Update ------------------------------*/}
-
+            <EmailInput
+              user="updateProfile"
+              message={message}
+              value={info.email}
+              onChange={handlerInputChange}
+            />
             {additionalInputs.map((input, index) => {
               console.log(input);
               return (
@@ -219,11 +242,15 @@ export default function Profile() {
                 />
               );
             })}
-            <MultilineInputJobPost
+
+            <MultilineInput
               name="about_company"
               onChange={handlerInputChange}
               label="ABOUT THE COMPANY"
               value={info.about_company}
+              errorMessage="** Should have characters between 100 - 2000 characters"
+              pattern={aboutPattern.pattern}
+              helperText="Between 100 and 2000 characters"
             />
             <Buttonwidth
               variant="contained"

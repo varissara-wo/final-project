@@ -144,16 +144,26 @@ function usePosts() {
     navigate("/applications");
   };
   const UpdateProifleRecruiter = async (recruiterId, formData) => {
+    console.log("เข้าอันแรก");
     console.log(recruiterId, formData);
-    await axios.put(
+    const result = await axios.put(
       `http://localhost:4000/recruiter/profile/${recruiterId}`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
-    setIsLoading(false);
-    navigate("/recruiter/profile");
+    console.log("เข้าไหม");
+    const message = result.data.message;
+    console.log(message);
+    if (message === "** This email is unavailable") {
+      setMessage(message);
+      window.scrollTo(0, 0);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      navigate("/recruiter/jobpost");
+    }
   };
 
   //Get jobs applications
@@ -172,6 +182,7 @@ function usePosts() {
     await axios.put(
       `http://localhost:4000/professional/applications/${applicationId}`
     );
+    setIsLoading(false);
   };
 
   const UpdateProifleProfessional = async (professionalId, formData) => {
@@ -205,9 +216,11 @@ function usePosts() {
   };
 
   const getPostById = async (jobId, applicationStatus) => {
+    console.log(jobId, applicationStatus);
     const results = await axios.get(
       `http://localhost:4000/recruiter/posts/${jobId}?status=${applicationStatus}`
     );
+    console.log("getit");
     const postData = results.data.data;
     const candidatesData = results.data.candidatesData;
 
@@ -221,6 +234,7 @@ function usePosts() {
     await axios.put(
       `http://localhost:4000/recruiter/applications/status/${applicationId}?status=${applicationStatus}`
     );
+    setIsLoading(false);
   };
 
   return {

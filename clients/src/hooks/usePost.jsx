@@ -151,9 +151,9 @@ function usePosts() {
     );
   };
 
-  const getPostById = async (jobId) => {
+  const getPostById = async (jobId, applicationStatus) => {
     const results = await axios.get(
-      `http://localhost:4000/recruiter/posts/${jobId}`
+      `http://localhost:4000/recruiter/posts/${jobId}?status=${applicationStatus}`
     );
     const postData = results.data.data;
     const candidatesData = results.data.candidatesData;

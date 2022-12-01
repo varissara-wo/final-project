@@ -752,18 +752,20 @@ professionalRouter.get("/applications", async (req, res) => {
       values = [job_id, applicationStatus];
     }
     const results = await pool.query(query, values);
-    const data = [];
-
-    for (const row of results.rows) {
-      row.logo_url = JSON.parse(row.logo_url).url;
-      row.cv_url = JSON.parse(row.cv_url).url;
-
-      if (row.is_upload_cv === "true") {
-        row.cv_url = JSON.parse(row.new_cv_url).url;
-      }
-      data.push(row);
+    const data = results.rows;
+    console.log("show data");
+    console.log(data);
+    if (data.length > 0) {
+      data.map((item) => {
+        item.logo_url = JSON.parse(item.logo_url).url;
+        item.cv_url = JSON.parse(item.cv_url).url;
+        if (item.is_upload_cv === true) {
+          item.cv_url = JSON.parse(item.new_cv_url).url;
+        }
+      });
     }
 
+    console.log("764");
     console.log(data);
     return res.status(200).json({
       data: data,

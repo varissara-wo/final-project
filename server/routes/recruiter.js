@@ -334,7 +334,7 @@ recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
   try {
     if (emailUse.rows.length !== 0) {
       return res.json({
-        message: "email is alreadyuse",
+        message: "** This email is unavailable",
       });
     } else {
       await pool.query(
@@ -377,13 +377,13 @@ recruiterRouter.get("/posts/:jobId", async (req, res) => {
   try {
     // query sum total_candidates
     const queryCandidates = await pool.query(
-      `SELECT COUNT(*) AS total_candidates FROM job_applications WHERE job_id = $1`,
+      `SELECT COUNT(*) AS total_candidates FROM job_applications WHERE job_id = $1 AND application_status != 'Declined'`,
       [jobId]
     );
     const TotalCandidates = Number(queryCandidates.rows[0].total_candidates);
     // query sum on Track_candidates
     const queryOnTrackCandidates = await pool.query(
-      `SELECT COUNT(*) AS on_track_candidates FROM job_applications WHERE job_id = $1 AND application_status != 'Declined'`,
+      `SELECT COUNT(*) AS on_track_candidates FROM job_applications WHERE job_id = $1 AND application_status = 'Waiting' AND application_status = 'Reviewing'`,
       [jobId]
     );
     const onTrackCandidates = Number(
@@ -404,7 +404,7 @@ recruiterRouter.get("/posts/:jobId", async (req, res) => {
     if (applicationStatus === "All") {
       query =
         queryForm +
-        `WHERE job_applications.job_id = $1 ORDER BY job_applications.created_at DESC`;
+        `WHERE job_applications.job_id = $1  AND application_status != 'Declined' ORDER BY job_applications.created_at DESC`;
       values = [jobId];
     }
     if (applicationStatus === "Waiting") {

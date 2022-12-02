@@ -310,9 +310,8 @@ export function Jobpostings() {
                             color="error"
                             startIcon={<HighlightOffIcon />}
                             onClick={() => {
+                              setIsLoading(true);
                               closedPost(content.job_id);
-                              // setIsLoading(true);
-                              setExpanded(false);
                             }}
                           >
                             CLOSE

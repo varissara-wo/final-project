@@ -46,6 +46,10 @@ import OnelineInput from "./OnelineInput.jsx";
 import MultilineInput from "./MultilineInput.jsx";
 import { useEffect } from "react";
 import { useAuth } from "../../contexts/authentication.jsx";
+import dayjs from "dayjs";
+
+const date = new Date(); const yearmax = new Date(date.setFullYear(date.getFullYear() - 18));
+
 
 const ProfessionalRegister = () => {
   const { professionalLogin } = useAuth();
@@ -288,8 +292,8 @@ const ProfessionalRegister = () => {
                     {index === 0
                       ? "DONE!"
                       : index === 2
-                      ? "IN PROGRESS"
-                      : "PENDING"}
+                        ? "IN PROGRESS"
+                        : "PENDING"}
                   </Typography>
                 )}
                 {activeStep === 2 && (
@@ -297,8 +301,8 @@ const ProfessionalRegister = () => {
                     {index === 0
                       ? "DONE!"
                       : index === 2
-                      ? "DONE!"
-                      : "IN PROGRESS"}
+                        ? "DONE!"
+                        : "IN PROGRESS"}
                   </Typography>
                 )}
                 {label}
@@ -396,6 +400,7 @@ const ProfessionalRegister = () => {
                     });
                     setValue(newValue);
                   }}
+                  maxDate={dayjs(yearmax)}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>

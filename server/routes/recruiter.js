@@ -18,7 +18,7 @@ recruiterRouter.get("/", async (req, res) => {
     return res.status(200).json({
       data: recruiterUsers.rows,
     });
-  } catch {}
+  } catch { }
 });
 
 //Check email
@@ -316,7 +316,7 @@ recruiterRouter.put("/profile/:id", LogoUpload, async (req, res) => {
       const responseLogoUpload = await logoUpload(file);
       logoUrl = responseLogoUpload;
       // console.log(logoUrl);
-    } catch (err) {}
+    } catch (err) { }
   }
 
   const userUpdate = {
@@ -383,7 +383,7 @@ recruiterRouter.get("/posts/:jobId", async (req, res) => {
     const TotalCandidates = Number(queryCandidates.rows[0].total_candidates);
     // query sum on Track_candidates
     const queryOnTrackCandidates = await pool.query(
-      `SELECT COUNT(*) AS on_track_candidates FROM job_applications WHERE job_id = $1 AND application_status = 'Waiting' AND application_status = 'Reviewing'`,
+      `SELECT COUNT(*) AS on_track_candidates FROM job_applications WHERE job_id = $1 AND application_status != 'Declined' AND application_status != 'Finished'`,
       [jobId]
     );
     const onTrackCandidates = Number(
@@ -440,7 +440,7 @@ recruiterRouter.get("/posts/:jobId", async (req, res) => {
       data: data,
       candidatesData: candidatesData,
     });
-  } catch (error) {}
+  } catch (error) { }
 });
 
 //Change Application Status
@@ -453,7 +453,7 @@ recruiterRouter.put("/applications/status/:applicationId", async (req, res) => {
       `UPDATE job_applications SET application_status = $1, updated_at= $2 WHERE job_application_id = $3`,
       [applicationStatus, updated_at, applicationId]
     );
-  } catch (error) {}
+  } catch (error) { }
 });
 
 export default recruiterRouter;

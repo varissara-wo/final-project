@@ -2,7 +2,7 @@ import { Router } from "express";
 import bcrypt from "bcrypt";
 import { pool } from "../utils/db.js";
 import multer from "multer";
-import { cvUpload } from "../utils/upload.js";
+import { cvUpload, deleteFileUploaded } from "../utils/upload.js";
 import { v2 as cloudinary } from "cloudinary";
 import { protect } from "../middlewares/protect.js";
 
@@ -117,90 +117,80 @@ professionalRouter.post("/", CvUpload, async (req, res) => {
 
 //Update user
 professionalRouter.put("/:id", CvUpload, async (req, res) => {
-  const professional = req.params.id;
+  const professionalId = req.params.id;
+  const {
+    email,
+    name,
+    phone,
+    birthday,
+    linkedin,
+    title,
+    experience,
+    education,
+  } = req.body;
 
-  // const userId = req.params.id;
-  let cvUrl;
-
-  if (req.body.cv) {
-    cvUrl = req.body.cv;
-  } else {
-    const file = req.files.cv[0];
-
-    const idimg = await pool.query(
-      `select cv_url from professional_users  where professional_id = $1`,
-      [professional]
-    );
-
-    const id = JSON.parse(idimg.rows[0].cv_url).publicId;
+  if (req.files.cv) {
+    const cvFile = req.files.cv[0];
     try {
-      await cloudinary.uploader.destroy(id);
-      const responseLogoUpload = await cvUpload(file);
-      cvUrl = responseLogoUpload;
-    } catch (err) {}
-  }
-
-  const updatedUser = {
-    cv_url: cvUrl,
-    ...req.body,
-    updated_at: new Date(),
-  };
-
-  const emailUse = await pool.query(
-    `select * from professional_users where email = $1 and professional_id != $2`,
-    [updatedUser.email, professional]
-  );
-
-  try {
-    if (emailUse.rows.length !== 0) {
-      return res.json({
-        message: "** This email is unavailable",
-      });
-    } else {
+      const idImg = await pool.query(
+        `select cv_url from professional_users  where professional_id = $1`,
+        [professionalId]
+      );
+      const publicId = JSON.parse(idImg.rows[0].cv_url).publicId;
+      deleteFileUploaded(publicId);
+      const cvUrl = await cvUpload(cvFile);
+      const updated_at = new Date();
       await pool.query(
-        `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,
+        `UPDATE professional_users
+        SET email=$1, name=$2, phone=$3, birthday=$4, linkedin=$5, job_title=$6, experience=$7, education=$8, cv_url=$9, updated_at=$10
+        WHERE professional_id=$11;`,
         [
-          updatedUser.email,
-          updatedUser.name,
-          updatedUser.phone,
-          updatedUser.birthday,
-          updatedUser.linkedin,
-          updatedUser.title,
-          updatedUser.experience,
-          updatedUser.cv_url,
-          updatedUser.education,
-          updatedUser.updated_at,
-          professional,
+          email,
+          name,
+          phone,
+          birthday,
+          linkedin,
+          title,
+          experience,
+          education,
+          cvUrl,
+          updated_at,
+          professionalId,
         ]
       );
-      return res.status(200).json({
-        message: ` ${professional} has been update.`,
+      return res.json({
+        message: `User ${professionalId} has been updated.`,
       });
+    } catch (error) {
+      console.log(error);
     }
-  } catch (err) {
-    console.log(err);
+  } else {
+    try {
+      const updated_at = new Date();
+      await pool.query(
+        `UPDATE professional_users
+          SET email=$1, name=$2, phone=$3, birthday=$4, linkedin=$5, job_title=$6, experience=$7, education=$8, updated_at=$9
+          WHERE professional_id=$10;`,
+        [
+          email,
+          name,
+          phone,
+          birthday,
+          linkedin,
+          title,
+          experience,
+          education,
+          updated_at,
+          professionalId,
+        ]
+      );
+      return res.json({
+        message: `User ${professionalId} has been updated.`,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
-  const userId = req.params.id;
-
-  await pool.query(
-    `UPDATE professional_users SET email=$1,name=$2,phone=$3,birthday=$4,linkedin=$5,job_title=$6,experience=$7,cv_url=$8,education=$9,updated_at=$10 where professional_id=$11`,
-    [
-      updatedUser.email,
-      updatedUser.name,
-      updatedUser.phone,
-      updatedUser.birthday,
-      updatedUser.linkedin,
-      updatedUser.title,
-      updatedUser.experience,
-      updatedUser.cv,
-      updatedUser.education,
-      updatedUser.updated_at,
-      userId,
-    ]
-  );
-  return res.json({
-    message: `User ${userId} has been updated.`,
-  });
 });
 
 //Delete user
@@ -219,13 +209,12 @@ professionalRouter.get("/follow/:id", async (req, res) => {
     const professId = req.params.id;
     const followjobs = await pool.query(
       `select * from follow_jobs inner join jobs on jobs.job_id = follow_jobs.job_id
-      inner join categories  on  categories.categories_id =  jobs.categories_id
-      inner join recruiter_users on  recruiter_users.recruiter_id =  jobs.recruiter_id
-      where professional_id =$1`,
+        inner join categories  on  categories.categories_id =  jobs.categories_id
+        inner join recruiter_users on  recruiter_users.recruiter_id =  jobs.recruiter_id
+        where professional_id =$1`,
       [professId]
     );
     const data = followjobs.rows;
-    console.log(data);
 
     if (data.length > 0) {
       data.map((data) => {
@@ -280,13 +269,13 @@ professionalRouter.get("/jobs", async (req, res) => {
   try {
     const getJob = await pool.query(
       `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
-    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
-    recruiter_users.logo_url from jobs 
-    left join recruiter_users
-    on jobs.recruiter_id =  recruiter_users.recruiter_id
-    left join categories
-    on jobs.categories_id =  categories.categories_id
-    where recruit_status = 'open'`
+      jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+      recruiter_users.logo_url from jobs
+      left join recruiter_users
+      on jobs.recruiter_id =  recruiter_users.recruiter_id
+      left join categories
+      on jobs.categories_id =  categories.categories_id
+      where recruit_status = 'open'`
     );
 
     return res.json({
@@ -300,21 +289,19 @@ professionalRouter.get("/", async (req, res) => {
   try {
     const getJob = await pool.query(
       `select jobs.job_id,categories.name,jobs.job_title,jobs.type,
-    jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
-    recruiter_users.logo_url from jobs 
-    left join recruiter_users
-    on jobs.recruiter_id =  recruiter_users.recruiter_id
-    left join categories
-    on jobs.categories_id =  categories.categories_id
-    where recruit_status = 'open'`
+      jobs.min_salary,jobs.max_salary, recruiter_users.company_name,
+      recruiter_users.logo_url from jobs
+      left join recruiter_users
+      on jobs.recruiter_id =  recruiter_users.recruiter_id
+      left join categories
+      on jobs.categories_id =  categories.categories_id
+      where recruit_status = 'open'`
     );
 
     const data = getJob.rows;
-    console.log(data);
     data.map((data) => {
       data.logo_url = JSON.parse(data.logo_url).url;
     });
-    console.log(data);
 
     return res.json({
       data: data,
@@ -703,7 +690,6 @@ professionalRouter.get("/profile/:id", async (req, res) => {
 
 //Get job applications
 professionalRouter.get("/applications", async (req, res) => {
-  console.log("hiiiiiiiii");
   const job_id = req.query.user_id || "";
   const applicationStatus = req.query.status || "";
   const queryForm = `SELECT job_applications.job_application_id, job_applications.interested_detail, job_applications.application_status, 
@@ -753,8 +739,6 @@ professionalRouter.get("/applications", async (req, res) => {
     }
     const results = await pool.query(query, values);
     const data = results.rows;
-    console.log("show data");
-    console.log(data);
     if (data.length > 0) {
       data.map((item) => {
         item.logo_url = JSON.parse(item.logo_url).url;
@@ -765,8 +749,6 @@ professionalRouter.get("/applications", async (req, res) => {
       });
     }
 
-    console.log("764");
-    console.log(data);
     return res.status(200).json({
       data: data,
     });
@@ -775,11 +757,9 @@ professionalRouter.get("/applications", async (req, res) => {
 
 //Declined application
 professionalRouter.put("/applications/:applicationId", async (req, res) => {
-  console.log(req.params.applicationId);
   const applicationId = req.params.applicationId;
   const application = "Declined";
   const declined_at = new Date();
-  console.log(declined_at);
   try {
     await pool.query(
       `UPDATE job_applications SET application_status = $1, declined_at= $2 WHERE job_application_id = $3`,

@@ -32,4 +32,8 @@ const logoUpload = async (file) => {
   return logoFileUrl;
 };
 
-export { cvUpload, logoUpload };
+const deleteFileUploaded = async (publicId) => {
+  await cloudinary.uploader.destroy(publicId);
+};
+
+export { cvUpload, logoUpload, deleteFileUploaded };

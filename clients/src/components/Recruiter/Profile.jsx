@@ -180,9 +180,10 @@ export default function Profile() {
                   height: "80px",
                   borderRadius: "16px",
                   boxShadow: "5",
+                  overflow: "hidden",
                 }}
               >
-                <img src={img} alt="getthatjoblogo" />
+                <img src={img} alt="companylogo" width="100%" height="auto" />
               </Box>
               <Box
                 sx={{

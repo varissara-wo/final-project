@@ -47,7 +47,7 @@ export default function JobPostWrapper(props) {
     optionRequirement,
     categoryId,
   } = props;
-
+  console.log(jobId);
   const calSalary = (num) => {
     let a = num / 1000;
     return Math.floor(a);
@@ -161,7 +161,7 @@ export default function JobPostWrapper(props) {
               variant="contained"
               color="error"
               startIcon={<HighlightOffIcon />}
-              onClick={() => closedPost("jobId")}
+              onClick={() => closedPost(jobId)}
               disabled
             >
               CLOSE
@@ -173,8 +173,8 @@ export default function JobPostWrapper(props) {
               color="error"
               startIcon={<HighlightOffIcon />}
               onClick={() => {
-                closedPost("jobId");
                 setIsLoading(true);
+                closedPost(jobId);
               }}
             >
               CLOSE

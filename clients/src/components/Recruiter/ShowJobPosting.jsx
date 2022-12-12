@@ -247,6 +247,7 @@ export function ShowJobPostings() {
             professional_updated_at,
             company_name,
           } = candidate;
+
           return (
             <Accordion
               expanded={expanded === `panal${job_application_id}`}
